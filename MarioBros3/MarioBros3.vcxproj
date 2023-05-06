@@ -176,7 +176,12 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="mario-sample.txt" />
+    <Text Include="AssetFile\brick.txt" />
+    <Text Include="AssetFile\cloud.txt" />
+    <Text Include="AssetFile\coin.txt" />
+    <Text Include="AssetFile\game_start.txt" />
+    <Text Include="AssetFile\mario.txt" />
+    <Text Include="AssetFile\scene1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

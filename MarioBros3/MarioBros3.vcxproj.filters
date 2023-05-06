@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\AssetFile">
+      <UniqueIdentifier>{14d42112-4a52-4bde-8767-e4a6978ec842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{3448f4e0-47e8-4615-9764-32e608cd4d48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -145,8 +151,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="mario-sample.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="AssetFile\brick.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\cloud.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\coin.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\mario.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\game_start.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\scene1.txt">
+      <Filter>Resource Files\AssetFile</Filter>
     </Text>
   </ItemGroup>
 </Project>
