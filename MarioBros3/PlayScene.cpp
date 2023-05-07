@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
-
+#include "ColorBox.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -9,9 +9,10 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Background.h"
 #include "SampleKeyEventHandler.h"
-
+#include "Pipe.h"
+#include "QuestionBlock.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -119,7 +120,52 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_QUESTIONBLOCK: obj = new CQuestionBlock(x, y); break;
+	case OBJECT_TYPE_COLORBOX: 
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_id = atoi(tokens[6].c_str());
+		obj = new CColorBox(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_id
+		);
 
+		break;
+	}
+	case OBJECT_TYPE_BACKGROUND:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_id = atoi(tokens[6].c_str());
+		obj = new CBackground(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_id
+		);
+
+		break;
+	}
+	case OBJECT_TYPE_PIPE:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+
+		obj = new CPipe(
+			x, y,
+			cell_width, cell_height, height,
+			sprite_begin, sprite_middle
+		);
+
+		break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -246,7 +292,31 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
+	for (int i = 0; i < objects.size(); i++)
+	{
+		CColorBox* p = dynamic_cast<CColorBox*>(objects[i]);
+		CMario* ma = dynamic_cast<CMario*>(player);
+		
+		if (p)
+		{
+			DebugOut(L"box%d: %f\n", i, p->gety());
+			DebugOut(L"mario: %f\n", ma->gety() + 36.0f);
+			if (ma->getlevel() == 1)
+			{
+				if (ma->gety() + 24.0f >= p->gety())
+					p->tmp = 0;
+				else
+					p->tmp = 1;
+			}
+			else if (ma->getlevel() == 2)
+			{
+				if (ma->gety() + 36.0f >= p->gety())
+					p->tmp = 0;
+				else
+					p->tmp = 1;
+			}
+		}
+	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 

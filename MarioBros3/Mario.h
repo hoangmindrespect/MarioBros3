@@ -12,8 +12,8 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.67f
+#define MARIO_JUMP_RUN_SPEED_Y	0.77f
 
 #define MARIO_GRAVITY			0.002f
 
@@ -88,15 +88,15 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
-#define MARIO_BIG_BBOX_WIDTH  14
-#define MARIO_BIG_BBOX_HEIGHT 24
-#define MARIO_BIG_SITTING_BBOX_WIDTH  14
-#define MARIO_BIG_SITTING_BBOX_HEIGHT 16
+#define MARIO_BIG_BBOX_WIDTH  21
+#define MARIO_BIG_BBOX_HEIGHT 36
+#define MARIO_BIG_SITTING_BBOX_WIDTH  21
+#define MARIO_BIG_SITTING_BBOX_HEIGHT 24
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
-#define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 12
+#define MARIO_SMALL_BBOX_WIDTH  19.5
+#define MARIO_SMALL_BBOX_HEIGHT 18
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
@@ -122,6 +122,7 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 public:
+	int getlevel() { return level; }
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;

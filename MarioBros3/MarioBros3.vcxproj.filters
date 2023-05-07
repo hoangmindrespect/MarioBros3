@@ -90,6 +90,18 @@
     <ClInclude Include="Portal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -149,12 +161,21 @@
     <ClCompile Include="Portal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
-      <Filter>Resource Files\AssetFile</Filter>
-    </Text>
-    <Text Include="AssetFile\cloud.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
     <Text Include="AssetFile\coin.txt">
@@ -169,5 +190,49 @@
     <Text Include="AssetFile\scene1.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\Road.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\Background.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\ColorBox.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\Pipe.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\questionblock.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\back.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\bbox.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\download.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\enemies.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\items.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\mario.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\misc.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\misc_x3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\back1.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

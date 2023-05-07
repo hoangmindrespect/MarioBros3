@@ -2,43 +2,54 @@
 [ASSETS]
 AssetFile/mario.txt
 AssetFile/coin.txt
-AssetFile/cloud.txt
+AssetFile/Road.txt
 AssetFile/brick.txt
+AssetFile/Background.txt
+AssetFile/ColorBox.txt
+AssetFile/goomba.txt
+AssetFile/Pipe.txt
+AssetFile/questionblock.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+
+#background
+6 	2115	-30	4222.5	646.5	1	127000
+6 	496	216	12	118	1	127001
+6 	882	169	12	120	1	127002
+6 	930	252	12	48	1	127003
+
+7 	400	234	72	72	1	161000
+7 	455	210	72	120	1	162000
+7 	671	235	120	72	1	163000
+7 	756	211	96	120	1	164000
+7 	828	163	96	120	1	165000
+7 	852	247	144	48	1	166000
+
 # MARIO
 0	120	10
 
-#COIN
-4	100	120
-4	120	120
-4	140	120
-4	160	120
-4	180	120
+#QuestionBlock
+9	279	172
+9	302	172
+9	351	102
+9	375	102
+9	999	234
+9	1071	186
 
+#pipe
+8 	560	210	48	24	3	13100	13200
 
-4	100	100
-4	120	100
-4	140	100
-4	160	100
-4	180	100
-
-4	100	80
-4	120	80
-4	140	80
-4	160	80
-4	180	80
-
-
-
+#Goomba
+2	398	210
 
 #Platform
-5 	100	180	16	15	32	51000	52000	53000
-5	140	140	16	15	26	51000	52000	53000
+5 	23	282	24	24	40	91000	92000	93000
+5 	957	270	24	48	29	94000	95000	96000
 
 
 
