@@ -205,6 +205,9 @@
     <Text Include="AssetFile\questionblock.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\goomba.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\back.png">

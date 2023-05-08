@@ -189,6 +189,7 @@
     <Text Include="AssetFile\coin.txt" />
     <Text Include="AssetFile\ColorBox.txt" />
     <Text Include="AssetFile\game_start.txt" />
+    <Text Include="AssetFile\goomba.txt" />
     <Text Include="AssetFile\mario.txt" />
     <Text Include="AssetFile\Pipe.txt" />
     <Text Include="AssetFile\questionblock.txt" />

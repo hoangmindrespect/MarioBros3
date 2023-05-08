@@ -19,4 +19,5 @@ height	240
 40	textures\download.png
 50	textures\items.png
 60	textures\back1.png
+70	textures\misc_x3.png
 

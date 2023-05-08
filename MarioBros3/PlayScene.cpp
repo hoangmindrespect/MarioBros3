@@ -120,7 +120,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_QUESTIONBLOCK: obj = new CQuestionBlock(x, y); break;
+	case OBJECT_TYPE_QUESTIONBLOCK:
+	{
+		int type = atof(tokens[3].c_str());
+		obj = new CQuestionBlock(x, y, type); 
+		break;
+	}
 	case OBJECT_TYPE_COLORBOX: 
 	{
 		float cell_width = (float)atof(tokens[3].c_str());
@@ -299,8 +304,6 @@ void CPlayScene::Update(DWORD dt)
 		
 		if (p)
 		{
-			DebugOut(L"box%d: %f\n", i, p->gety());
-			DebugOut(L"mario: %f\n", ma->gety() + 36.0f);
 			if (ma->getlevel() == 1)
 			{
 				if (ma->gety() + 24.0f >= p->gety())
@@ -315,6 +318,17 @@ void CPlayScene::Update(DWORD dt)
 				else
 					p->tmp = 1;
 			}
+		}
+	}
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(objects[i]);
+		if (p)
+		{
+			if (p->obj != nullptr)
+				objects.push_back(p->obj);
+
 		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
