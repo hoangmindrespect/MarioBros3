@@ -42,8 +42,9 @@ void CQuestionBlock::Update(DWORD dt ,vector<LPGAMEOBJECT>* coObjects = NULL)
 				IsDown = true;
 			}
 		}
-
-		if (obj != nullptr)
+		if (type != 1)
+			return;
+		else if (obj != nullptr)
 		{
 			if (IsUpObj == false && obj->gety() > minyo)
 			{

@@ -9,6 +9,7 @@ AssetFile/ColorBox.txt
 AssetFile/goomba.txt
 AssetFile/Pipe.txt
 AssetFile/questionblock.txt
+AssetFile/redmushroom.txt
 
 #
 [OBJECTS]
@@ -36,16 +37,19 @@ AssetFile/questionblock.txt
 #QuestionBlock
 9 	279	172	1
 9 	302	172	1
-9 	351	102	1
+9 	351	102	2
 9 	375	102	1
 9 	999	234	1
 9 	1071	186	1
+
 
 #pipe
 8 	560	210	48	24	3	13100	13200
 
 #Goomba
 2	398	210
+4	398	210
+10	351	65
 
 #Platform
 5 	23	282	24	24	40	91000	92000	93000

@@ -13,6 +13,7 @@
 #include "SampleKeyEventHandler.h"
 #include "Pipe.h"
 #include "QuestionBlock.h"
+#include "RedMushroom.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -189,7 +190,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-
+	case 10: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

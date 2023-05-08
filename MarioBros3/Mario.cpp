@@ -1,6 +1,6 @@
 #include <algorithm>
 #include "debug.h"
-
+#include "RedMushroom.h"
 #include "Mario.h"
 #include "Game.h"
 #include"GameObject.h"
@@ -56,6 +56,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CRedMushroom*>(e->obj))
+	{
+		e->obj->sety(9999);
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -113,7 +117,13 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		if (p->obj != nullptr)
 			return;
 		else
-			p->obj = new CCoin(p->getx(), p->gety() - 35);
+		{
+			if (p->getType() == 1)
+				p->obj = new CCoin(p->getx(), p->gety() - 35);
+			else if (p->getType() == 2)
+				p->obj = new CRedMushroom(p->getx(), p->gety() - 55); 
+				//return;
+		}
 
 	}
 
