@@ -44,7 +44,7 @@ void CRedMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	CGameObject::Update(dt, coObjects);
-	//CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
@@ -52,5 +52,8 @@ void CRedMushroom::Render()
 {
 	CSprites* s = CSprites::GetInstance();
 	s->Get(16000)->Draw(x, y);
+
+	RenderBoundingBox();
+
 }
 

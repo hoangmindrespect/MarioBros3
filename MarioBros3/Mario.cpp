@@ -110,7 +110,10 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
+	this->level = MARIO_LEVEL_BIG;
+	this->y -= 22.0f;
 	e->obj->Delete();
+	
 }
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
@@ -126,7 +129,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		}
 		else if (p->getType() == 2)
 		{
-			t = new CRedMushroom(p->getx(), p->gety() - 30.0f);
+			t = new CRedMushroom(p->getx(), p->gety() - 25.0f);
 		}
 
 		CPlayScene::objects.push_back(t);
