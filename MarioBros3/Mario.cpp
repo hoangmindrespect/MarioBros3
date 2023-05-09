@@ -57,9 +57,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CRedMushroom*>(e->obj))
-	{
-		e->obj->sety(9999);
-	}
+		OnCollisionWithRedMushRoom(e);
+
+	
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -108,23 +108,28 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
+void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+}
+
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
 	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
-	if (e->ny > 0)
+	if (e->ny > 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 	{
+		CGameObject* t = nullptr;
 		p->SetState(QUESTIONBLOCK_STATE_EMPTY);
-		if (p->obj != nullptr)
-			return;
-		else
+		if (p->getType() == 1)
 		{
-			if (p->getType() == 1)
-				p->obj = new CCoin(p->getx(), p->gety() - 35);
-			else if (p->getType() == 2)
-				p->obj = new CRedMushroom(p->getx(), p->gety() - 55); 
-				//return;
+			t = new CCoin(p->getx(), p->gety() - 25.0f);
+		}
+		else if (p->getType() == 2)
+		{
+			t = new CRedMushroom(p->getx(), p->gety() - 30.0f);
 		}
 
+		CPlayScene::objects.push_back(t);
 	}
 
 }

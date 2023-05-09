@@ -21,23 +21,14 @@
 class CQuestionBlock : public CGameObject {
 	int type;
 
-	float miny = y - 6;
+	float miny = y - 26;
 	float maxy = y;
 	bool IsUp = false;
 	bool IsDown = false;
-
-	float xo, yo;
-	float minyo = y - 85;
-	float maxyo = y - 45;
-	bool IsUpObj = false;
-	bool IsDownObj = false;
 public:
-	LPGAMEOBJECT obj = nullptr;
 	CQuestionBlock(float x, float y, int z) : CGameObject(x, y) { 
+		state = QUESTIONBLOCK_STATE_NONE_EMPTY;
 		type = z;
-		this->xo = x;
-		this->yo = y - 25;
-		
 	}
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
@@ -46,7 +37,6 @@ public:
 	int getType() { return type; }
 	virtual void SetState(int state);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-
 };
 
 

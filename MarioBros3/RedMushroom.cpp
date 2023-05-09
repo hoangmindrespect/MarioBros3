@@ -4,7 +4,7 @@ CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = REDMUSHROOM_GRAVITY;
-	vx = 0.005f;
+	vx = REDMUSHROOM_WALKING_SPEED;
 }
 
 void CRedMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -44,7 +44,7 @@ void CRedMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	//CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 

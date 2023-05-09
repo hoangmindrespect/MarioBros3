@@ -42,32 +42,6 @@ void CQuestionBlock::Update(DWORD dt ,vector<LPGAMEOBJECT>* coObjects = NULL)
 				IsDown = true;
 			}
 		}
-		if (type != 1)
-			return;
-		else if (obj != nullptr)
-		{
-			if (IsUpObj == false && obj->gety() > minyo)
-			{
-				yo -= 0.2f * dt;
-				obj->sety(yo);
-			}
-			else
-			{
-				IsUpObj = true;
-				if (IsDownObj == false && yo < maxyo)
-				{
-					yo += 0.2f * dt;
-					obj->sety(yo);
-				}
-				else
-				{
-					obj->sety(maxyo);
-					obj->sety(99999);
-					obj = nullptr;
-					IsDownObj = true;
-				}
-			}
-		}
 	}
 	CGameObject::Update(dt, coObjects);
 	//CCollision::GetInstance()->Process(this, dt, coObjects);

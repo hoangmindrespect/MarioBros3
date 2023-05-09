@@ -15,6 +15,7 @@
 #include "QuestionBlock.h"
 #include "RedMushroom.h"
 using namespace std;
+std::vector<CGameObject*> CPlayScene::objects;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
@@ -298,11 +299,13 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+
+#pragma region Handle color box
 	for (int i = 0; i < objects.size(); i++)
 	{
 		CColorBox* p = dynamic_cast<CColorBox*>(objects[i]);
 		CMario* ma = dynamic_cast<CMario*>(player);
-		
+
 		if (p)
 		{
 			if (ma->getlevel() == 1)
@@ -321,17 +324,8 @@ void CPlayScene::Update(DWORD dt)
 			}
 		}
 	}
+#pragma endregion
 
-	for (int i = 0; i < objects.size(); i++)
-	{
-		CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(objects[i]);
-		if (p)
-		{
-			if (p->obj != nullptr)
-				objects.push_back(p->obj);
-
-		}
-	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 

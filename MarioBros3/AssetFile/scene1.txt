@@ -37,8 +37,8 @@ AssetFile/redmushroom.txt
 #QuestionBlock
 9 	279	172	1
 9 	302	172	1
-9 	351	102	2
-9 	375	102	1
+9 	351	102	1
+9 	375	102	2
 9 	999	234	1
 9 	1071	186	1
 
@@ -49,7 +49,6 @@ AssetFile/redmushroom.txt
 #Goomba
 2	398	210
 4	398	210
-10	351	65
 
 #Platform
 5 	23	282	24	24	40	91000	92000	93000
