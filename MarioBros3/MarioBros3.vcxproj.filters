@@ -105,6 +105,12 @@
     <ClInclude Include="RedMushroom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PiranhaPlant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -179,6 +185,12 @@
     <ClCompile Include="RedMushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PiranhaPlant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -217,6 +229,12 @@
     <Text Include="AssetFile\redmushroom.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\bullet.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\piranha.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\back.png">
@@ -244,6 +262,12 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\back1.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\enemies1.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\enemies1_flip.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

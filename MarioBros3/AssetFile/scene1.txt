@@ -10,6 +10,8 @@ AssetFile/goomba.txt
 AssetFile/Pipe.txt
 AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
+AssetFile/bullet.txt
+AssetFile/piranha.txt
 
 #
 [OBJECTS]
@@ -44,7 +46,9 @@ AssetFile/redmushroom.txt
 
 
 #pipe
+12	560	222
 8 	560	210	48	24	3	13100	13200
+
 
 #Goomba
 2	398	210

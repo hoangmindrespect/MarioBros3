@@ -13,7 +13,7 @@ class CPlayScene: public CScene
 {
 public:
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	static LPGAMEOBJECT player;					
 	static vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_SPRITES(string line);

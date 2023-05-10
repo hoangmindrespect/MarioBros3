@@ -9,6 +9,8 @@
 #include "Portal.h"
 #include "QuestionBlock.h"
 #include "Collision.h"
+#include "Bullet.h"
+#include "PiranhaPlant.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -58,6 +60,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CRedMushroom*>(e->obj))
 		OnCollisionWithRedMushRoom(e);
+	//else if()
 
 	
 }
@@ -110,6 +113,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
+	Sleep(1000);
 	this->level = MARIO_LEVEL_BIG;
 	this->y -= 22.0f;
 	e->obj->Delete();
