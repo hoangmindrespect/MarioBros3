@@ -17,7 +17,13 @@ void CPiranhaPlant::Render()
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	if (abs((CPlayScene::player)->getx() - x) <= 200.0f)
 	{
-		if (IsUp == false)
+		if (IsStart_Up == false)
+		{
+			timeStart_Up = GetTickCount64();
+			IsStart_Up = true;
+		}
+		ULONGLONG now1 = GetTickCount64();
+		if (now1 - timeStart_Up >= 3000)
 		{
 			if (y >= ymax)
 			{
@@ -25,8 +31,12 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			}
 			else if (y < ymax)
 			{
-				y = ymax;
-				//Sleep(3000);
+				if (IsStart_Fire == false)
+				{
+					timeStart_Fire = GetTickCount64();
+					IsStart_Fire = true;
+				}
+				
 				if ((CPlayScene::player)->gety() > y)
 					if ((CPlayScene::player)->getx() < x)
 						state = PIRANHA_STATE_DOWN_LEFT;
@@ -37,7 +47,8 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						state = PIRANHA_STATE_UP_LEFT;
 					else
 						state = PIRANHA_STATE_UP_RIGHT;
-				if (IsFire == false)
+				ULONGLONG now = GetTickCount64();
+				if (now - timeStart_Fire >= 2000)
 				{
 					CGameObject* bul = nullptr;
 					if (state == PIRANHA_STATE_DOWN_LEFT)
@@ -49,27 +60,27 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					else
 						bul = new CBullet(x + 4, y - 8, 0.05f, -0.02f);
 					CPlayScene::objects.push_back(bul);
-					IsFire = true;
+					IsStart_Fire = false;
+					//IsUp = true;
+					IsStart_Up = false;
 				}
-				IsUp = true;
+				
 			}
 		}
-		else if (IsUp = true)
+		else 
 		{
 			y += 0.05f * dt;
 			if (y > ymax + 47.0f)
 			{
 				y = ymax + 47.0f;
-				IsUp = false;
-				IsFire = false;
 			}
 		}
 	}
 	else
 	{
 		y = ymax + 47.0f;
-		IsUp = false; 
-		IsFire = false;
+		IsStart_Fire = false;
+		IsStart_Up = true;
 	}
 	
 	//DebugOut(L"ma: %f, pi: %f\n", (CPlayScene::player)->getx(), x);

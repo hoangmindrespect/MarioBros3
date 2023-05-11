@@ -20,14 +20,16 @@
 
 class CPiranhaPlant : public CGameObject {
 	float ymax;
-	bool IsUp;
-	bool IsFire;
-	//vector<CBullet*> bullet;
+	bool IsStart_Fire;
+	bool IsStart_Up;
+	ULONGLONG timeStart_Fire;
+	ULONGLONG timeStart_Up;
 public:
 	CPiranhaPlant(float x, float y) : CGameObject(x, y) {
 		ymax = y - 47.0f;
-		IsUp = false;
-		IsFire = false;
+		//timeStart_Up = -2000;
+		IsStart_Fire = false;
+		IsStart_Up = true; // at the first time meet mario it up immediately!
 		state = PIRANHA_STATE_UP_LEFT;
 	}
 	void Render();
