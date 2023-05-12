@@ -116,11 +116,9 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
-	Sleep(1000);
 	this->level = MARIO_LEVEL_BIG;
 	this->y -= 22.0f;
 	e->obj->Delete();
-	
 }
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)

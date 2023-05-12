@@ -111,6 +111,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Koopas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -191,6 +194,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Koopas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -233,6 +239,9 @@
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
     <Text Include="AssetFile\piranha.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\koopas.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
   </ItemGroup>

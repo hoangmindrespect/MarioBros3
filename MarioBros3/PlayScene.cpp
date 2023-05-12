@@ -16,6 +16,7 @@
 #include "RedMushroom.h"
 #include "Bullet.h"
 #include "PiranhaPlant.h"
+#include "Koopas.h"
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 LPGAMEOBJECT CPlayScene::player;
@@ -123,9 +124,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case 12: obj = new CPiranhaPlant(x, y); break;
+	case OBJECT_TYPE_PIRANHA: obj = new CPiranhaPlant(x, y); break;
 	case OBJECT_TYPE_QUESTIONBLOCK:
 	{
 		int type = atof(tokens[3].c_str());
@@ -195,7 +197,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-	case 10: obj = new CRedMushroom(x, y); break;
+	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

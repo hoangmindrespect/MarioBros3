@@ -146,6 +146,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="Koopas.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaPlant.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Pipe.cpp" />
@@ -197,6 +199,7 @@
     <Text Include="AssetFile\ColorBox.txt" />
     <Text Include="AssetFile\game_start.txt" />
     <Text Include="AssetFile\goomba.txt" />
+    <Text Include="AssetFile\koopas.txt" />
     <Text Include="AssetFile\mario.txt" />
     <Text Include="AssetFile\Pipe.txt" />
     <Text Include="AssetFile\piranha.txt" />

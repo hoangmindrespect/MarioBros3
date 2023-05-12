@@ -8,6 +8,7 @@ AssetFile/Background.txt
 AssetFile/ColorBox.txt
 AssetFile/goomba.txt
 AssetFile/Pipe.txt
+AssetFile/koopas.txt
 
 AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
@@ -60,7 +61,7 @@ AssetFile/piranha.txt
 
 #Goomba
 2	398	210
-
+11	350	210
 #Platform
 5 	12	282	24	24	40	91000	92000	93000
 5 	962	270	24	48	29	94000	95000	96000

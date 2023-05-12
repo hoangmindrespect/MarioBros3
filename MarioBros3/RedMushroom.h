@@ -6,7 +6,7 @@
 
 
 #define REDMUSHROOM_BBOX_WIDTH 24
-#define REDMUSHROOM_BBOX_HEIGHT 24
+#define REDMUSHROOM_BBOX_HEIGHT 22
 
 class CRedMushroom : public CGameObject
 {
