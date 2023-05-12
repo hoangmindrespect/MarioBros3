@@ -23,7 +23,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			IsStart_Up = true;
 		}
 		ULONGLONG now1 = GetTickCount64();
-		if (now1 - timeStart_Up >= 3000)
+		if (now1 - timeStart_Up >= 2000)
 		{
 			if (y >= ymax)
 			{
@@ -48,7 +48,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					else
 						state = PIRANHA_STATE_UP_RIGHT;
 				ULONGLONG now = GetTickCount64();
-				if (now - timeStart_Fire >= 2000)
+				if (now - timeStart_Fire >= 1500)
 				{
 					CGameObject* bul = nullptr;
 					if (state == PIRANHA_STATE_DOWN_LEFT)
@@ -61,7 +61,6 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						bul = new CBullet(x + 4, y - 8, 0.05f, -0.02f);
 					CPlayScene::objects.push_back(bul);
 					IsStart_Fire = false;
-					//IsUp = true;
 					IsStart_Up = false;
 				}
 				

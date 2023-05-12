@@ -17,7 +17,7 @@
       <UniqueIdentifier>{14d42112-4a52-4bde-8767-e4a6978ec842}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Textures">
-      <UniqueIdentifier>{3448f4e0-47e8-4615-9764-32e608cd4d48}</UniqueIdentifier>
+      <UniqueIdentifier>{44908097-ae1f-473e-9dca-4543492ecc8e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -237,37 +237,25 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\back.png">
+    <Image Include="textures\back1_x3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\back2_x3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\bbox.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\download.png">
+    <Image Include="textures\enemies1_flipx3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\enemies.png">
+    <Image Include="textures\enemies1x3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\items.png">
+    <Image Include="textures\mariox3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\mario.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\misc.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\misc_x3.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\back1.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\enemies1.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\enemies1_flip.png">
+    <Image Include="textures\miscx3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

@@ -7,7 +7,7 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.15f
-#define MARIO_RUNNING_SPEED		0.22f
+#define MARIO_RUNNING_SPEED		0.25f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
@@ -119,6 +119,8 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e);
+	void OnCollisionWithRedBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
@@ -131,7 +133,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_SMALL;
+		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

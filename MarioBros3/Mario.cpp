@@ -60,7 +60,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CRedMushroom*>(e->obj))
 		OnCollisionWithRedMushRoom(e);
-	//else if()
+	else if (dynamic_cast<CBullet*>(e->obj))
+		OnCollisionWithRedBullet(e);
+	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+		OnCollisionWithRedPiranhaPlant(e);
 
 	
 }
@@ -140,6 +143,34 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	}
 
 }
+
+void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
+{
+	if (level == MARIO_LEVEL_BIG)
+	{
+		level = MARIO_LEVEL_SMALL;
+		StartUntouchable();
+	}
+	else if (level == MARIO_LEVEL_SMALL)
+	{
+		e->src_obj->SetState(MARIO_STATE_DIE);
+	}
+	e->obj->Delete();
+}
+
+void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
+{
+	if (level == MARIO_LEVEL_BIG)
+	{
+		level = MARIO_LEVEL_SMALL;
+		StartUntouchable();
+	}
+	else if (level == MARIO_LEVEL_SMALL)
+	{
+		e->src_obj->SetState(MARIO_STATE_DIE);
+	}
+}
+
 //
 // Get animation ID for small Mario
 //

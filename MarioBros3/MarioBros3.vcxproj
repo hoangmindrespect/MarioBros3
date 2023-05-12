@@ -206,17 +206,13 @@
     <Text Include="AssetFile\scene1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\back.png" />
-    <Image Include="textures\back1.png" />
+    <Image Include="textures\back1_x3.png" />
+    <Image Include="textures\back2_x3.png" />
     <Image Include="textures\bbox.png" />
-    <Image Include="textures\download.png" />
-    <Image Include="textures\enemies.png" />
-    <Image Include="textures\enemies1.png" />
-    <Image Include="textures\enemies1_flip.png" />
-    <Image Include="textures\items.png" />
-    <Image Include="textures\mario.png" />
-    <Image Include="textures\misc.png" />
-    <Image Include="textures\misc_x3.png" />
+    <Image Include="textures\enemies1x3.png" />
+    <Image Include="textures\enemies1_flipx3.png" />
+    <Image Include="textures\mariox3.png" />
+    <Image Include="textures\miscx3.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

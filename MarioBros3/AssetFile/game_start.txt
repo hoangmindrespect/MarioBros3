@@ -12,14 +12,9 @@ height	240
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
-0	textures\mario.png
-10	textures\enemies.png
-20	textures\misc.png
-30	textures\back.png
-40	textures\download.png
-50	textures\items.png
-60	textures\back1.png
-70	textures\misc_x3.png
-80	textures\enemies1.png
-90	textures\enemies1_FLIP.png
-
+0	textures\back1_x3.png
+10	textures\back2_x3.png
+20	textures\enemies1_flipx3.png
+30	textures\enemies1x3.png
+40	textures\mariox3.png
+50	textures\miscx3.png
