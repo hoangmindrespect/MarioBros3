@@ -209,11 +209,10 @@
     <Text Include="AssetFile\scene1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\back1_x3.png" />
-    <Image Include="textures\back2_x3.png" />
     <Image Include="textures\bbox.png" />
     <Image Include="textures\enemies1x3.png" />
     <Image Include="textures\enemies1_flipx3.png" />
+    <Image Include="textures\item_x3.png" />
     <Image Include="textures\mariox3.png" />
     <Image Include="textures\miscx3.png" />
   </ItemGroup>

@@ -11,7 +11,7 @@
 #include "Collision.h"
 #include "Bullet.h"
 #include "PiranhaPlant.h"
-
+#include "Koopas.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -64,6 +64,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRedBullet(e);
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 		OnCollisionWithRedPiranhaPlant(e);
+	else if (dynamic_cast<CKoopas*>(e->obj))
+		OnCollisionWithKoopas(e);
 
 	
 }
@@ -166,6 +168,43 @@ void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 	else if (level == MARIO_LEVEL_SMALL)
 	{
 		e->src_obj->SetState(MARIO_STATE_DIE);
+	}
+}
+
+void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
+{
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+	// jump on top >> kill Koopas and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
+		{
+			koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Koopas
+	{
+		if (untouchable == 0)
+		{
+			if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+			else
+			{
+				koopas->SetState(KOOPAS_STATE_DIE_DOWN_KICKED);
+			}
+		}
 	}
 }
 

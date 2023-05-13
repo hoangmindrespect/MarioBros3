@@ -311,24 +311,26 @@ void CPlayScene::Update(DWORD dt)
 	{
 		CColorBox* p = dynamic_cast<CColorBox*>(objects[i]);
 		CMario* ma = dynamic_cast<CMario*>(player);
-
+		
 		if (p)
 		{
+			DebugOut(L"ma: %f, co%d: %f\n", ma->gety() + 36,i, p->gety());
 			if (ma->getlevel() == 1)
 			{
-				if (ma->gety() + 24.0f >= p->gety())
+				if (ma->gety() + MARIO_SMALL_BBOX_HEIGHT >= p->gety())
 					p->tmp = 0;
 				else
 					p->tmp = 1;
 			}
 			else if (ma->getlevel() == 2)
 			{
-				if (ma->gety() + 36.0f >= p->gety())
+				if (ma->gety() + 28.0f >= p->gety())
 					p->tmp = 0;
 				else
 					p->tmp = 1;
 			}
 		}
+		
 	}
 #pragma endregion
 
@@ -346,6 +348,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	
 
 	PurgeDeletedObjects();
 }

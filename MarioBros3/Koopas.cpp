@@ -52,7 +52,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-
+	if ((state == KOOPAS_STATE_DIE_DOWN) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
+	{
+		SetState(KOOPAS_STATE_WALKING);
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -61,7 +64,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopas::Render()
 {
 	int aniId = ID_ANI_KOOPAS_WALKING;
-
+	if (state == KOOPAS_STATE_DIE_DOWN)
+	{
+		aniId = ID_ANI_KOOPAS_DIE_DOWN;
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
@@ -69,4 +75,23 @@ void CKoopas::Render()
 void CKoopas::SetState(int state)
 {
 	CGameObject::SetState(state);
+	switch (state)
+	{
+	case KOOPAS_STATE_DIE_DOWN:
+		die_start = GetTickCount64();
+		y += 8;
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		break;
+	case KOOPAS_STATE_WALKING:
+		vx = -KOOPAS_WALKING_SPEED;
+		y -= 8;
+		break;
+	case KOOPAS_STATE_DIE_DOWN_KICKED:
+		vx = -KOOPAS_WALKING_SPEED * 3;
+		break;
+
+	}
+
 }

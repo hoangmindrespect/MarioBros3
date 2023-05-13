@@ -246,12 +246,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\back1_x3.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
-    <Image Include="textures\back2_x3.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
     <Image Include="textures\bbox.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
@@ -265,6 +259,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\miscx3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\item_x3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

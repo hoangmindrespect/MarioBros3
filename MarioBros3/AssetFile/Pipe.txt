@@ -1,7 +1,7 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-13100	1055	1104	1152	1152	0
-13200	1058	1153	1149	1201	0
+13100	206	104	303	153	60
+13200	209	155	300	204	60
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
