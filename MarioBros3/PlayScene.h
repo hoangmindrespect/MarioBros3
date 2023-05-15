@@ -6,6 +6,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "Koopas.h"
 //#include "Koopas.h"
 
 
@@ -15,6 +16,7 @@ public:
 	// A play scene has to have player, right? 
 	static LPGAMEOBJECT player;					
 	static vector<LPGAMEOBJECT> objects;
+	vector<CKoopas*> koopases;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

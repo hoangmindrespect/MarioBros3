@@ -17,6 +17,7 @@
 #include "Bullet.h"
 #include "PiranhaPlant.h"
 #include "Koopas.h"
+
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 LPGAMEOBJECT CPlayScene::player;
@@ -124,7 +125,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(x, y); break;
+	case OBJECT_TYPE_KOOPAS:
+	{
+		obj = new CKoopas(x, y);
+		break;
+	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_PIRANHA: obj = new CPiranhaPlant(x, y); break;
@@ -136,15 +141,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_COLORBOX: 
 	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_id = atoi(tokens[6].c_str());
-		obj = new CColorBox(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_id
-		);
+		float width = (float)atof(tokens[3].c_str());
+		obj = new CColorBox(x, y,width);
 
 		break;
 	}
@@ -217,7 +215,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetPosition(x, y);
 
 
-	objects.push_back(obj);
+	if(obj != NULL)
+		objects.push_back(obj);
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -314,7 +313,6 @@ void CPlayScene::Update(DWORD dt)
 		
 		if (p)
 		{
-			DebugOut(L"ma: %f, co%d: %f\n", ma->gety() + 36,i, p->gety());
 			if (ma->getlevel() == 1)
 			{
 				if (ma->gety() + MARIO_SMALL_BBOX_HEIGHT >= p->gety())
@@ -322,7 +320,7 @@ void CPlayScene::Update(DWORD dt)
 				else
 					p->tmp = 1;
 			}
-			else if (ma->getlevel() == 2)
+			else if (ma->getlevel() == 2 || ma->getlevel() == 3)
 			{
 				if (ma->gety() + 28.0f >= p->gety())
 					p->tmp = 0;

@@ -4,6 +4,7 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "debug.h"
+#include "Mario.h"
 
 void CColorBox::RenderBoundingBox()
 {
@@ -23,29 +24,20 @@ void CColorBox::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	float xx = x - this->cellWidth / 2 + rect.right / 2;
+	float xx = x - this->width / 2 + rect.right / 2;
 
 	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
 void CColorBox::Render()
 {
-	if (this->length <= 0) return;
-	float xx = x;
-	CSprites* s = CSprites::GetInstance();
-
-	s->Get(this->spriteId)->Draw(xx, y);
-	xx += this->cellWidth;
 	RenderBoundingBox();
 }
 
 void CColorBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	float cellWidth_div_2 = this->cellWidth / 2;
-	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
-	r = l + this->cellWidth * this->length;
-	b = t + this->cellHeight;
-
-
+	l = x - this->width / 2;
+	t = y - 10.0f;
+	r = l + this->width;
+	b = t + 10.0f;
 }

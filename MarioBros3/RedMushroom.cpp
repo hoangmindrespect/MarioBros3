@@ -1,5 +1,6 @@
 #include "RedMushroom.h"
 #include "debug.h"
+#include "ColorBox.h"
 CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -19,14 +20,13 @@ void CRedMushroom::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-	DebugOut(L"vx: %f\n", vx * dt);
 };
 
 void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CRedMushroom*>(e->obj)) return;
-
+	
 	if (e->ny != 0)
 	{
 		vy = 0;

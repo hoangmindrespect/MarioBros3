@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include <d3dx9.h>
 
 CGame * CGame::__instance = NULL;
 
@@ -47,7 +48,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	swapChainDesc.Windowed = TRUE;
 
 	// Create the D3D device and the swap chain
-	HRESULT hr = D3D10CreateDeviceAndSwapChain(NULL,
+	HRESULT hr = D3D10CreateDeviceAndSwapChain(D3DADAPTER_DEFAULT,
 		D3D10_DRIVER_TYPE_HARDWARE,
 		NULL,
 		0,
@@ -160,6 +161,7 @@ void CGame::SetPointSamplerState()
 	pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
 	pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
 	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
+
 }
 
 /*

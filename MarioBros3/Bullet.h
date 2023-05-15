@@ -6,9 +6,9 @@
 
 #define ID_ANI_BULLET 15801
 
-#define	BULLET_WIDTH 24
-#define BULLET_BBOX_WIDTH 24
-#define BULLET_BBOX_HEIGHT 24
+#define	BULLET_WIDTH 16
+#define BULLET_BBOX_WIDTH 16
+#define BULLET_BBOX_HEIGHT 16
 
 class CBullet : public CGameObject {
 	

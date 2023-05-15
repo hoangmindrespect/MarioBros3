@@ -78,6 +78,27 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+// TAIL MARIO
+#define ID_ANI_MARIO_TAIL_IDLE_RIGHT 1700
+#define ID_ANI_MARIO_TAIL_IDLE_LEFT 1701
+
+#define ID_ANI_MARIO_TAIL_WALKING_RIGHT 1703
+#define ID_ANI_MARIO_TAIL_WALKING_LEFT 1702
+
+#define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 1705
+#define ID_ANI_MARIO_TAIL_RUNNING_LEFT 1704
+
+#define ID_ANI_MARIO_TAIL_BRACE_RIGHT 1707
+#define ID_ANI_MARIO_TAIL_BRACE_LEFT 1706
+
+#define ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT 1708
+#define ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT 1709
+
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT 1710
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT 1711
+#define ID_ANI_MARIO_TAIL_SIT_RIGHT 1712
+#define ID_ANI_MARIO_TAIL_SIT_LEFT 1713
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -87,7 +108,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
-
+#define	MARIO_LEVEL_TAIL		3
 #define MARIO_BIG_BBOX_WIDTH  21
 #define MARIO_BIG_BBOX_HEIGHT 36
 #define MARIO_BIG_SITTING_BBOX_WIDTH  21
@@ -124,6 +145,7 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
+	int GetAniIdTail();
 	int GetAniIdSmall();
 
 public:
@@ -135,7 +157,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_TAIL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -157,7 +179,6 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
 

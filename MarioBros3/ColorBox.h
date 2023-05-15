@@ -6,20 +6,14 @@
 class CColorBox : public CGameObject
 {
 public:
-	int length;				// Unit: cell 
-	float cellWidth;
-	float cellHeight;
-	int spriteId;
+	float width;				// Unit: cell 
 	int tmp = 0;
 public:
 	CColorBox(float x, float y,
-		float cell_width, float cell_height, int length,
-		int sprite_id) :CGameObject(x, y)
+		float width
+		) :CGameObject(x, y)
 	{
-		this->length = length;
-		this->cellWidth = cell_width;
-		this->cellHeight = cell_height;
-		spriteId = sprite_id;
+		this->width = width;
 	}
 	void Render();
 	int IsCollidable() { return 1; };
@@ -27,6 +21,8 @@ public:
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
+	//virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
 };
 
 typedef CColorBox* LPCOLORBOX;
