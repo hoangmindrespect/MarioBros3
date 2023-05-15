@@ -5,7 +5,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
-	nx = 1;
+	n = 1;
 	this->vx = KOOPAS_WALKING_SPEED;
 	SetState(KOOPAS_STATE_WALKING_RIGHT);
 }
@@ -47,10 +47,11 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
-		if (nx < 0)
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
-		else
+		n = -n;
+		if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
 			SetState(KOOPAS_STATE_WALKING_LEFT);
+		if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
+			SetState(KOOPAS_STATE_WALKING_RIGHT);
 	}
 }
 
@@ -60,12 +61,14 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	if ((state == KOOPAS_STATE_DIE_DOWN) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
 	{
-		if(nx > 0)
+		if(n > 0)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 		else 
 			SetState(KOOPAS_STATE_WALKING_LEFT);
 		y -= 8;
 	}
+	
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -101,22 +104,15 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
-		//y -= 8;
-		nx = 1;
+		n = 1;
 		break;
 	case KOOPAS_STATE_WALKING_LEFT:
 		vx = -KOOPAS_WALKING_SPEED;
-		//y -= 8;
-		nx = -1;
+		n = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:
-	{
-		if (nx > 0)
-			vx = KOOPAS_SPINNING_SPEED;
-		else
-			vx = -KOOPAS_SPINNING_SPEED;
-	}
-	break;
+		//vx = KOOPAS_SPINNING_SPEED;
+		break;
 
 	}
 

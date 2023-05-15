@@ -35,7 +35,7 @@ class CKoopas : public CGameObject
 protected:
 	float ax;
 	float ay;
-	int nx;
+	int n;
 	ULONGLONG die_start;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -51,5 +51,8 @@ protected:
 public:
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
+	void setVx(float i) {
+		vx = i;
+	}
 };
 

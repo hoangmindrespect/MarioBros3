@@ -90,14 +90,18 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				if (level == MARIO_LEVEL_TAIL)
+				{
+					level = MARIO_LEVEL_BIG;
+					StartUntouchable();
+				}
+				else if (level == MARIO_LEVEL_BIG)
 				{
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
 				}
 				else
 				{
-					DebugOut(L">>> Mario DIE >>> \n");
 					SetState(MARIO_STATE_DIE);
 				}
 			}
@@ -119,7 +123,6 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
-	
 	this->SetLevel(MARIO_LEVEL_BIG);
 	e->obj->Delete();
 }
@@ -147,7 +150,12 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 {
-	if (level == MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_TAIL)
+	{
+		level = MARIO_LEVEL_BIG;
+		StartUntouchable();
+	}
+	else if (level == MARIO_LEVEL_BIG)
 	{
 		level = MARIO_LEVEL_SMALL;
 		StartUntouchable();
@@ -161,7 +169,13 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 {
-	if (level == MARIO_LEVEL_BIG)
+
+	if (level == MARIO_LEVEL_TAIL)
+	{
+		level = MARIO_LEVEL_BIG;
+		StartUntouchable();
+	}
+	else if (level == MARIO_LEVEL_BIG)
 	{
 		level = MARIO_LEVEL_SMALL;
 		StartUntouchable();
@@ -176,24 +190,29 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 	// jump on top >> kill Koopas and deflect a bit 
-	
-
-	if (e->ny < 0)
+	//we got four case col
+	if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
 	{
-		if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
-		{
-			koopas->SetState(KOOPAS_STATE_DIE_DOWN);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
-	}
-	else if (e->nx != 0)
-	{
-		DebugOut(L">>> CO VA CHAM>>> \n");
-		if (untouchable == 0)
+		DebugOut(L">>> CASE 1>>> %d \n", koopas->GetState());
+		if (e->ny < 0)
 		{
 			if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+		}
+		else if (e->nx != 0)
+		{
+			
+			if (untouchable == 0)
+			{
+				if (level == MARIO_LEVEL_TAIL)
+				{
+					level = MARIO_LEVEL_BIG;
+					StartUntouchable();
+				}
+				else if (level == MARIO_LEVEL_BIG)
 				{
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
@@ -205,6 +224,24 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP)
+	{
+		DebugOut(L">>> CASE 2>>> \n");
+		if (x < koopas->getx())
+			koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
+		else
+			koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
+
+		koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+
+	}
+	else if (koopas->GetState() == KOOPAS_STATE_DIE_UP_SPIN || koopas->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)
+	{
+
+	}
+	
+
+	
 }
 
 //
@@ -280,16 +317,16 @@ int CMario::GetAniIdBig()
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
+				aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT;
+				aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
 		}
 	}
 	else
