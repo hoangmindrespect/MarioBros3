@@ -40,6 +40,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 #define MAX_SCENE_LINE 1024
 
+void CPlayScene::AddObject(LPGAMEOBJECT object)
+{
+	objects.push_back(object);
+}
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -128,6 +132,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPAS:
 	{
 		obj = new CKoopas(x, y);
+		index.push_back(objects.size());
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
@@ -313,19 +318,22 @@ void CPlayScene::Update(DWORD dt)
 		
 		if (p)
 		{
-			if (ma->getlevel() == 1)
+			for (int j : index)
 			{
-				if (ma->gety() + MARIO_SMALL_BBOX_HEIGHT >= p->gety())
-					p->tmp = 0;
-				else
-					p->tmp = 1;
-			}
-			else if (ma->getlevel() == 2 || ma->getlevel() == 3)
-			{
-				if (ma->gety() + 28.0f >= p->gety())
-					p->tmp = 0;
-				else
-					p->tmp = 1;
+				if (ma->getlevel() == 1)
+				{
+					if (ma->gety() + MARIO_SMALL_BBOX_HEIGHT < p->gety() || objects[j]->gety() + 24.0f < p->gety())
+						p->tmp = 1;
+					else
+						p->tmp = 0;
+				}
+				else if (ma->getlevel() == 2 || ma->getlevel() == 3 )
+				{
+					if (ma->gety() + 28.0f < p->gety()|| objects[j]->gety() + 24.0f < p->gety())
+						p->tmp = 1;
+					else
+						p->tmp = 0;
+				}
 			}
 		}
 		

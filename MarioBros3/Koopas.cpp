@@ -12,7 +12,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_DIE_DOWN)
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_DIE / 2;
@@ -65,7 +65,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 		else 
 			SetState(KOOPAS_STATE_WALKING_LEFT);
-		y -= 8;
+		y -= 18;
+		ay = KOOPAS_GRAVITY;
 	}
 	
 
@@ -111,7 +112,7 @@ void CKoopas::SetState(int state)
 		n = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:
-		//vx = KOOPAS_SPINNING_SPEED;
+		ay = KOOPAS_GRAVITY;
 		break;
 
 	}

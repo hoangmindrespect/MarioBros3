@@ -1,6 +1,7 @@
 #include "RedMushroom.h"
 #include "debug.h"
 #include "ColorBox.h"
+#include "Mario.h"
 CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -26,7 +27,10 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CRedMushroom*>(e->obj)) return;
-	
+	else if (dynamic_cast<CMario*>(e->obj))
+	{
+		e->obj->sety(e->obj->gety() - 32.0f);
+	}
 	if (e->ny != 0)
 	{
 		vy = 0;

@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 #include "RedMushroom.h"
 #include "Mario.h"
@@ -26,6 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+	
 
 	isOnPlatform = false;
 
@@ -68,6 +69,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
 
+
 	
 }
 
@@ -103,6 +105,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				else
 				{
 					SetState(MARIO_STATE_DIE);
+
+
 				}
 			}
 		}
@@ -129,60 +133,71 @@ void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
 	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 	{
-		CGameObject* t = nullptr;
+		//CGameObject* t = NULL;
 		p->SetState(QUESTIONBLOCK_STATE_EMPTY);
 		if (p->getType() == 1)
 		{
-			t = new CCoin(p->getx(), p->gety() - 25.0f);
+			CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);
+			scene->AddObject(t);
 		}
 		else if (p->getType() == 2)
 		{
-			t = new CRedMushroom(p->getx(), p->gety() - 50.0f);
+			CRedMushroom* t = new CRedMushroom(p->getx(), p->gety() - 50.0f);
+			scene->AddObject(t);
 		}
 
-		CPlayScene::objects.push_back(t);
 	}
 
 }
 
 void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 {
-	if (level == MARIO_LEVEL_TAIL)
+	if (untouchable == 0)
 	{
-		level = MARIO_LEVEL_BIG;
-		StartUntouchable();
+		if (level == MARIO_LEVEL_TAIL)
+		{
+			level = MARIO_LEVEL_BIG;
+			StartUntouchable();
+		}
+		else if (level == MARIO_LEVEL_BIG)
+		{
+			level = MARIO_LEVEL_SMALL;
+
+			StartUntouchable();
+		}
+		else if (level == MARIO_LEVEL_SMALL)
+		{
+			e->src_obj->SetState(MARIO_STATE_DIE);
+
+		}
+		e->obj->Delete();
 	}
-	else if (level == MARIO_LEVEL_BIG)
-	{
-		level = MARIO_LEVEL_SMALL;
-		StartUntouchable();
-	}
-	else if (level == MARIO_LEVEL_SMALL)
-	{
-		e->src_obj->SetState(MARIO_STATE_DIE);
-	}
-	e->obj->Delete();
 }
 
 void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 {
 
-	if (level == MARIO_LEVEL_TAIL)
+	if (untouchable == 0)
 	{
-		level = MARIO_LEVEL_BIG;
-		StartUntouchable();
-	}
-	else if (level == MARIO_LEVEL_BIG)
-	{
-		level = MARIO_LEVEL_SMALL;
-		StartUntouchable();
-	}
-	else if (level == MARIO_LEVEL_SMALL)
-	{
-		e->src_obj->SetState(MARIO_STATE_DIE);
+		if (level == MARIO_LEVEL_TAIL)
+		{
+			level = MARIO_LEVEL_BIG;
+			StartUntouchable();
+		}
+		else if (level == MARIO_LEVEL_BIG)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else if (level == MARIO_LEVEL_SMALL)
+		{
+			e->src_obj->SetState(MARIO_STATE_DIE);
+		}
 	}
 }
 
@@ -193,7 +208,6 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	//we got four case col
 	if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
 	{
-		DebugOut(L">>> CASE 1>>> %d \n", koopas->GetState());
 		if (e->ny < 0)
 		{
 			if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
@@ -220,24 +234,50 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				else
 				{
 					SetState(MARIO_STATE_DIE);
+
 				}
 			}
 		}
 	}
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP)
 	{
-		DebugOut(L">>> CASE 2>>> \n");
 		if (x < koopas->getx())
 			koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
 		else
 			koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
-
+		koopas->sety(koopas->gety() - 5.0f);
 		koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
 
 	}
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_UP_SPIN || koopas->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)
 	{
-
+		// make defend koopas stop
+		if (e->ny != 0)
+		{
+			koopas->sety(koopas->gety() - 9.0f);
+			koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (e->nx != 0)
+		{
+			if (untouchable == 0)
+			{
+				if (level == MARIO_LEVEL_TAIL)
+				{
+					level = MARIO_LEVEL_BIG;
+					StartUntouchable();
+				}
+				else if (level == MARIO_LEVEL_BIG)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
 	}
 	
 
@@ -439,12 +479,7 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_TAIL)
 		aniId = GetAniIdTail();
-
 	animations->Get(aniId)->Render(x, y);
-
-	//RenderBoundingBox();
-	
-	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)
@@ -560,8 +595,9 @@ void CMario::SetLevel(int l)
 	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
-		y = (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	level = l;
+
 }
 

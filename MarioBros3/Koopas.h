@@ -10,7 +10,7 @@
 #define KOOPAS_BBOX_HEIGHT 36
 #define KOOPAS_BBOX_HEIGHT_DIE 24
 
-#define KOOPAS_DIE_TIMEOUT 10000
+#define KOOPAS_DIE_TIMEOUT 5000
 
 #define KOOPAS_STATE_WALKING_RIGHT 105
 #define KOOPAS_STATE_WALKING_LEFT 106
@@ -53,6 +53,9 @@ public:
 	virtual void SetState(int state);
 	void setVx(float i) {
 		vx = i;
+	}
+	void setVy(float i) {
+		vy = i;
 	}
 };
 
