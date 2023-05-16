@@ -1,5 +1,8 @@
 #include "Koopas.h"
 #include"ColorBox.h"
+#include "Goomba.h"
+#include "debug.h"
+#include "Platform.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -36,9 +39,28 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
-	
+	else if (dynamic_cast<CGoomba*>(e->obj))
+	{
+		DebugOut(L"Lo cc");
+		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
+			return;
+		else
+		{
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
+			// when collide with goomba - is a collidable object it will be change direction => change direction 2 times equal dont change
+			vx = -vx;
+		}
+	}
+	else if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
+		if (plat->IsBlocking() == 0)
+			vx = -vx;
+	}
+	else if (!e->obj->IsBlocking())
+		return;
 
 	if (e->ny != 0)
 	{
@@ -86,7 +108,6 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_DIE_DOWN;
 	else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
-
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }

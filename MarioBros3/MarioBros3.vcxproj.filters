@@ -264,5 +264,8 @@
     <Image Include="textures\item_x3.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="textures\enemies1_flip_vertical_x3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>
