@@ -3,6 +3,10 @@
 #include "Goomba.h"
 #include "debug.h"
 #include "Platform.h"
+#include "QuestionBlock.h"
+#include "PlayScene.h"
+#include "RedMushroom.h"
+#include "Leaf.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -42,7 +46,6 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	else if (dynamic_cast<CGoomba*>(e->obj))
 	{
-		DebugOut(L"Lo cc");
 		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
 			return;
 		else
@@ -58,6 +61,38 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
 		if (plat->IsBlocking() == 0)
 			vx = -vx;
+	}
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+	{
+		//DebugOut(L"Va cham voi ques");
+		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
+			return;
+		else
+		{
+			//DebugOut(L"Va cham voi ques");
+			CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+			CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
+			if (e->nx != 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
+			{
+				p->SetState(QUESTIONBLOCK_STATE_EMPTY);
+
+				if (x < p->getx())
+					p->setOption(1);
+				else
+					p->setOption(2);
+				if (p->getType() == 1)
+				{
+					CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);
+					scene->AddObject(t);
+				}
+				else if (p->getType() == 2)
+				{
+					CLeaf* t = new CLeaf(p->getx(), p->gety() - 50.0f);
+					scene->AddObject(t);
+				}
+
+			}
+		}
 	}
 	else if (!e->obj->IsBlocking())
 		return;

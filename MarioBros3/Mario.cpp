@@ -138,8 +138,8 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 	{
-		//CGameObject* t = NULL;
 		p->SetState(QUESTIONBLOCK_STATE_EMPTY);
+		
 		if (p->getType() == 1)
 		{
 			CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);

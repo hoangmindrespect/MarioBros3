@@ -18,3 +18,4 @@ height	240
 50	textures\miscx3.png
 60	textures\item_x3.png
 70	textures\enemies1_flip_vertical_x3.png
+80	textures\miscx3_flip.png

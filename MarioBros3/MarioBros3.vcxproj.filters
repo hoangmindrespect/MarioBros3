@@ -114,6 +114,9 @@
     <ClInclude Include="Koopas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -197,6 +200,9 @@
     <ClCompile Include="Koopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -265,6 +271,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\enemies1_flip_vertical_x3.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\miscx3_flip.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

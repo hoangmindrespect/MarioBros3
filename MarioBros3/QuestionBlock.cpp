@@ -1,5 +1,5 @@
 #include "QuestionBlock.h"
-
+#include "debug.h"
 void CQuestionBlock::Render()
 {
 	int aniId = ID_ANI_QUESTIONBLOCK;
@@ -29,17 +29,56 @@ void CQuestionBlock::Update(DWORD dt ,vector<LPGAMEOBJECT>* coObjects = NULL)
 {
 	if (state == QUESTIONBLOCK_STATE_EMPTY)
 	{
-		if (IsUp == false && y > miny)
-			y -= 0.2f * dt;
-		else
+		if (direction == 1)
 		{
-			IsUp = true;
-			if (IsDown == false && y < maxy)
-				y += 0.2f * dt;
+			if (IsUp == false && y > miny)
+				y -= 0.2f * dt;
 			else
 			{
-				y = maxy;
-				IsDown = true;
+				IsUp = true;
+				if (IsDown == false && y < maxy)
+					y += 0.2f * dt;
+				else
+				{
+					y = maxy;
+					IsDown = true;
+				}
+			}
+		}
+		else if (direction == 2)
+		{
+			if (option == 1) // move left to right
+			{
+				//DebugOut(L"check xem co vo day khong");
+				if (IsMoveLeft == false && x  < xmax1)
+					x += 0.2f * dt;
+				else
+				{
+					IsMoveLeft = true;
+					if (IsMoveRight == false && y > xmin)
+						x -= 0.2f * dt;
+					else
+					{
+						x = xmin;
+						IsMoveRight = true;
+					}
+				}
+			}
+			else if (option == 2)// move right to left
+			{
+				if (IsMoveRight == false && x > xmax2)
+					x -= 0.2f * dt;
+				else
+				{
+					IsMoveRight = true;
+					if (IsMoveLeft == false && y < xmin)
+						x += 0.2f * dt;
+					else
+					{
+						x = xmin;
+						IsMoveLeft = true;
+					}
+				}
 			}
 		}
 	}
