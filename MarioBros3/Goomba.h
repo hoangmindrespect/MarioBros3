@@ -35,7 +35,7 @@ protected:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
-
+	void SetYWhenCollideColorbox(LPGAMEOBJECT gameobject);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	

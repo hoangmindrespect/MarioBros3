@@ -13,11 +13,14 @@
 #include "PiranhaPlant.h"
 #include "Koopas.h"
 #include "ColorBox.h"
+#include "Leaf.h"
+#include "Leaf.h"
+#include "Platform.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	//ay = MARIO_GRAVITY;
 	vy += ay * dt;
 	vx += ax * dt;
-
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -27,9 +30,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 	
-
 	isOnPlatform = false;
-
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -41,17 +42,19 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
+	if (e->ny != 0 )
 	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->obj->IsBlocking())
+		{
+			vy = 0;
+			if (e->ny < 0) isOnPlatform = true;
+		}
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
+	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
-
+	
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
@@ -68,16 +71,55 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRedPiranhaPlant(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);	
+	else if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
+		if (platform->IsBlocking() == 0) {
 
+			if (e->ny < 0) {
 
-	
+				isOnPlatform = true;
+				SetYWhenCollideColorbox(platform);
+			}
+		}
+	}
+}
+
+void CMario::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject) {
+	if (level == MARIO_LEVEL_SMALL) {
+		if (gameobject->gety() - gety() < MARIO_SMALL_BBOX_HEIGHT + 8.0f)
+		{
+			sety(gameobject->gety() - MARIO_SMALL_BBOX_HEIGHT - 4.0f);
+			vy = 0; 
+			isOnPlatform = true;
+		}
+	}
+	else {
+		if (!isSitting) {
+			if (gameobject->gety() - gety() < MARIO_BIG_BBOX_HEIGHT )
+			{
+				sety(gameobject->gety() - MARIO_BIG_BBOX_HEIGHT + 4);
+				vy = 0;
+				isOnPlatform = true;
+			}
+		}
+		else {
+			if (gameobject->gety() - gety() < MARIO_BIG_BBOX_HEIGHT / 2 + 4)
+			{
+				sety(gameobject->gety() - MARIO_BIG_BBOX_HEIGHT / 2 - 4);
+				vy = 0;
+				isOnPlatform = true;
+			}
+		}
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -105,8 +147,6 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				else
 				{
 					SetState(MARIO_STATE_DIE);
-
-
 				}
 			}
 		}
@@ -145,10 +185,18 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 			CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);
 			scene->AddObject(t);
 		}
-		else if (p->getType() == 2)
+		else if (p->getType() == 2) // question block contains item
 		{
-			CRedMushroom* t = new CRedMushroom(p->getx(), p->gety() - 50.0f);
-			scene->AddObject(t);
+			if (level == MARIO_LEVEL_SMALL)
+			{
+				CRedMushroom* mushroom = new CRedMushroom(x, y - 25.0f);
+				scene->AddObject(mushroom);
+			}
+			else  if (level == MARIO_LEVEL_BIG)
+			{
+				CLeaf* leaf = new CLeaf(x, y);
+				scene->AddObject(leaf);
+			}
 		}
 
 	}
@@ -239,6 +287,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP)
 	{
 		if (x < koopas->getx())
@@ -279,10 +328,14 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	
-
-	
 }
+
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	SetLevel(MARIO_LEVEL_TAIL);
+	e->obj->Delete();
+}
+
 
 //
 // Get animation ID for small Mario
@@ -306,8 +359,10 @@ int CMario::GetAniIdSmall()
 			else
 				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
 		}
+
 	}
 	else
+	{
 		if (isSitting)
 		{
 			if (nx > 0)
@@ -339,7 +394,8 @@ int CMario::GetAniIdSmall()
 				else if (ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
 			}
-
+	}
+	
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
 
 	return aniId;

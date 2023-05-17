@@ -87,8 +87,17 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 				}
 				else if (p->getType() == 2)
 				{
-					CLeaf* t = new CLeaf(p->getx(), p->gety() - 50.0f);
-					scene->AddObject(t);
+					CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+					if (mario->getlevel() == MARIO_LEVEL_SMALL)
+					{
+						CRedMushroom* mushroom = new CRedMushroom(x, y - 25.0f);
+						scene->AddObject(mushroom);
+					}
+					else  if (mario->getlevel() == MARIO_LEVEL_BIG)
+					{
+						CLeaf* leaf = new CLeaf(x, y);
+						scene->AddObject(leaf);
+					}
 				}
 
 			}
@@ -111,7 +120,15 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 	}
 }
-
+void CKoopas::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject) {
+	
+	if (gameobject->gety() - gety() < 40.0f)
+	{
+		sety(gameobject->gety() - 24.0f);
+		vy = 0;
+		
+	}
+}
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;

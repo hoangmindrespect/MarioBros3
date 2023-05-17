@@ -318,6 +318,7 @@ void CPlayScene::Update(DWORD dt)
 		
 		if (p)
 		{
+			
 			for (int j : index)
 			{
 				if (ma->getlevel() == 1)

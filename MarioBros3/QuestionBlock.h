@@ -17,7 +17,7 @@
 
 
 
-//1: coin, 2: redmush, 3: greenmush, 4: leaf
+//1: coin, 2: item, 3: greenmushgroom
 class CQuestionBlock : public CGameObject {
 	int type;//1: coin, 2: redmush, 3: greenmush, 4: leaf
 	int direction; //1: vertical, 2: horizontal

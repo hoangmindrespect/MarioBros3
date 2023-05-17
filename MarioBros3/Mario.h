@@ -15,7 +15,7 @@
 #define MARIO_JUMP_SPEED_Y		0.67f
 #define MARIO_JUMP_RUN_SPEED_Y	0.77f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.0018f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -146,6 +146,8 @@ class CMario : public CGameObject
 	void OnCollisionWithRedBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void SetYWhenCollideColorbox(LPGAMEOBJECT gameobject);
 
 	int GetAniIdBig();
 	int GetAniIdTail();
@@ -175,7 +177,6 @@ public:
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
