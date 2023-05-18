@@ -31,6 +31,16 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	case DIK_A:
+		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+		if (mario->getlevel() == MARIO_LEVEL_TAIL)
+		{
+			if(mario->getnx() > 0)
+				mario->SetState(MARIO_STATE_ATTACK_RIGHT);
+			else
+				mario->SetState(MARIO_STATE_ATTACK_LEFT);
+		}
+		break;
 	}
 }
 
@@ -47,6 +57,10 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
+	case DIK_A: // key up => reset prepare to run
+		mario->SetIsRun(false);
+		mario->SetIsReadyToRun(false);
+		break;
 	}
 }
 
@@ -58,17 +72,33 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			mario->SetState(MARIO_STATE_PREPARE_RUNNING_RIGHT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+
+		if (game->IsKeyDown(DIK_X))
+		{
+			DebugOut(L"chuan bi set state %d\n", mario->GetState());
+			if (mario->GetState() == MARIO_STATE_PREPARE_RUNNING_RIGHT)
+				mario->SetState(MARIO_STATE_FLYING_RIGHT);				
+			DebugOut(L"set state %d\n", mario->GetState());
+
+		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
 		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			mario->SetState(MARIO_STATE_PREPARE_RUNNING_LEFT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
+
+		if (game->IsKeyDown(DIK_X))
+		{
+			if (mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+				mario->SetState(MARIO_STATE_FLYING_LEFT);
+		}
 	}
+	
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }

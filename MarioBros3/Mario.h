@@ -30,9 +30,21 @@
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
 
+#define MARIO_STATE_PREPARE_RUNNING_RIGHT	11258
+#define MARIO_STATE_PREPARE_RUNNING_LEFT	11259
+
+#define MARIO_STATE_RELEASE_RUNNING_RIGHT	1258
+#define MARIO_STATE_RELEASE_RUNNING_LEFT	1259
+
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 #define TIME_READY_TO_RUN	3000
+
+#define MARIO_STATE_ATTACK_RIGHT	178
+#define MARIO_STATE_ATTACK_LEFT	179
+
+#define MARIO_STATE_FLYING_RIGHT	168
+#define MARIO_STATE_FLYING_LEFT	169
 
 #pragma region ANIMATION_ID
 
@@ -99,9 +111,15 @@
 
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT 1710
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT 1711
+
 #define ID_ANI_MARIO_TAIL_SIT_RIGHT 1712
 #define ID_ANI_MARIO_TAIL_SIT_LEFT 1713
 
+#define ID_ANI_MARIO_TAIL_ATTACK_RIGHT	1714
+#define ID_ANI_MARIO_TAIL_ATTACK_LEFT	1715
+
+#define ID_ANI_MARIO_TAIL_FLYING_RIGHT	1716
+#define ID_ANI_MARIO_TAIL_FLYING_LEFT	1717		
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -124,10 +142,17 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_ATTACK_TIME 500
+#define MARIO_TIME_TO_RUN 1500
 
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
+	BOOLEAN isReadyToRun;
+	BOOLEAN	isAttackByTail;
+	BOOLEAN isOnPlatform;
+	BOOLEAN isRun;
+	BOOLEAN isFlying;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -135,7 +160,8 @@ class CMario : public CGameObject
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
+	ULONGLONG attack_start;
+	ULONGLONG running_start;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -147,23 +173,31 @@ class CMario : public CGameObject
 	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+
 	void SetYWhenCollideColorbox(LPGAMEOBJECT gameobject);
+	
 
 	int GetAniIdBig();
 	int GetAniIdTail();
 	int GetAniIdSmall();
 
 public:
-	int getlevel() { return level; }
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+	
 		isSitting = false;
+		isAttackByTail = false;
+		isReadyToRun = false;
+		isFlying = false;
+		isRun = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-		level = MARIO_LEVEL_SMALL;
+		level = MARIO_LEVEL_TAIL;
 		untouchable = 0;
 		untouchable_start = -1;
+		attack_start = -1;
+		running_start = 0;
 		isOnPlatform = false;
 		coin = 0;
 	}
@@ -179,9 +213,12 @@ public:
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void SetIsRun(bool a) { isRun = a; }
+	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
+	int getlevel() { return level; }
+	int getnx() { return nx; }
 };
 

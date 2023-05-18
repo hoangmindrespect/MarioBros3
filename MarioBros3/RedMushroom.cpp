@@ -2,11 +2,13 @@
 #include "debug.h"
 #include "ColorBox.h"
 #include "Mario.h"
+#include "Platform.h"
+#include "QuestionBlock.h"
 CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = REDMUSHROOM_GRAVITY;
-	vx = REDMUSHROOM_WALKING_SPEED;
+	vx = GOOMBA_WALKING_SPEED;
 }
 
 void CRedMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -25,12 +27,31 @@ void CRedMushroom::OnNoCollision(DWORD dt)
 
 void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
+	
 	if (dynamic_cast<CRedMushroom*>(e->obj)) return;
 	else if (dynamic_cast<CMario*>(e->obj))
 	{
 		e->obj->sety(e->obj->gety() - 32.0f);
 	}
+	else if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
+		if (p->IsBlocking() == 0)
+		{
+			if (e->ny < 0)
+			{
+				SetYWhenCollideColorbox(p);
+			}
+		}
+	}
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+	{
+		CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
+		sety(p->gety() - 23.0f);
+		vy = 0;
+	}
+
+	if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -38,7 +59,14 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
-		
+	}
+}
+void CRedMushroom::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject)
+{
+	if (gameobject->gety() - gety() < REDMUSHROOM_BBOX_HEIGHT)
+	{
+		sety(gameobject->gety() - REDMUSHROOM_BBOX_HEIGHT - 1.0f);
+		vy = 0;
 	}
 }
 

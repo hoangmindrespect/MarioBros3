@@ -140,8 +140,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_QUESTIONBLOCK:
 	{
 		int type = atof(tokens[3].c_str());
-		int direction = atof(tokens[4].c_str());
-		obj = new CQuestionBlock(x, y, type, direction);
+		obj = new CQuestionBlock(x, y, type);
 		break;
 	}
 	case OBJECT_TYPE_COLORBOX: 

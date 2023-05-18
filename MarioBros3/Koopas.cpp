@@ -68,10 +68,6 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				p->SetState(QUESTIONBLOCK_STATE_EMPTY);
 
-				if (x < p->getx())
-					p->setOption(1);
-				else
-					p->setOption(2);
 				if (p->getType() == 1)
 				{
 					CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);
@@ -82,12 +78,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 					CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 					if (mario->getlevel() == MARIO_LEVEL_SMALL)
 					{
-						CRedMushroom* mushroom = new CRedMushroom(x, y - 25.0f);
+						CRedMushroom* mushroom = new CRedMushroom(x + 30.0f, y - 55.0f);
 						scene->AddObject(mushroom);
 					}
 					else  if (mario->getlevel() == MARIO_LEVEL_BIG)
 					{
-						CLeaf* leaf = new CLeaf(x, y);
+						CLeaf* leaf = new CLeaf(x + 30.0f, y - 35.0f);
 						scene->AddObject(leaf);
 					}
 				}

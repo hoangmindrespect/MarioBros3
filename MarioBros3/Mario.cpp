@@ -22,7 +22,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	//DebugOut(L"%f \n", maxVx);
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -30,6 +30,35 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 	
+	if (GetTickCount64() - attack_start > MARIO_ATTACK_TIME)
+	{
+		//DebugOut(L"time out");
+		isAttackByTail = false;
+		attack_start = 0;
+	}
+	if (state == MARIO_STATE_PREPARE_RUNNING_LEFT || state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
+	{
+		if (GetTickCount64() - running_start > MARIO_TIME_TO_RUN)
+		{
+			if (state == MARIO_STATE_PREPARE_RUNNING_LEFT)
+			{
+				SetState(MARIO_STATE_RUNNING_LEFT);
+				/*vx = -MARIO_RUNNING_SPEED;
+				ax = -MARIO_ACCEL_RUN_X;*/
+			}
+			else if (state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
+			{
+				SetState(MARIO_STATE_RUNNING_RIGHT);
+				/*vx = MARIO_RUNNING_SPEED;
+				ax = MARIO_ACCEL_RUN_X;*/
+			}
+			running_start = 0;
+			//isReadyToRun = false;
+			isRun = true;
+		}
+	}
+	
+
 	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -189,12 +218,12 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		{
 			if (level == MARIO_LEVEL_SMALL)
 			{
-				CRedMushroom* mushroom = new CRedMushroom(x, y - 25.0f);
+				CRedMushroom* mushroom = new CRedMushroom(x, y - 95.0f);
 				scene->AddObject(mushroom);
 			}
 			else  if (level == MARIO_LEVEL_BIG)
 			{
-				CLeaf* leaf = new CLeaf(x, y);
+				CLeaf* leaf = new CLeaf(x, y - 35.0f);
 				scene->AddObject(leaf);
 			}
 		}
@@ -467,57 +496,93 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdTail()
 {
 	int aniId = -1;
-	if (!isOnPlatform)
+	if (!isFlying)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		if (!isAttackByTail)
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
+			if (!isOnPlatform)
+			{
+				if (abs(ax) == MARIO_ACCEL_RUN_X)
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT;
+				}
+				else
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+				}
+			}
 			else
-				aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT;
+				if (isSitting)
+				{
+					if (nx > 0)
+						aniId = ID_ANI_MARIO_TAIL_SIT_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_TAIL_SIT_LEFT;
+				}
+				else
+				{
+					if (vx == 0)
+					{
+						if (nx > 0) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
+						else aniId = ID_ANI_MARIO_TAIL_IDLE_LEFT;
+					}
+					else if (vx > 0)
+					{
+						if (ax < 0)
+							aniId = ID_ANI_MARIO_TAIL_BRACE_RIGHT;
+						else if (ax == MARIO_ACCEL_RUN_X)
+						{
+							if (!isRun)
+								aniId = ID_ANI_MARIO_TAIL_WALKING_RIGHT;
+							else
+								aniId = ID_ANI_MARIO_TAIL_RUNNING_RIGHT;
+						}
+						else if (ax == MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_TAIL_WALKING_RIGHT;
+					}
+					else // vx < 0
+					{
+						if (ax > 0)
+							aniId = ID_ANI_MARIO_TAIL_BRACE_LEFT;
+						else if (ax == -MARIO_ACCEL_RUN_X)
+						{
+							if (!isRun)
+								aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
+							else
+								aniId = ID_ANI_MARIO_TAIL_RUNNING_LEFT;
+						}
+						else if (ax == -MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
+					}
+
+				}
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
-			else
-				aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_TAIL_ATTACK_RIGHT;
+			else if (nx < 0)
+				aniId = ID_ANI_MARIO_TAIL_ATTACK_LEFT;
+		}
+
+
+		if (aniId == -1)
+		{
+			aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
 		}
 	}
 	else
-		if (isSitting)
-		{
-			if (nx > 0)
-				aniId = ID_ANI_MARIO_TAIL_SIT_RIGHT;
-			else
-				aniId = ID_ANI_MARIO_TAIL_SIT_LEFT;
-		}
-		else
-			if (vx == 0)
-			{
-				if (nx > 0) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
-				else aniId = ID_ANI_MARIO_TAIL_IDLE_LEFT;
-			}
-			else if (vx > 0)
-			{
-				if (ax < 0)
-					aniId = ID_ANI_MARIO_TAIL_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
-					aniId = ID_ANI_MARIO_TAIL_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_TAIL_WALKING_RIGHT;
-			}
-			else // vx < 0
-			{
-				if (ax > 0)
-					aniId = ID_ANI_MARIO_TAIL_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
-					aniId = ID_ANI_MARIO_TAIL_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
-			}
-
-	if (aniId == -1) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
+	{
+		DebugOut(L"hello vo r nè");
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
+	}
 
 	return aniId;
 }
@@ -545,9 +610,40 @@ void CMario::SetState(int state)
 	if (this->state == MARIO_STATE_DIE) return; 
 
 	switch (state)
-	{
+	{	
+	case MARIO_STATE_FLYING_RIGHT:
+		isFlying = true;
+		vx = MARIO_WALKING_SPEED;
+		vy = -MARIO_WALKING_SPEED;
+		break;
+	case MARIO_STATE_FLYING_LEFT:
+		break;
+	case MARIO_STATE_PREPARE_RUNNING_RIGHT:
+		if (isSitting) break;
+		DebugOut(L"1 \n");
+		if (!isReadyToRun)
+		{
+			running_start = GetTickCount64();
+			isReadyToRun = true;
+		}
+		maxVx = MARIO_WALKING_SPEED;
+		ax = MARIO_ACCEL_RUN_X;
+		nx = 1;
+		break;
+	case MARIO_STATE_PREPARE_RUNNING_LEFT:
+		if (isSitting) break;
+		if (!isReadyToRun)
+		{
+			running_start = GetTickCount64();
+			isReadyToRun = true;
+		}
+		maxVx = -MARIO_WALKING_SPEED;
+		ax = -MARIO_ACCEL_RUN_X;
+		nx = -1;
+		break;
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
+		DebugOut(L"2 \n");
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
@@ -608,7 +704,16 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
-
+	case MARIO_STATE_ATTACK_RIGHT:
+		isAttackByTail = true;
+		attack_start = GetTickCount64();
+		nx = 1;
+		break;
+	case MARIO_STATE_ATTACK_LEFT:
+		isAttackByTail = true;
+		attack_start = GetTickCount64();
+		nx = -1;
+		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
