@@ -56,20 +56,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			vx = -vx;
 		}
 	}
-	else if (dynamic_cast<CPlatform*>(e->obj))
-	{
-		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
-		if (plat->IsBlocking() == 0)
-			vx = -vx;
-	}
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 	{
-		//DebugOut(L"Va cham voi ques");
 		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
 			return;
 		else
 		{
-			//DebugOut(L"Va cham voi ques");
 			CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 			CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
 			if (e->nx != 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
@@ -103,7 +95,34 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	else if (!e->obj->IsBlocking())
+	else if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
+		if (plat->IsBlocking() == 0)
+		{
+			if (plat->getIsBlockKoopas() == 0)
+			{
+				if (e->ny < 0) {
+					SetYWhenCollideColorbox(plat);
+				}
+			}
+			else
+			{
+				if (state == KOOPAS_STATE_WALKING_RIGHT || state == KOOPAS_STATE_WALKING_LEFT)
+				{
+					vx = -vx;
+					n = -n;
+					if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
+						SetState(KOOPAS_STATE_WALKING_LEFT);
+					if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
+						SetState(KOOPAS_STATE_WALKING_RIGHT);
+				}
+			}
+		}
+		
+	}
+
+	if (e->obj->IsBlocking() == 0)
 		return;
 
 	if (e->ny != 0)
@@ -122,11 +141,21 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CKoopas::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject) {
 	
-	if (gameobject->gety() - gety() < 40.0f)
+	if (state == KOOPAS_STATE_WALKING_LEFT || state == KOOPAS_STATE_WALKING_RIGHT)
 	{
-		sety(gameobject->gety() - 24.0f);
-		vy = 0;
-		
+		if (gameobject->gety() - gety() < KOOPAS_BBOX_HEIGHT)
+		{
+			sety(gameobject->gety() - KOOPAS_BBOX_HEIGHT + 4.0f);
+			vy = 0;
+		}
+	}
+	else
+	{
+		if (gameobject->gety() - gety() < KOOPAS_BBOX_HEIGHT_DIE)
+		{
+			sety(gameobject->gety() - KOOPAS_BBOX_HEIGHT_DIE - 1.0f);
+			vy = 0;
+		}
 	}
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

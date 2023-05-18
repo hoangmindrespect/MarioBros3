@@ -76,7 +76,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
-		if (platform->IsBlocking() == 0) {
+		if (platform->IsBlocking() == 0 && platform->getIsBlockKoopas() == 0) {
 
 			if (e->ny < 0) {
 
@@ -256,6 +256,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	//we got four case col
 	if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
 	{
+		DebugOut(L"kill this koopas");
 		if (e->ny < 0)
 		{
 			if (koopas->GetState() != KOOPAS_STATE_DIE_DOWN)
