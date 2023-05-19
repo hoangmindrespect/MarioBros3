@@ -31,6 +31,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	/*case DIK_X:
+		mario->SetState(MARIO_STATE_LOW_FLY);
+		break;*/
 	case DIK_A:
 		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 		if (mario->getlevel() == MARIO_LEVEL_TAIL)
@@ -61,6 +64,21 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetIsRun(false);
 		mario->SetIsReadyToRun(false);
 		break;
+	case DIK_X:
+		mario->SetIsFlying(false);
+		if (mario->getnx() > 0)
+			mario->SetState(MARIO_STATE_RELEASE_FLYING_RIGHT);
+		else
+			mario->SetState(MARIO_STATE_RELEASE_FLYING_LEFT);
+		break;
+	case DIK_RIGHT:
+		mario->SetIsRun(false);
+		mario->SetIsReadyToRun(false);
+		break;
+	case DIK_LEFT:
+		mario->SetIsRun(false);
+		mario->SetIsReadyToRun(false);
+		break;
 	}
 }
 
@@ -72,30 +90,41 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_PREPARE_RUNNING_RIGHT);
+		{
+			if (mario->getIsRun() == 0)
+			{
+				mario->SetState(MARIO_STATE_PREPARE_RUNNING_RIGHT);
+			}
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 
 		if (game->IsKeyDown(DIK_X))
 		{
-			DebugOut(L"chuan bi set state %d\n", mario->GetState());
-			if (mario->GetState() == MARIO_STATE_PREPARE_RUNNING_RIGHT)
-				mario->SetState(MARIO_STATE_FLYING_RIGHT);				
-			DebugOut(L"set state %d\n", mario->GetState());
-
+			if (mario->GetState() == MARIO_STATE_RUNNING_RIGHT || mario->GetState() == MARIO_STATE_RELEASE_FLYING_RIGHT )
+			{
+				mario->SetState(MARIO_STATE_FLYING_RIGHT);
+			}
 		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
 		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_PREPARE_RUNNING_LEFT);
+		{
+			if (mario->getIsRun() == 0)
+			{
+				mario->SetState(MARIO_STATE_PREPARE_RUNNING_LEFT);
+			}
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 
 		if (game->IsKeyDown(DIK_X))
 		{
-			if (mario->GetState() == MARIO_STATE_RUNNING_LEFT)
+			if (mario->GetState() == MARIO_STATE_RUNNING_LEFT || mario->GetState() == MARIO_STATE_RELEASE_FLYING_LEFT)
+			{
 				mario->SetState(MARIO_STATE_FLYING_LEFT);
+			}
 		}
 	}
 	

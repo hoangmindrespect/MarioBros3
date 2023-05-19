@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
-#include "ColorBox.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -134,20 +133,28 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		index.push_back(objects.size());
 		break;
 	}
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_PIRANHA: obj = new CPiranhaPlant(x, y); break;
+	case OBJECT_TYPE_BRICK: 
+	{
+		int model = atof(tokens[3].c_str());
+		obj = new CBrick(x, y, model);
+		break;
+	}
+	case OBJECT_TYPE_COIN: 
+	{	
+		int model = atof(tokens[3].c_str());
+		obj = new CCoin(x, y, model);
+		break;
+	}
+	case OBJECT_TYPE_PIRANHA: 
+	{
+		int model = atof(tokens[3].c_str());
+		obj = new CPiranhaPlant(x, y, model);
+		break;
+	}
 	case OBJECT_TYPE_QUESTIONBLOCK:
 	{
 		int type = atof(tokens[3].c_str());
 		obj = new CQuestionBlock(x, y, type);
-		break;
-	}
-	case OBJECT_TYPE_COLORBOX: 
-	{
-		float width = (float)atof(tokens[3].c_str());
-		obj = new CColorBox(x, y,width);
-
 		break;
 	}
 	case OBJECT_TYPE_BACKGROUND:
@@ -311,36 +318,17 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
-#pragma region Handle color box
-	for (int i = 0; i < objects.size(); i++)
+	if (player->getx() > 1080)
 	{
-		CColorBox* p = dynamic_cast<CColorBox*>(objects[i]);
-		CMario* ma = dynamic_cast<CMario*>(player);
-		
-		if (p)
+		if (isCreateGoomba == false)
 		{
-			
-			for (int j : index)
-			{
-				if (ma->getlevel() == 1)
-				{
-					if (ma->gety() + MARIO_SMALL_BBOX_HEIGHT < p->gety() || objects[j]->gety() + 24.0f < p->gety())
-						p->tmp = 1;
-					else
-						p->tmp = 0;
-				}
-				else if (ma->getlevel() == 2 || ma->getlevel() == 3 )
-				{
-					if (ma->gety() + 28.0f < p->gety()|| objects[j]->gety() + 24.0f < p->gety())
-						p->tmp = 1;
-					else
-						p->tmp = 0;
-				}
-			}
+			CGoomba* g1 = new CGoomba(1300, 234);
+			CGoomba* g2 = new CGoomba(1450, 234);
+			objects.push_back(g1);
+			objects.push_back(g2);
+			isCreateGoomba = true;
 		}
-		
 	}
-#pragma endregion
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -355,7 +343,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
 	
 
 	PurgeDeletedObjects();

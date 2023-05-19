@@ -7,6 +7,7 @@
 #include "PlayScene.h"
 #include "RedMushroom.h"
 #include "Leaf.h"
+#include "Brick.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -56,6 +57,15 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			vx = -vx;
 		}
 	}
+	else if (dynamic_cast<CBrick*>(e->obj))
+	{
+		CBrick* b = dynamic_cast<CBrick*>(e->obj);
+		if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+		{
+			if (b->getModel() == 2)
+				e->obj->Delete();
+		}
+	}
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 	{
 		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
@@ -70,7 +80,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 				if (p->getType() == 1)
 				{
-					CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f);
+					CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f, 1);
 					scene->AddObject(t);
 				}
 				else if (p->getType() == 2)
@@ -81,7 +91,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 						CRedMushroom* mushroom = new CRedMushroom(x + 30.0f, y - 55.0f);
 						scene->AddObject(mushroom);
 					}
-					else  if (mario->getlevel() == MARIO_LEVEL_BIG)
+					else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
 					{
 						CLeaf* leaf = new CLeaf(x + 30.0f, y - 35.0f);
 						scene->AddObject(leaf);

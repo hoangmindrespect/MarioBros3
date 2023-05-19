@@ -11,11 +11,13 @@
 
 class CPlayScene: public CScene
 {
+
 public:
 	// A play scene has to have player, right? 
 	static LPGAMEOBJECT player;					
 	static vector<LPGAMEOBJECT> objects;
 	vector<int> index;
+	BOOLEAN isCreateGoomba = false;
 	void AddObject(LPGAMEOBJECT e);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

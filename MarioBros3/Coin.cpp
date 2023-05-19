@@ -8,18 +8,21 @@ void CCoin::Render()
 	RenderBoundingBox();
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
-	if (IsUp == false && y > maxy)
-		y -= 0.3f * dt;
-	else
+	if (isInQuestionBlock == 1)
 	{
-		IsUp = true;
-		if (IsDown == false && y < miny)
-			y += 0.2f * dt;
+		if (IsUp == false && y > maxy)
+			y -= 0.3f * dt;
 		else
 		{
-			y = miny;
-			IsDown = true;
-			this->Delete();
+			IsUp = true;
+			if (IsDown == false && y < miny)
+				y += 0.2f * dt;
+			else
+			{
+				y = miny;
+				IsDown = true;
+				this->Delete();
+			}
 		}
 	}
 	CGameObject::Update(dt, coObjects);

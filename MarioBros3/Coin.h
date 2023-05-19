@@ -15,11 +15,13 @@ class CCoin : public CGameObject {
 	float miny;
 	bool IsUp;
 	bool IsDown;
+	int isInQuestionBlock;
 public:
-	CCoin(float x, float y) : CGameObject(x, y) {
+	CCoin(float x, float y, int k) : CGameObject(x, y) {
 		maxy = y - 55;
 		miny = y - 25;
 		IsUp = IsDown = false;
+		isInQuestionBlock = k;
 	}
 	void Render();
 	//void Update(DWORD dt);

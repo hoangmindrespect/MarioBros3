@@ -25,6 +25,7 @@
 #define MARIO_STATE_WALKING_LEFT	200
 
 #define MARIO_STATE_JUMP			300
+#define MARIO_STATE_LOW_FLY			309
 #define MARIO_STATE_RELEASE_JUMP    301
 
 #define MARIO_STATE_RUNNING_RIGHT	400
@@ -45,6 +46,9 @@
 
 #define MARIO_STATE_FLYING_RIGHT	168
 #define MARIO_STATE_FLYING_LEFT	169
+
+#define MARIO_STATE_RELEASE_FLYING_RIGHT	128
+#define MARIO_STATE_RELEASE_FLYING_LEFT	129
 
 #pragma region ANIMATION_ID
 
@@ -119,7 +123,10 @@
 #define ID_ANI_MARIO_TAIL_ATTACK_LEFT	1715
 
 #define ID_ANI_MARIO_TAIL_FLYING_RIGHT	1716
-#define ID_ANI_MARIO_TAIL_FLYING_LEFT	1717		
+#define ID_ANI_MARIO_TAIL_FLYING_LEFT	1717
+
+#define ID_ANI_MARIO_TAIL_LOW_FLYING_RIGHT	1718
+#define ID_ANI_MARIO_TAIL_LOW_FLYING_LEFT	1719
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -144,6 +151,7 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_ATTACK_TIME 500
 #define MARIO_TIME_TO_RUN 1500
+#define MARIO_FLYING_TIME 5000
 
 class CMario : public CGameObject
 {
@@ -153,6 +161,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	BOOLEAN isRun;
 	BOOLEAN isFlying;
+	BOOLEAN isReleaseFlying; // mario landing or flying?
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -162,6 +171,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG attack_start;
 	ULONGLONG running_start;
+	ULONGLONG flying_start;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -190,6 +200,7 @@ public:
 		isReadyToRun = false;
 		isFlying = false;
 		isRun = false;
+		isReleaseFlying = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -218,7 +229,14 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetIsRun(bool a) { isRun = a; }
 	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
+	void SetIsFlying(bool a) { isFlying = a; }
+	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }
+	void SetVy(float v) { vy = v; }
+	void SetVx(float v) { vx = v; }
 	int getlevel() { return level; }
 	int getnx() { return nx; }
+	float getvx() { return vx; }
+	bool getIsRun() { return isRun; }
+	bool getIsFlying() { return isFlying; }
 };
 
