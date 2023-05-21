@@ -138,6 +138,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Cloud.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="RedMushroom.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
@@ -168,6 +170,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
@@ -186,6 +189,7 @@
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedMushroom.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -207,16 +211,19 @@
     <Text Include="AssetFile\redmushroom.txt" />
     <Text Include="AssetFile\Road.txt" />
     <Text Include="AssetFile\scene1.txt" />
+    <Text Include="AssetFile\ScoreGame.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\bbox.png" />
-    <Image Include="textures\enemies1x3.png" />
-    <Image Include="textures\enemies1_flipx3.png" />
-    <Image Include="textures\enemies1_flip_vertical_x3.png" />
-    <Image Include="textures\item_x3.png" />
-    <Image Include="textures\mariox3.png" />
-    <Image Include="textures\miscx3.png" />
-    <Image Include="textures\miscx3_flip.png" />
+    <Image Include="textures\black.png" />
+    <Image Include="textures\enemies.png" />
+    <Image Include="textures\enemies1_flip_horizontal.png" />
+    <Image Include="textures\enemies1_flip_vertical.png" />
+    <Image Include="textures\hud.png" />
+    <Image Include="textures\item.png" />
+    <Image Include="textures\mario.png" />
+    <Image Include="textures\misc.png" />
+    <Image Include="textures\misc_flip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

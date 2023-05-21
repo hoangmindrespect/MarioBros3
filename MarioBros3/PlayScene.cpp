@@ -16,6 +16,7 @@
 #include "Bullet.h"
 #include "PiranhaPlant.h"
 #include "Koopas.h"
+#include "HUD.h"
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 LPGAMEOBJECT CPlayScene::player;
@@ -209,6 +210,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
+	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -342,10 +344,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-
 	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
-	
-
 	PurgeDeletedObjects();
 }
 
@@ -355,9 +354,7 @@ void CPlayScene::Render()
 		objects[i]->Render();
 }
 
-/*
-*	Clear all objects from this scene
-*/
+
 void CPlayScene::Clear()
 {
 	vector<LPGAMEOBJECT>::iterator it;

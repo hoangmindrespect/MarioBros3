@@ -17,9 +17,9 @@
 #define ID_ANI__PIRANHA_DOWN_UP 15865
 
 
-#define PIRANHA_BBOX_WIDTH 24
-#define PIRANHA_BBOX_HEIGHT 48
-#define PIRANHA_BBOX_BITE_HEIGHT 36
+#define PIRANHA_BBOX_WIDTH 16
+#define PIRANHA_BBOX_HEIGHT 32
+#define PIRANHA_BBOX_BITE_HEIGHT 24
 
 #define PIRANHA_STATE_UP_LEFT 64
 #define	PIRANHA_STATE_DOWN_LEFT 27
@@ -38,8 +38,8 @@ class CPiranhaPlant : public CGameObject {
 	ULONGLONG timeStart_Up;
 public:
 	CPiranhaPlant(float x, float y, int model) : CGameObject(x, y) {
-		ymax = y - 46.0f;
-		ymax1 = x - 35.0f;
+		ymax = y - 31.0f;
+		ymax1 = x - 23.0f;
 		this->model = model;
 		IsStart_Fire = false;
 		IsStart_Up = true; // at the first time meet mario it up immediately!

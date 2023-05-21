@@ -6,9 +6,9 @@
 
 #define ID_ANI_COIN 11900
 
-#define	COIN_WIDTH 24
-#define COIN_BBOX_WIDTH 24
-#define COIN_BBOX_HEIGHT 24
+#define	COIN_WIDTH 16
+#define COIN_BBOX_WIDTH 16
+#define COIN_BBOX_HEIGHT 16
 
 class CCoin : public CGameObject {
 	float maxy;

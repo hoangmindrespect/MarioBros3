@@ -27,7 +27,7 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	sprite.TextureIndex = 0;
 
-	D3DXMatrixScaling(&this->matScaling, (FLOAT)spriteWidth * 0.5, (FLOAT)spriteHeight * 0.5, 1.0f);
+	D3DXMatrixScaling(&this->matScaling, (FLOAT)spriteWidth , (FLOAT)spriteHeight , 1.0f);
 }
 
 void CSprite::Draw(float x, float y)

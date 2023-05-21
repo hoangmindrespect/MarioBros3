@@ -114,6 +114,12 @@
     <ClInclude Include="Leaf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cloud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -197,6 +203,12 @@
     <ClCompile Include="Leaf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -244,30 +256,39 @@
     <Text Include="AssetFile\koopas.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\ScoreGame.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\bbox.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\enemies1_flipx3.png">
+    <Image Include="textures\hud.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\enemies1x3.png">
+    <Image Include="textures\black.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\mariox3.png">
+    <Image Include="textures\enemies.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\miscx3.png">
+    <Image Include="textures\enemies1_flip_horizontal.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\item_x3.png">
+    <Image Include="textures\enemies1_flip_vertical.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\enemies1_flip_vertical_x3.png">
+    <Image Include="textures\item.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="textures\miscx3_flip.png">
+    <Image Include="textures\misc.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\misc_flip.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\mario.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

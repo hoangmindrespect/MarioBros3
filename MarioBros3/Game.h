@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <string>
 using namespace std;
+#define FULL_WEIGHT_1_1 2816
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
@@ -58,7 +59,8 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
-
+	int screen_height;
+	int screen_width;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -91,7 +93,9 @@ public:
 	ID3D10Device* GetDirect3DDevice() { return this->pD3DDevice; }
 	IDXGISwapChain* GetSwapChain() { return this->pSwapChain; }
 	ID3D10RenderTargetView* GetRenderTargetView() { return this->pRenderTargetView; }
-
+	HWND getWnd() {
+		return hWnd;
+	}
 	ID3DX10Sprite* GetSpriteHandler() { return this->spriteObject; }
 
 	ID3D10BlendState* GetAlphaBlending() { return pBlendStateAlpha; };

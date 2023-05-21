@@ -53,8 +53,11 @@ float blue = (float)strtol("FD", NULL, 16);
 
 #define BACKGROUND_COLOR D3DXCOLOR(red/255, green/255, blue/255, 0.0f)
 
-#define SCREEN_WIDTH 400
-#define SCREEN_HEIGHT 390
+#define SCREEN_WIDTH 272
+#define SCREEN_HEIGHT 256
+
+int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -128,8 +131,8 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			WINDOW_CLASS_NAME,
 			MAIN_WINDOW_TITLE,
 			WS_OVERLAPPEDWINDOW, // WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP,
-			CW_USEDEFAULT,
-			CW_USEDEFAULT,
+			SCREEN_WIDTH / screenWidth + 400.0f,
+			SCREEN_HEIGHT / screenHeight,
 			ScreenWidth,
 			ScreenHeight,
 			NULL,
@@ -208,7 +211,7 @@ int WINAPI WinMain(
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
 	game->Load(L"AssetFile/game_start.txt");  
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*3, SCREEN_HEIGHT*3, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

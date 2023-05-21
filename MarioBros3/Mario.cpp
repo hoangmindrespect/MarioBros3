@@ -52,24 +52,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			isRun = true;
 		}
 
-		/*if (isFlying)
+		// check if mario fly too long
+		if (state == MARIO_STATE_FLYING_RIGHT || state == MARIO_STATE_FLYING_RIGHT)
 		{
 			if (GetTickCount64() - flying_start > MARIO_FLYING_TIME)
 			{
-				if(nx > 0)
+				if (nx > 0)
 					SetState(MARIO_STATE_RELEASE_FLYING_RIGHT);
 				else
 					SetState(MARIO_STATE_RELEASE_FLYING_LEFT);
 			}
-			isFlying = false;
-		}*/
-		/*if (isOnPlatform)
-		{
-			if (nx > 0)
-				SetState(MARIO_STATE_RUNNING_RIGHT);
-			else					 
-				SetState(MARIO_STATE_RUNNING_LEFT);
-		}*/
+		}
 	}
 	
 
@@ -536,11 +529,8 @@ int CMario::GetAniIdTail()
 		{
 			if (!isOnPlatform)
 			{
-				DebugOut(L"VO KHONG PHAI PLATFORM\n");
 				if (isReleaseFlying)
 				{
-					DebugOut(L"VO RELEASE\n");
-
 					if (nx >= 0)
 						aniId = ID_ANI_MARIO_TAIL_LOW_FLYING_RIGHT;
 					else
@@ -661,22 +651,26 @@ void CMario::SetState(int state)
 	{	
 	case MARIO_STATE_RELEASE_FLYING_RIGHT:
 		isReleaseFlying = true;
+		isFlying = false;
 		vx = MARIO_WALKING_SPEED;
 		vy = MARIO_GRAVITY ;
 		break;
 	case MARIO_STATE_RELEASE_FLYING_LEFT:
 		isReleaseFlying = true;
+		isFlying = false;
 		vx = -MARIO_WALKING_SPEED;
 		vy = MARIO_GRAVITY ;
 		break;
 	case MARIO_STATE_FLYING_RIGHT:
 		isFlying = true;
+		isReleaseFlying = false;
 		flying_start = GetTickCount64();
 		vx = MARIO_WALKING_SPEED;
 		vy = -MARIO_WALKING_SPEED;
 		break;
 	case MARIO_STATE_FLYING_LEFT:
 		isFlying = true;
+		isReleaseFlying = false;
 		flying_start = GetTickCount64();
 		vx = -MARIO_WALKING_SPEED;
 		vy = -MARIO_WALKING_SPEED;
