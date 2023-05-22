@@ -136,15 +136,15 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			else
 			{
 				y += 0.05f * dt;
-				if (y > ymax + 35.0f)
+				if (y > ymax + 23.0f)
 				{
-					y = ymax + 35.0f;
+					y = ymax + 23.0f;
 				}
 			}
 		}
 		else
 		{
-			y = ymax + 35.0f;
+			y = ymax + 23.0f;
 			IsStart_Up = true;
 		}
 	}

@@ -206,7 +206,7 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_DIE_DOWN:
 		die_start = GetTickCount64();
-		y += 8;
+		y += 6;
 		vx = 0;
 		vy = 0;
 		ay = 0;

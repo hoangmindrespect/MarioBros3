@@ -6,18 +6,18 @@
 #include "PlayScene.h"
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.15f
-#define MARIO_RUNNING_SPEED		0.25f
+#define MARIO_WALKING_SPEED		0.08f
+#define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.0003f
+#define MARIO_ACCEL_RUN_X	0.0005f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.28f
+#define MARIO_JUMP_RUN_SPEED_Y	0.4f
 
-#define MARIO_GRAVITY			0.001f
+#define MARIO_GRAVITY			0.0005f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.3f
+#define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -137,10 +137,14 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_TAIL		3
-#define MARIO_BIG_BBOX_WIDTH  14
-#define MARIO_BIG_BBOX_HEIGHT 24
-#define MARIO_BIG_SITTING_BBOX_WIDTH  14
-#define MARIO_BIG_SITTING_BBOX_HEIGHT 24
+#define MARIO_BIG_BBOX_WIDTH  16
+#define MARIO_BIG_BBOX_HEIGHT 26
+
+#define MARIO_TAIL_BBOX_WIDTH  24
+#define MARIO_TAIL_BBOX_HEIGHT 26
+
+#define MARIO_BIG_SITTING_BBOX_WIDTH  16
+#define MARIO_BIG_SITTING_BBOX_HEIGHT 18
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
@@ -152,7 +156,7 @@
 #define MARIO_ATTACK_TIME 500
 #define MARIO_TIME_TO_RUN 1500
 #define MARIO_FLYING_TIME 5000
-
+#define MARIO_BRACE_TIME 1000
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -162,6 +166,7 @@ class CMario : public CGameObject
 	BOOLEAN isRun;
 	BOOLEAN isFlying;
 	BOOLEAN isReleaseFlying; // mario landing or flying?
+	BOOLEAN isChangeDirection;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -172,6 +177,7 @@ class CMario : public CGameObject
 	ULONGLONG attack_start;
 	ULONGLONG running_start;
 	ULONGLONG flying_start;
+	ULONGLONG bracing_start;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -194,7 +200,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-	
+		isChangeDirection = false;
 		isSitting = false;
 		isAttackByTail = false;
 		isReadyToRun = false;
