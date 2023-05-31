@@ -44,5 +44,5 @@ void CQuestionBlock::Update(DWORD dt ,vector<LPGAMEOBJECT>* coObjects = NULL)
 		}
 	}
 	CGameObject::Update(dt, coObjects);
-
+	//CCollision::GetInstance()->Process(this, dt, coObjects);
 }

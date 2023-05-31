@@ -50,6 +50,9 @@
 #define MARIO_STATE_RELEASE_FLYING_RIGHT	128
 #define MARIO_STATE_RELEASE_FLYING_LEFT	129
 
+#define MARIO_STATE_IN_MAP	9991
+
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -127,6 +130,9 @@
 
 #define ID_ANI_MARIO_TAIL_LOW_FLYING_RIGHT	1718
 #define ID_ANI_MARIO_TAIL_LOW_FLYING_LEFT	1719
+
+#define ID_ANI_MARIO_SMALL_IN_MAP	1720
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -197,9 +203,11 @@ class CMario : public CGameObject
 	int GetAniIdTail();
 	int GetAniIdSmall();
 
+	int IsInMap;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		//IsInMap = k;
 		isChangeDirection = false;
 		isSitting = false;
 		isAttackByTail = false;
@@ -210,7 +218,7 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-		level = MARIO_LEVEL_TAIL;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		attack_start = -1;
@@ -222,6 +230,7 @@ public:
 	void Render();
 	void SetState(int state);
 	void setLevel(int i) { level = i; }
+	void setIsInMap(int k) { IsInMap = k; }
 	int IsCollidable()
 	{ 
 		return (state != MARIO_STATE_DIE); 
@@ -237,6 +246,8 @@ public:
 	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
 	void SetIsFlying(bool a) { isFlying = a; }
 	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }
+	bool getIsReleaseFlying() {return isReleaseFlying; }
+
 	void SetVy(float v) { vy = v; }
 	void SetVx(float v) { vx = v; }
 	int getlevel() { return level; }

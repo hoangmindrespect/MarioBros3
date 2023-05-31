@@ -17,6 +17,7 @@
 #include "PiranhaPlant.h"
 #include "Koopas.h"
 #include "HUD.h"
+#include "GrassInMap.h"
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 LPGAMEOBJECT CPlayScene::player;
@@ -117,16 +118,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+	{
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		int type = atof(tokens[3].c_str());
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
+		CMario* mario = dynamic_cast<CMario*>(player);
+		if (type == 1)
+			mario->setIsInMap(1);
+		else
+			mario->setIsInMap(0);
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_KOOPAS:
 	{
@@ -172,6 +181,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_GRASS_IN_MAP: obj = new CGrassInMap(x, y); break;
 	case OBJECT_TYPE_PIPE:
 	{
 
@@ -308,7 +318,7 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
+	DebugOut(L"%f\n", player->getx());
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -344,7 +354,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 	PurgeDeletedObjects();
 }
 

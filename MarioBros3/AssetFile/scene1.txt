@@ -14,7 +14,7 @@ AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
 AssetFile/bullet.txt
 AssetFile/piranha.txt
-
+AssetFile/GrassInMap.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -257,14 +257,13 @@ AssetFile/piranha.txt
 
 6 	538	266	16	16	1	163008
 
-6 	544	266	16	16	1	163008
+6 	554	266	16	16	1	163008
 
 6 	570	266	16	16	1	163008
 
 6 	586	266	16	16	1	163008
 
 6 	602	266	16	16	1	163009
-
 
 #colorbox 6
 5	522	170	16	15	4	164001	164002	164003	0	0
@@ -452,7 +451,7 @@ AssetFile/piranha.txt
 
 
 # MARIO
-0	150	220
+0	150	220	0
 
 #QuestionBlock
 9 	184	218	1
@@ -495,7 +494,7 @@ AssetFile/piranha.txt
 
 #pipe
 12	370	244	1
-8 	370	234	32	16	3	13100	13200
+8 	370	234	30	16	3	13100	13200
 
 12	1808	263	3
 8 	1808	250	32	16	2	13100	13200

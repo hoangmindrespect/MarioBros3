@@ -120,6 +120,9 @@
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GrassInMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -209,6 +212,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GrassInMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -259,6 +265,12 @@
     <Text Include="AssetFile\ScoreGame.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\scene2.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\GrassInMap.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\bbox.png">
@@ -289,6 +301,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\mario.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\worldmap.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

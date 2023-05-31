@@ -20,7 +20,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_DIE / 2;
@@ -177,6 +177,15 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y -= 18;
 		ay = KOOPAS_GRAVITY;
 	}
+	else if ((state == KOOPAS_STATE_DIE_UP) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
+	{
+		if (n > 0)
+			SetState(KOOPAS_STATE_WALKING_RIGHT);
+		else
+			SetState(KOOPAS_STATE_WALKING_LEFT);
+		y -= 18;
+		ay = KOOPAS_GRAVITY;
+	}
 	
 
 	CGameObject::Update(dt, coObjects);
@@ -195,6 +204,10 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_DIE_DOWN;
 	else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
+	else if (state == KOOPAS_STATE_DIE_UP)
+		aniId = ID_ANI_KOOPAS_DIE_UP;
+	else if (state == KOOPAS_STATE_DIE_UP_SPIN)
+		aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
@@ -211,6 +224,13 @@ void CKoopas::SetState(int state)
 		vy = 0;
 		ay = 0;
 		break;
+	case KOOPAS_STATE_DIE_UP:
+		die_start = GetTickCount64();
+		//y += 6;
+		vx = 0;
+		vy = -0.4f;
+		ay = KOOPAS_GRAVITY;
+		break;
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
 		n = 1;
@@ -220,6 +240,8 @@ void CKoopas::SetState(int state)
 		n = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:
+		ay = KOOPAS_GRAVITY;
+	case KOOPAS_STATE_DIE_UP_SPIN:
 		ay = KOOPAS_GRAVITY;
 		break;
 
