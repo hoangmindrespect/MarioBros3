@@ -18,9 +18,8 @@
 #include "Platform.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (!IsInMap)
+	if (IsInMap == 0)
 	{
-		//ay = MARIO_GRAVITY;
 		if (!isFlying)
 			vy += ay * dt;
 		vx += ax * dt;
@@ -30,6 +29,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			untouchable_start = 0;
 			untouchable = 0;
+		}
+
+		if (state == MARIO_STATE_DIE)
+		{
+			if (GetTickCount64() - die_start > 1500)
+			{
+				CGame::GetInstance()->InitiateSwitchScene(1);; die_start = 0;
+			}
 		}
 
 		if (GetTickCount64() - attack_start > MARIO_ATTACK_TIME)
@@ -67,28 +74,97 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 
 		}
-
-
 		isOnPlatform = false;
 	}
 	else
 	{
-		ay = 0;
-		ax = 0;
-		vx = 0;
-		vy = 0;
+		vy = vx = 0.0f;
+		if (isMoveDown == true)
+		{
+			if (isEndTurn == false)
+			{
+				ytmp = y + 32.0f;
+				isEndTurn = true;
+			}
+			
+			if (y <= ytmp) {
+				y += dt * 0.1f;
+				
+			}
+			else
+			{
+				y = ytmp;
+				vy = 0.0f;
+				isEndTurn = false;
+				isMoveDown = false;
+			}
+		}
+		else if (isMoveUp == true)
+		{
+			if (isEndTurn == false)
+			{
+				ytmp = y - 32.0f;
+				isEndTurn = true;
+			}
+			if (y > ytmp)
+				y -= dt * 0.1f;
+			else
+			{
+				vy = 0.0f;
+				y = ytmp;
+				isEndTurn = false;
+				isMoveUp = false;
+			};
+		}
+		else if (isMoveRight == true)
+		{
+			if (isEndTurn == false)
+			{
+				xtmp = x + 32.0f;
+				isEndTurn = true;
+			}
+			if (x <= xtmp)
+				x += 0.1f * dt;
+			else
+			{
+				vx = 0.0f;
+				x = xtmp;
+				isEndTurn = false;
+				isMoveRight = false;
+			};
+		}
+		else if (isMoveLeft == true)
+		{
+			if (isEndTurn == false)
+			{
+				xtmp = x - 32.0f;
+				isEndTurn = true;
+			}
+			if (x > xtmp)
+				x -= 0.1f * dt;
+			else
+			{
+				vx = 0.0f;
+				x = xtmp;
+				isEndTurn = false;
+				isMoveLeft = false;
+			};
+		}
 	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
+	DebugOut(L"%f, %f\n", x, y);
 	x += vx * dt;
 	y += vy * dt;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	
 	if (e->ny != 0 )
 	{
 		if (e->obj->IsBlocking())
@@ -122,15 +198,19 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);	
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
+		
 		CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
-		if (platform->IsBlocking() == 0 && platform->getIsBlockKoopas() == 0) {
+		if (platform->IsBlocking() == 0 ) {
+			if (platform->getIsBlockKoopas() == 0) {
+				if (e->ny < 0) {
 
-			if (e->ny < 0) {
-
-				isOnPlatform = true;
-				SetYWhenCollideColorbox(platform);
+					isOnPlatform = true;
+					SetYWhenCollideColorbox(platform);
+				}
 			}
+			
 		}
+
 	}
 }
 
@@ -220,7 +300,8 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	if(isSwitch)
+		CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());;
 }
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
@@ -279,7 +360,6 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 		else if (level == MARIO_LEVEL_SMALL)
 		{
 			e->src_obj->SetState(MARIO_STATE_DIE);
-
 		}
 		e->obj->Delete();
 	}
@@ -311,6 +391,8 @@ void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 			else if (level == MARIO_LEVEL_SMALL)
 			{
 				e->src_obj->SetState(MARIO_STATE_DIE);
+				//CGame::GetInstance()->InitiateSwitchScene(1);;
+				die_start = GetTickCount64();
 			}
 		}
 	}

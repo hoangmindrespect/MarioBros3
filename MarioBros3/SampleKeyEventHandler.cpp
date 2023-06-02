@@ -5,6 +5,7 @@
 
 #include "Mario.h"
 #include "PlayScene.h"
+#include "MarioStop.h"
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
@@ -14,11 +15,136 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
-		mario->SetState(MARIO_STATE_SIT);
+	{
+		if (mario->getIsInMap() == 0)
+			mario->SetState(MARIO_STATE_SIT);
+		else
+		{
+			for (int i = 0; i < CPlayScene::stop.size(); i++)
+			{
+				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
+				{
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
+					if (a->getCanMoveDown() == 0)
+						mario->SetIsMoveDown(false);
+					else
+					{
+						if (mario->getIsMoveLeft() || mario->getIsMoveUp() || mario->getIsMoveRight())
+							break;
+						else
+							mario->SetIsMoveDown(true);
+					}
+					break;
+				}
+			}
+		
+		}
 		break;
+	}
+	case DIK_RIGHT:
+	{
+		if (mario->getIsInMap() == 1)
+		{
+			for (int i = 0; i < CPlayScene::stop.size(); i++)
+			{
+				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
+				{
+					
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
+					if (a->getCanMoveRight() == 0)
+					{
+						mario->SetIsMoveRight(false);
+					}
+					else
+					{
+						if (mario->getIsMoveLeft() || mario->getIsMoveUp() || mario->getIsMoveDown())
+							break;
+						else
+							mario->SetIsMoveRight(true);
+					}
+					break;
+					
+				}
+			}
+			
+		}
+		break;
+	}
+	case DIK_UP:
+	{
+		if (mario->getIsInMap() == 1)
+		{
+			for (int i = 0; i < CPlayScene::stop.size(); i++)
+			{
+				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
+				{
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
+					DebugOut(L"jo %d\n ", a->getCanMoveUp());
+					
+					if (a->getCanMoveUp() == 0)
+						mario->SetIsMoveUp(false);
+					else
+					{
+						
+						if (mario->getIsMoveLeft() || mario->getIsMoveRight() || mario->getIsMoveDown())
+							break;
+						else
+							mario->SetIsMoveUp(true);
+					}
+					break;
+				}
+				
+			}
+			
+		}
+		break;
+	}case DIK_LEFT:
+	{
+		if (mario->getIsInMap() == 1)
+		{
+			for (int i = 0; i < CPlayScene::stop.size(); i++)
+			{
+				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
+				{
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
+					if (a->getCanMoveLeft() == 0)
+						mario->SetIsMoveLeft(false);
+					else
+					{
+						if (mario->getIsMoveRight() || mario->getIsMoveUp() || mario->getIsMoveDown())
+							break;
+						else
+							mario->SetIsMoveLeft(true);
+					}
+					break;
+				}
+			}
+			
+		}
+		break;
+	}
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+	{	
+		if (mario->getIsInMap() == 1)
+		{
+			for (int i = 0; i < CPlayScene::stop.size(); i++)
+			{
+				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
+				{
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
+					if (a->getType() == 1)
+					{
+						CGame::GetInstance()->InitiateSwitchScene(a->getIDScene());
+					}
+					break;
+				}
+
+			}
+		}
+		else
+			mario->SetState(MARIO_STATE_JUMP);
 		break;
+	}
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
 		break;

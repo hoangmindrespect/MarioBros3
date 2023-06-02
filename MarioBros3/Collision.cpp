@@ -223,7 +223,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	vector<LPCOLLISIONEVENT> coEvents;
 	LPCOLLISIONEVENT colX = NULL; 
 	LPCOLLISIONEVENT colY = NULL;
-
+	
 	coEvents.clear();
 
 	if (objSrc->IsCollidable())
@@ -235,9 +235,12 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	if (coEvents.size() == 0)
 	{
 		objSrc->OnNoCollision(dt);
+		//DebugOut(L"into process");
+
 	}
 	else
 	{
+		
 		Filter(objSrc, coEvents, colX, colY);
 
 		float x, y, vx, vy, dx, dy;
@@ -252,7 +255,6 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			{
 				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
 				objSrc->SetPosition(x, y);
-
 				objSrc->OnCollisionWith(colY);
 
 				//

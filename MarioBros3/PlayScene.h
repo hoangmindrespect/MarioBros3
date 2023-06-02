@@ -16,6 +16,8 @@ public:
 	// A play scene has to have player, right? 
 	static LPGAMEOBJECT player;					
 	static vector<LPGAMEOBJECT> objects;
+	static vector<LPGAMEOBJECT> stop;
+
 	vector<int> index;
 	BOOLEAN isCreateGoomba = false;
 	void AddObject(LPGAMEOBJECT e);

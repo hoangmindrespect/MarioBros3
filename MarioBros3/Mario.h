@@ -25,6 +25,8 @@
 #define MARIO_STATE_WALKING_LEFT	200
 
 #define MARIO_STATE_JUMP			300
+
+
 #define MARIO_STATE_LOW_FLY			309
 #define MARIO_STATE_RELEASE_JUMP    301
 
@@ -163,8 +165,22 @@
 #define MARIO_TIME_TO_RUN 1500
 #define MARIO_FLYING_TIME 5000
 #define MARIO_BRACE_TIME 1000
+
+struct IsCanMove
+{
+	float x;
+	float y;
+	bool canMoveRight, canMoveLeft, canMoveUp, canMoveDown;
+};
+
 class CMario : public CGameObject
 {
+	BOOLEAN isEndTurn; // user for moving in map
+	BOOLEAN isMoveLeft;
+	BOOLEAN isMoveRight;
+	BOOLEAN isMoveUp;
+	BOOLEAN isMoveDown;
+	BOOLEAN isSwitch;
 	BOOLEAN isSitting;
 	BOOLEAN isReadyToRun;
 	BOOLEAN	isAttackByTail;
@@ -176,16 +192,17 @@ class CMario : public CGameObject
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
-
+	float xtmp, ytmp;
 	int level; 
-	int untouchable; 
+	int untouchable;
+	ULONGLONG die_start;
 	ULONGLONG untouchable_start;
 	ULONGLONG attack_start;
 	ULONGLONG running_start;
 	ULONGLONG flying_start;
 	ULONGLONG bracing_start;
 	int coin; 
-
+	vector<IsCanMove> A;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -208,6 +225,7 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		//IsInMap = k;
+		isEndTurn = isMoveDown = isMoveLeft = isMoveRight = isMoveUp = isSwitch = false;;
 		isChangeDirection = false;
 		isSitting = false;
 		isAttackByTail = false;
@@ -225,6 +243,11 @@ public:
 		running_start = 0;
 		isOnPlatform = false;
 		coin = 0;
+		IsCanMove a ;
+		a.x = 72;
+		a.y = 70;
+		a.canMoveDown = a.canMoveLeft = a.canMoveRight = a.canMoveUp = false;
+		A.push_back(a);
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -239,21 +262,33 @@ public:
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	//set
 	void SetIsRun(bool a) { isRun = a; }
 	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
 	void SetIsFlying(bool a) { isFlying = a; }
 	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }
-	bool getIsReleaseFlying() {return isReleaseFlying; }
-
+	void SetLevel(int l);
 	void SetVy(float v) { vy = v; }
 	void SetVx(float v) { vx = v; }
+	void SetIsMoveUp(bool a) { isMoveUp = a; }
+	void SetIsMoveDown(bool a) { isMoveDown = a; }
+	void SetIsMoveRight(bool a) { isMoveRight = a; }
+	void SetIsMoveLeft(bool a) { isMoveLeft = a; }
+	void SetIsSwitch(bool a) { isSwitch = a; }
+	//get 
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	bool getIsReleaseFlying() { return isReleaseFlying; }
 	int getlevel() { return level; }
 	int getnx() { return nx; }
 	float getvx() { return vx; }
 	bool getIsRun() { return isRun; }
 	bool getIsFlying() { return isFlying; }
+	int getIsInMap() { return IsInMap; }
+	bool getIsMoveUp() { return isMoveUp ; }
+	bool getIsMoveDown() { return isMoveDown; }
+	bool getIsMoveRight() { return isMoveRight; }
+	bool getIsMoveLeft() { return isMoveLeft; }
 };
 

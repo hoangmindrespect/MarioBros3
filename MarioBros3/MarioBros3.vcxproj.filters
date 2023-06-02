@@ -123,6 +123,9 @@
     <ClInclude Include="GrassInMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MarioStop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -213,6 +216,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GrassInMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioStop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

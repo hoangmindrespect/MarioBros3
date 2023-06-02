@@ -18,8 +18,12 @@
 #include "Koopas.h"
 #include "HUD.h"
 #include "GrassInMap.h"
+#include "MarioStop.h"
+
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
+std::vector<CGameObject*> CPlayScene::stop;
+
 LPGAMEOBJECT CPlayScene::player;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -182,6 +186,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_GRASS_IN_MAP: obj = new CGrassInMap(x, y); break;
+
 	case OBJECT_TYPE_PIPE:
 	{
 
@@ -219,6 +224,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_MARIO_STOP:
+	{
+		float spriteid = (float)atof(tokens[3].c_str());
+		float canMoveRight = (float)atof(tokens[4].c_str());
+		int canMoveLeft = atoi(tokens[5].c_str());
+		int canMoveDown = atoi(tokens[6].c_str());
+		int canMoveUp = atoi(tokens[7].c_str());
+		int idScene = atoi(tokens[8].c_str());
+		int type = atoi(tokens[9].c_str());
+
+		obj = new CMarioStop(
+			x, y,
+			spriteid, canMoveRight, canMoveLeft,
+			canMoveDown, canMoveUp, idScene, type
+		);
+		stop.push_back(obj);
+		obj = NULL;
+		break;
+	}
 	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
 	case OBJECT_TYPE_PORTAL:
@@ -236,8 +260,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	// General object setup
-	obj->SetPosition(x, y);
+	if (obj != NULL)
+		obj->SetPosition(x, y);
 
 
 	if(obj != NULL)
@@ -318,7 +342,6 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-	DebugOut(L"%f\n", player->getx());
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -354,14 +377,22 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CMario* mario = dynamic_cast<CMario*>(player);
+	if(mario->getIsInMap() == 0)
+		CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
+	else
+		CGame::GetInstance()->SetCamPos(0.0f, 0.0f /*cy*/);
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < objects.size() - 1; i++)
 		objects[i]->Render();
+	for (int i = 0; i < stop.size(); i++)
+		stop[i]->Render();
+	
+	objects[objects.size() - 1]->Render();
 }
 
 
@@ -373,6 +404,11 @@ void CPlayScene::Clear()
 		delete (*it);
 	}
 	objects.clear();
+	for (it = stop.begin(); it != stop.end(); it++)
+	{
+		delete(*it);
+	}
+	stop.clear();
 }
 
 /*
@@ -385,8 +421,10 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
+	for (int i = 0; i < stop.size(); i++)
+		delete stop[i];
 
-	objects.clear();
+	objects.clear(); stop.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
@@ -406,10 +444,23 @@ void CPlayScene::PurgeDeletedObjects()
 			*it = NULL;
 		}
 	}
+	for (it = stop.begin(); it != stop.end(); it++)
+	{
+		LPGAMEOBJECT o = *it;
+		if (o->IsDeleted())
+		{
+			delete o;
+			*it = NULL;
+		}
+	}
 
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+
+	stop.erase(
+		std::remove_if(stop.begin(), stop.end(), CPlayScene::IsGameObjectDeleted),
+		stop.end());
 }
