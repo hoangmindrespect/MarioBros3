@@ -33,7 +33,7 @@ float blue = (float)strtol("FD", NULL, 16);
 #define BACKGROUND_COLOR D3DXCOLOR(red/255, green/255, blue/255, 0.0f)
 
 #define SCREEN_WIDTH 272
-#define SCREEN_HEIGHT 256
+#define SCREEN_HEIGHT 272
 
 int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 int screenHeight = GetSystemMetrics(SM_CYSCREEN);

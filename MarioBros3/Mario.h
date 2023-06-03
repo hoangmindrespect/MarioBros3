@@ -156,7 +156,7 @@
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
-#define MARIO_SMALL_BBOX_WIDTH  13
+#define MARIO_SMALL_BBOX_WIDTH  10
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
 
@@ -180,7 +180,9 @@ class CMario : public CGameObject
 	BOOLEAN isMoveRight;
 	BOOLEAN isMoveUp;
 	BOOLEAN isMoveDown;
+
 	BOOLEAN isSwitch;
+
 	BOOLEAN isSitting;
 	BOOLEAN isReadyToRun;
 	BOOLEAN	isAttackByTail;
@@ -189,6 +191,7 @@ class CMario : public CGameObject
 	BOOLEAN isFlying;
 	BOOLEAN isReleaseFlying; // mario landing or flying?
 	BOOLEAN isChangeDirection;
+
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 

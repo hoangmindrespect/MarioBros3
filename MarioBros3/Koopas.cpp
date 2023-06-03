@@ -52,9 +52,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		else
 		{
 			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-			// when collide with goomba - is a collidable object it will be change direction => change direction 2 times equal dont change
-			vx = -vx;
+			if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
+			{
+				goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
+				// when collide with goomba - is a collidable object it will be change direction => change direction 2 times equal dont change
+				vx = -vx;
+			}
 		}
 	}
 	else if (dynamic_cast<CBrick*>(e->obj))

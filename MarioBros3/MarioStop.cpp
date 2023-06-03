@@ -22,7 +22,7 @@ void CMarioStop::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, 0.5);
+	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, 0.0f);
 }
 
 void CMarioStop::Render()

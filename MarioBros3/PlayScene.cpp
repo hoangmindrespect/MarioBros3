@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
 #include "PlayScene.h"
@@ -352,13 +352,13 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
-	if (player->getx() > 1080)
+	DebugOut(L"%f\n", player->getx());
+	if (player->getx() > 689)
 	{
 		if (isCreateGoomba == false)
 		{
-			CGoomba* g1 = new CGoomba(1300, 234);
-			CGoomba* g2 = new CGoomba(1450, 234);
+			CGoomba* g1 = new CGoomba(889, 102);
+			CGoomba* g2 = new CGoomba(959, 102);
 			objects.push_back(g1);
 			objects.push_back(g2);
 			isCreateGoomba = true;
@@ -378,8 +378,11 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 	CMario* mario = dynamic_cast<CMario*>(player);
-	if(mario->getIsInMap() == 0)
-		CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
+	if (mario->getIsInMap() == 0)
+	{
+		// khi mario đang bay hoặc đang rơi thì sẽ set lấy cy
+		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	}
 	else
 		CGame::GetInstance()->SetCamPos(0.0f, 0.0f /*cy*/);
 	PurgeDeletedObjects();

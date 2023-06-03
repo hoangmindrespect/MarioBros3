@@ -157,7 +157,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CMario::OnNoCollision(DWORD dt)
 {
-	DebugOut(L"%f, %f\n", x, y);
+	//DebugOut(L"%f, %f\n", x, y);
 	x += vx * dt;
 	y += vy * dt;
 }
@@ -249,7 +249,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 	if (e->ny < 0)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -284,6 +284,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					else
 					{
 						SetState(MARIO_STATE_DIE);
+						die_start = GetTickCount64();
 					}
 				}
 			}
@@ -306,7 +307,9 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
+	
 	this->SetLevel(MARIO_LEVEL_BIG);
+	
 	e->obj->Delete();
 }
 
@@ -360,6 +363,7 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 		else if (level == MARIO_LEVEL_SMALL)
 		{
 			e->src_obj->SetState(MARIO_STATE_DIE);
+			die_start = GetTickCount64();
 		}
 		e->obj->Delete();
 	}
@@ -391,7 +395,6 @@ void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 			else if (level == MARIO_LEVEL_SMALL)
 			{
 				e->src_obj->SetState(MARIO_STATE_DIE);
-				//CGame::GetInstance()->InitiateSwitchScene(1);;
 				die_start = GetTickCount64();
 			}
 		}
@@ -437,7 +440,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					else
 					{
 						SetState(MARIO_STATE_DIE);
-
+						die_start = GetTickCount64();
 					}
 				}
 			}
@@ -479,6 +482,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				else
 				{
 					SetState(MARIO_STATE_DIE);
+					die_start = GetTickCount64();
 				}
 			}
 		}
@@ -970,8 +974,9 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
+		
+		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
@@ -985,6 +990,5 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 ;
 	}
 	level = l;
-
 }
 

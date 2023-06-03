@@ -1,7 +1,7 @@
 #include <d3dx9.h>
 #include <algorithm>
-
-
+#include "Mario.h"
+#include "PlayScene.h"
 #include "debug.h"
 #include "Textures.h"
 #include "Game.h"
@@ -34,8 +34,7 @@ void CGameObject::RenderBoundingBox()
 
 	float cx, cy; 
 	CGame::GetInstance()->GetCamPos(cx, cy);
-
-	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, BBOX_ALPHA);
+	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, 0.0f);
 }
 
 CGameObject::~CGameObject()

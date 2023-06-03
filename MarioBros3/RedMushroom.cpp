@@ -29,10 +29,6 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	
 	if (dynamic_cast<CRedMushroom*>(e->obj)) return;
-	else if (dynamic_cast<CMario*>(e->obj))
-	{
-		e->obj->sety(e->obj->gety() - 32.0f);
-	}
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		CPlatform* p = dynamic_cast<CPlatform*>(e->obj);

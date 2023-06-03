@@ -9,7 +9,6 @@
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 
 	switch (KeyCode)
@@ -196,7 +195,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		{
 			mario->SetIsFlying(false);
 			mario->SetIsReleaseFlying(true);
-			DebugOut(L"hello %d\n", mario->GetState());
+			//DebugOut(L"hello %d\n", mario->GetState());
 			if (mario->GetState() == MARIO_STATE_FLYING_RIGHT || mario->GetState() == MARIO_STATE_FLYING_LEFT)
 			{
 				DebugOut(L"hello ");
