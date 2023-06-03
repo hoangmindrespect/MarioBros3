@@ -140,7 +140,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_GOOMBA: {
+		int type = atof(tokens[3].c_str());
+		obj = new CGoomba(x, y, type); break;
+	}
 	case OBJECT_TYPE_KOOPAS:
 	{
 		obj = new CKoopas(x, y);
@@ -357,8 +360,8 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (isCreateGoomba == false)
 		{
-			CGoomba* g1 = new CGoomba(889, 102);
-			CGoomba* g2 = new CGoomba(959, 102);
+			CGoomba* g1 = new CGoomba(889, 102, 1);
+			CGoomba* g2 = new CGoomba(959, 102, 1);
 			objects.push_back(g1);
 			objects.push_back(g2);
 			isCreateGoomba = true;

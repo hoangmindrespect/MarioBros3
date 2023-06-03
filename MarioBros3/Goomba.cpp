@@ -1,7 +1,8 @@
 #include "Goomba.h"
 
-CGoomba::CGoomba(float x, float y):CGameObject(x, y)
+CGoomba::CGoomba(float x, float y, int t):CGameObject(x, y)
 {
+	this->type = t;
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
