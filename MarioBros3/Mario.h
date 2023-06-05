@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 
 #include "Animation.h"
@@ -10,7 +10,7 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0004f
-#define MARIO_ACCEL_RUN_X	0.0005f
+#define MARIO_ACCEL_RUN_X	0.0006f
 
 #define MARIO_JUMP_SPEED_Y		0.28f
 #define MARIO_JUMP_RUN_SPEED_Y	0.4f
@@ -46,11 +46,9 @@
 #define MARIO_STATE_ATTACK_RIGHT	178
 #define MARIO_STATE_ATTACK_LEFT	179
 
-#define MARIO_STATE_FLYING_RIGHT	168
-#define MARIO_STATE_FLYING_LEFT	169
+#define MARIO_STATE_FLYING	168
 
-#define MARIO_STATE_RELEASE_FLYING_RIGHT	128
-#define MARIO_STATE_RELEASE_FLYING_LEFT	129
+#define MARIO_STATE_RELEASE_FLYING	128
 
 #define MARIO_STATE_IN_MAP	9991
 
@@ -182,15 +180,16 @@ class CMario : public CGameObject
 	BOOLEAN isMoveDown;
 
 	BOOLEAN isSwitch;
-
+	BOOLEAN isRealse;
+	BOOLEAN isFlying;
 	BOOLEAN isSitting;
-	BOOLEAN isReadyToRun;
 	BOOLEAN	isAttackByTail;
 	BOOLEAN isOnPlatform;
-	BOOLEAN isRun;
-	BOOLEAN isFlying;
-	BOOLEAN isReleaseFlying; // mario landing or flying?
+
+
+	// handle flying
 	BOOLEAN isChangeDirection;
+	BOOLEAN isStart; // biến bool để tính thời gian bay
 
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -232,10 +231,8 @@ public:
 		isChangeDirection = false;
 		isSitting = false;
 		isAttackByTail = false;
-		isReadyToRun = false;
 		isFlying = false;
-		isRun = false;
-		isReleaseFlying = false;
+		isRealse = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -245,6 +242,7 @@ public:
 		attack_start = -1;
 		running_start = 0;
 		isOnPlatform = false;
+		isSwitch = false;
 		coin = 0;
 		IsCanMove a ;
 		a.x = 72;
@@ -257,6 +255,7 @@ public:
 	void SetState(int state);
 	void setLevel(int i) { level = i; }
 	void setIsInMap(int k) { IsInMap = k; }
+	void Setax(float k) { ax = k; }
 	int IsCollidable()
 	{ 
 		return (state != MARIO_STATE_DIE); 
@@ -268,10 +267,10 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	//set
-	void SetIsRun(bool a) { isRun = a; }
+	/*void SetIsRun(bool a) { isRun = a; }
 	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
 	void SetIsFlying(bool a) { isFlying = a; }
-	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }
+	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }*/
 	void SetLevel(int l);
 	void SetVy(float v) { vy = v; }
 	void SetVx(float v) { vx = v; }
@@ -279,15 +278,18 @@ public:
 	void SetIsMoveDown(bool a) { isMoveDown = a; }
 	void SetIsMoveRight(bool a) { isMoveRight = a; }
 	void SetIsMoveLeft(bool a) { isMoveLeft = a; }
-	void SetIsSwitch(bool a) { isSwitch = a; }
+	void SetIsSwitch(bool a) {
+		isSwitch = a;
+	}
+	void SetIsFlying(bool a) { isFlying = a; }
 	//get 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	bool getIsReleaseFlying() { return isReleaseFlying; }
+	/*bool getIsReleaseFlying() { return isReleaseFlying; }*/
 	int getlevel() { return level; }
 	int getnx() { return nx; }
 	float getvx() { return vx; }
-	bool getIsRun() { return isRun; }
-	bool getIsFlying() { return isFlying; }
+	/*bool getIsRun() { return isRun; }
+	bool getIsFlying() { return isFlying; }*/
 	int getIsInMap() { return IsInMap; }
 	bool getIsMoveUp() { return isMoveUp ; }
 	bool getIsMoveDown() { return isMoveDown; }

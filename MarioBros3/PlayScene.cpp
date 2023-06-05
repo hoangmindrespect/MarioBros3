@@ -355,7 +355,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	DebugOut(L"%f\n", player->getx());
+
 	if (player->getx() > 689)
 	{
 		if (isCreateGoomba == false)
@@ -384,10 +384,11 @@ void CPlayScene::Update(DWORD dt)
 	if (mario->getIsInMap() == 0)
 	{
 		// khi mario đang bay hoặc đang rơi thì sẽ set lấy cy
-		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+		CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
 	}
 	else
 		CGame::GetInstance()->SetCamPos(0.0f, 0.0f /*cy*/);
+
 	PurgeDeletedObjects();
 }
 
