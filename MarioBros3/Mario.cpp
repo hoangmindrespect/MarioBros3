@@ -20,7 +20,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (IsInMap == 0)
 	{
-		if(!isFlying)
+		if(!isFlying && !isRealse)
 			vy += ay * dt;
 		vx += ax * dt;
 		if (abs(vx) > abs(maxVx) && isSwitch == false)
@@ -74,7 +74,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 
 		if (isOnPlatform)
+		{
 			isRealse = false;
+			//isFlying = false;
+		}
 		
 	}
 	else
@@ -171,7 +174,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->obj->IsBlocking())
 		{
 			vy = 0;
-			if (e->ny < 0) isOnPlatform = true;
+			if (e->ny < 0) {
+				isOnPlatform = true;
+				isFlying = false;
+				if (state == MARIO_STATE_FLYING)
+				{
+					if (nx > 0)
+					{
+						SetState(MARIO_STATE_RUNNING_RIGHT);
+					}
+					else
+					{
+						SetState(MARIO_STATE_RUNNING_LEFT);
+					}
+				}
+			}
 		}
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
@@ -880,8 +897,20 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_RELEASE_JUMP:
+	{
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		/*if (nx > 0)
+		{
+			ax = MARIO_ACCEL_RUN_X;
+			maxVx = MARIO_RUNNING_SPEED;
+		}
+		else
+		{
+			ax = -MARIO_ACCEL_RUN_X;
+			maxVx = -MARIO_RUNNING_SPEED;
+		}*/
 		break;
+	}
 
 	case MARIO_STATE_SIT:
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)

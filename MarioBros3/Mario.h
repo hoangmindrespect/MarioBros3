@@ -278,10 +278,12 @@ public:
 	void SetIsMoveDown(bool a) { isMoveDown = a; }
 	void SetIsMoveRight(bool a) { isMoveRight = a; }
 	void SetIsMoveLeft(bool a) { isMoveLeft = a; }
-	void SetIsSwitch(bool a) {
-		isSwitch = a;
-	}
+	void SetIsRelease(bool a) { isRealse = a; }
+	void SetIsSwitch(bool a) {isSwitch = a;}
 	void SetIsFlying(bool a) { isFlying = a; }
+	void setMaxVx(float a) { maxVx = a; }
+	void setNx(int a) { nx = a; }
+	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
 	//get 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	/*bool getIsReleaseFlying() { return isReleaseFlying; }*/
@@ -295,5 +297,7 @@ public:
 	bool getIsMoveDown() { return isMoveDown; }
 	bool getIsMoveRight() { return isMoveRight; }
 	bool getIsMoveLeft() { return isMoveLeft; }
+	bool getIsOnPlatForm() { return isOnPlatform; }
+	ULONGLONG getFlyingStart() { return flying_start; }
 };
 

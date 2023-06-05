@@ -191,8 +191,21 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_A: // key up => reset prepare to run
 		break;
 	case DIK_X:
+	{
+		
 		mario->SetIsFlying(false);
+		mario->setIsOnPlatForm(true);
+		DebugOut(L"%d\n", mario->GetState());
+		//if (mario->GetState() == MARIO_STATE_RELEASE_FLYING)
+		//{
+		//	if (mario->getnx() > 0)
+		//		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		//	else
+		//		mario->SetState(MARIO_STATE_WALKING_LEFT);
+		//	//mario->SetIsSwitch(false);
+		//}
 		break;
+	}
 	case DIK_RIGHT:
 		
 		break;
@@ -213,13 +226,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		if (game->IsKeyDown(DIK_A))
 		{
 			//at the first time into this state we'll have an boolean variable to count the time [isReady]
-			if (mario->GetState() != MARIO_STATE_RELEASE_FLYING)
+			if (mario->GetState() !=  MARIO_STATE_PREPARE_RUNNING_RIGHT)
 			{
-				if (mario->GetState() != MARIO_STATE_PREPARE_RUNNING_RIGHT)
+				if (mario->GetState() !=  MARIO_STATE_RUNNING_RIGHT)
 				{
-					if (mario->GetState() != MARIO_STATE_RUNNING_RIGHT)
+					if (mario->GetState() != MARIO_STATE_RELEASE_FLYING)
 					{
-						
 						if (mario->GetState() != MARIO_STATE_FLYING)
 						{
 							if (mario->GetState() == MARIO_STATE_RUNNING_LEFT)
@@ -227,15 +239,42 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							if (mario->GetState() != MARIO_STATE_JUMP)
 								mario->SetState(MARIO_STATE_PREPARE_RUNNING_RIGHT);
 						}
+						else
+						{
+							if (GetTickCount64() - mario->getFlyingStart() < 3000 )
+							{
+								if (mario->getnx() < 0)
+								{
+									if (mario->getIsOnPlatForm() == false)
+									{
+										mario->setNx(1);
+										mario->SetVy(-MARIO_WALKING_SPEED);
+										mario->Setax(MARIO_ACCEL_RUN_X);
+										mario->setMaxVx(MARIO_RUNNING_SPEED - 0.03);
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 		else
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
-		if (mario->GetState() != MARIO_STATE_RELEASE_FLYING) {
-			if (game->IsKeyDown(DIK_X))
+		{
+			if (mario->GetState() != MARIO_STATE_FLYING)
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			else
 			{
+				mario->setMaxVx(MARIO_WALKING_SPEED);
+				mario->Setax(MARIO_ACCEL_WALK_X);
+			}
+		}
+		
+
+		//flying
+		if (game->IsKeyDown(DIK_X))
+		{
+			if (mario->GetState() != MARIO_STATE_RELEASE_FLYING) {
 				if (mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
 				{
 					if (mario->getlevel() == MARIO_LEVEL_TAIL)
@@ -244,18 +283,39 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							mario->SetState(MARIO_STATE_FLYING);
 					}
 				}
+				else if (mario->GetState() == MARIO_STATE_FLYING)
+				{
+					if (GetTickCount64() - mario->getFlyingStart() < 3000)
+					{
+						if (game->IsKeyDown(DIK_A))
+						{
+							mario->setIsOnPlatForm(true);
+							mario->SetVy(-MARIO_WALKING_SPEED);
+							mario->Setax(MARIO_ACCEL_RUN_X);
+							mario->setMaxVx(MARIO_RUNNING_SPEED - 0.03);
+						}
+						else
+						{
+							mario->setIsOnPlatForm(true);
+							mario->SetVy(-MARIO_WALKING_SPEED);
+							mario->Setax(MARIO_ACCEL_RUN_X);
+							mario->setMaxVx(MARIO_WALKING_SPEED );
+						}
+					}
+				}
 			}
 		}
+		
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
 		if (game->IsKeyDown(DIK_A))
 		{
-			if (mario->GetState() != MARIO_STATE_RELEASE_FLYING)
+			if (mario->GetState() !=  MARIO_STATE_PREPARE_RUNNING_LEFT)
 			{
-				if (mario->GetState() != MARIO_STATE_PREPARE_RUNNING_LEFT)
+				if (mario->GetState() !=  MARIO_STATE_RUNNING_LEFT)
 				{
-					if (mario->GetState() != MARIO_STATE_RUNNING_LEFT)
+					if (mario->GetState() != MARIO_STATE_RELEASE_FLYING)
 					{
 						if (mario->GetState() != MARIO_STATE_FLYING)
 						{
@@ -264,16 +324,40 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							if (mario->GetState() != MARIO_STATE_JUMP)
 								mario->SetState(MARIO_STATE_PREPARE_RUNNING_LEFT);
 						}
+						else
+						{
+							if (GetTickCount64() - mario->getFlyingStart() < 3000 )
+							{
+								if (mario->getnx() > 0)
+								{
+									if (mario->getIsOnPlatForm() == false)
+									{
+										mario->setNx(-1);
+										mario->SetVy(-MARIO_WALKING_SPEED);
+										mario->Setax(-MARIO_ACCEL_RUN_X);
+										mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03);
+									}
+								}
+								
+							}
+						}
 					}
 				}
 			}
 		}
-		else
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
-
+		else {
+			if (mario->GetState() != MARIO_STATE_FLYING)
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
+			else
+			{
+				mario->setMaxVx(-MARIO_WALKING_SPEED);
+				mario->Setax(-MARIO_ACCEL_WALK_X);
+			}
+		}
 		// flying
-		if (mario->GetState() != MARIO_STATE_RELEASE_FLYING) {
-			if (game->IsKeyDown(DIK_X))
+		if (game->IsKeyDown(DIK_X))
+		{
+			if (mario->GetState() != MARIO_STATE_RELEASE_FLYING)
 			{
 				if (mario->GetState() == MARIO_STATE_RUNNING_LEFT)
 				{
@@ -283,10 +367,29 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							mario->SetState(MARIO_STATE_FLYING);
 					}
 				}
+				else if (mario->GetState() == MARIO_STATE_FLYING)
+				{
+					if (GetTickCount64() - mario->getFlyingStart() < 3000)
+					{
+						if (game->IsKeyDown(DIK_A))
+						{
+							mario->setIsOnPlatForm(true);
+							mario->SetVy(-MARIO_WALKING_SPEED);
+							mario->Setax(-MARIO_ACCEL_RUN_X);
+							mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03);
+						}
+						else
+						{
+							mario->setIsOnPlatForm(true);
+							mario->SetVy(-MARIO_WALKING_SPEED);
+							mario->Setax(-MARIO_ACCEL_RUN_X);
+							mario->setMaxVx(-MARIO_WALKING_SPEED);
+						}
+					}
+				}
 			}
 		}
 	}
-	
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }
