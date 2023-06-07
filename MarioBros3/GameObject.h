@@ -64,7 +64,10 @@ public:
 
 	// When collision with an object has been detected (triggered by CCollision::Process)
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
-	
+
+	// Is this object collide with other object at certain direction ( like ColorBox )
+	virtual int IsDirectionColliable(float nx, float ny) { return 1; }
+
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
 

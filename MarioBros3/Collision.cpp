@@ -1,6 +1,10 @@
 #include "Collision.h"
 #include "GameObject.h"
 
+int CCollisionEvent::WasCollided() {
+	return
+		t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable(nx, ny) == 1;
+}
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f

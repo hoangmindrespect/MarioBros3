@@ -3,26 +3,36 @@
 
 #include "GameObject.h"
 
+// 
+// The most popular type of object in Mario! 
+// 
 class CColorBox : public CGameObject
 {
-public:
-	float width;				// Unit: cell 
-	int tmp = 0;
+protected:
+	int length;				// Unit: cell 
+	float cellWidth;
+	float cellHeight;
+	int spriteIdBegin, spriteIdMiddle, spriteIdEnd;
 public:
 	CColorBox(float x, float y,
-		float width
-		) :CGameObject(x, y)
+		float cell_width, float cell_height, int length,
+		int sprite_id_begin, int sprite_id_middle, int sprite_id_end) :CGameObject(x, y)
 	{
-		this->width = width;
+		this->length = length;
+		this->cellWidth = cell_width;
+		this->cellHeight = cell_height;
+		this->spriteIdBegin = sprite_id_begin;
+		this->spriteIdMiddle = sprite_id_middle;
+		this->spriteIdEnd = sprite_id_end;
 	}
+	int IsDirectionColliable(float nx, float ny);
+
 	void Render();
-	int IsCollidable() { return 1; };
-	int IsBlocking() { return tmp; }
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
-	//virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 
 typedef CColorBox* LPCOLORBOX;
+
 

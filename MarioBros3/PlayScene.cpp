@@ -19,7 +19,7 @@
 #include "HUD.h"
 #include "GrassInMap.h"
 #include "MarioStop.h"
-
+#include "ColorBox.h"
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
@@ -227,6 +227,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_COLORBOX:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+		obj = new CColorBox(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
 	case OBJECT_TYPE_MARIO_STOP:
 	{
 		float spriteid = (float)atof(tokens[3].c_str());
@@ -344,7 +361,8 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// TO-DO: This is a "dirty" way, need a more organized way
+	
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -381,6 +399,8 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 	CMario* mario = dynamic_cast<CMario*>(player);
+	if (mario->gety() > 400)
+		mario->SetState(MARIO_STATE_DIE);
 	//DebugOut(L"%d\n", mario->GetState());;
 	if (mario->getIsInMap() == 0)
 	{

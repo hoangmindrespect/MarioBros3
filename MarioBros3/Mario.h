@@ -216,7 +216,6 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 
-	void SetYWhenCollideColorbox(LPGAMEOBJECT gameobject);
 	
 
 	int GetAniIdBig();
@@ -269,10 +268,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	//set
-	/*void SetIsRun(bool a) { isRun = a; }
-	void SetIsReadyToRun(bool a) { isReadyToRun = a; }
-	void SetIsFlying(bool a) { isFlying = a; }
-	void SetIsReleaseFlying(bool a) { isReleaseFlying = a; }*/
+
 	void SetLevel(int l);
 	void SetVy(float v) { vy = v; }
 	void SetVx(float v) { vx = v; }
@@ -287,14 +283,14 @@ public:
 	void setNx(int a) { nx = a; }
 	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
 	void setIsOnClound(bool a) { isOnCloud = a; }
+
 	//get 
+
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	/*bool getIsReleaseFlying() { return isReleaseFlying; }*/
 	int getlevel() { return level; }
 	int getnx() { return nx; }
 	float getvx() { return vx; }
-	/*bool getIsRun() { return isRun; }
-	bool getIsFlying() { return isFlying; }*/
+
 	int getIsInMap() { return IsInMap; }
 	bool getIsMoveUp() { return isMoveUp ; }
 	bool getIsMoveDown() { return isMoveDown; }

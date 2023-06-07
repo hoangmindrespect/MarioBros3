@@ -214,51 +214,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);	
-	else if (dynamic_cast<CPlatform*>(e->obj))
-	{
-		
-		CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
-		if (platform->IsBlocking() == 0 ) {
-			if (platform->getIsBlockKoopas() == 0) {
-				if (e->ny < 0) {
-
-					isOnPlatform = true;
-					SetYWhenCollideColorbox(platform);
-				}
-			}
-			
-		}
-
-	}
-}
-
-void CMario::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject) {
-	if (level == MARIO_LEVEL_SMALL ) {
-		if (gameobject->gety() - gety() < MARIO_SMALL_BBOX_HEIGHT + 10.0f)
-		{
-			sety(gameobject->gety() - MARIO_SMALL_BBOX_HEIGHT - 2.5f);
-			vy = 0; 
-			isOnPlatform = true;
-		}
-	}
-	else {
-		if (!isSitting) {
-			if (gameobject->gety() - gety() < MARIO_BIG_BBOX_HEIGHT )
-			{
-				sety(gameobject->gety() - MARIO_BIG_BBOX_HEIGHT + 5);
-				vy = 0;
-				isOnPlatform = true;
-			}
-		}
-		else {
-			if (gameobject->gety() - gety() < MARIO_BIG_BBOX_HEIGHT / 2 + 6)
-			{
-				sety(gameobject->gety() - MARIO_BIG_BBOX_HEIGHT / 2 - 4);
-				vy = 0;
-				isOnPlatform = true;
-			}
-		}
-	}
+	
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
