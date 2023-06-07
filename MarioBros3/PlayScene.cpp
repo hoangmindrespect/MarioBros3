@@ -381,8 +381,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 	CMario* mario = dynamic_cast<CMario*>(player);
-	if(mario->gety() < -80)
-		DebugOut(L"%f\n", mario->gety());;
+	//DebugOut(L"%d\n", mario->GetState());;
 	if (mario->getIsInMap() == 0)
 	{
 		float cyt = cy;
@@ -423,8 +422,9 @@ void CPlayScene::Update(DWORD dt)
 			else
 			{
 				mario->setIsOnClound(false);
-
-				cy = 0.0f; i = 44.0f;
+				
+					cy = 0.0f;
+				i = 44.0f;
 			}
 			
 		}

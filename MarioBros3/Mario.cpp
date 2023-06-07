@@ -770,9 +770,7 @@ int CMario::GetAniIdTail()
 		if (nx > 0)
 			aniId = ID_ANI_MARIO_TAIL_FLYING_RIGHT;
 		else
-		{
 			aniId = ID_ANI_MARIO_TAIL_FLYING_LEFT;
-		}
 	}
 
 	if (aniId == -1)
