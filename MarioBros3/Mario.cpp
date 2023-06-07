@@ -48,7 +48,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (state == MARIO_STATE_FLYING)
 		{
-			if (GetTickCount64() - flying_start > 3000)
+			if (GetTickCount64() - flying_start > 4000)
 			{
 				SetState(MARIO_STATE_RELEASE_FLYING);
 				isFlying = false;

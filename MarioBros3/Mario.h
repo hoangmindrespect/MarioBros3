@@ -185,6 +185,7 @@ class CMario : public CGameObject
 	BOOLEAN isSitting;
 	BOOLEAN	isAttackByTail;
 	BOOLEAN isOnPlatform;
+	BOOLEAN isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
 
 
 	// handle flying
@@ -233,6 +234,7 @@ public:
 		isAttackByTail = false;
 		isFlying = false;
 		isRealse = false;
+		isOnCloud = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -284,6 +286,7 @@ public:
 	void setMaxVx(float a) { maxVx = a; }
 	void setNx(int a) { nx = a; }
 	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
+	void setIsOnClound(bool a) { isOnCloud = a; }
 	//get 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	/*bool getIsReleaseFlying() { return isReleaseFlying; }*/
@@ -298,6 +301,7 @@ public:
 	bool getIsMoveRight() { return isMoveRight; }
 	bool getIsMoveLeft() { return isMoveLeft; }
 	bool getIsOnPlatForm() { return isOnPlatform; }
+	bool getIsOnCloud() { return isOnCloud; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 };
 

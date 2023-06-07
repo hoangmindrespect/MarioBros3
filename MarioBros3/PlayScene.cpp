@@ -358,14 +358,14 @@ void CPlayScene::Update(DWORD dt)
 
 	if (player->getx() > 689)
 	{
-		if (isCreateGoomba == false)
+		/*if (isCreateGoomba == false)
 		{
 			CGoomba* g1 = new CGoomba(889, 102, 1);
 			CGoomba* g2 = new CGoomba(959, 102, 1);
 			objects.push_back(g1);
 			objects.push_back(g2);
 			isCreateGoomba = true;
-		}
+		}*/
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -381,13 +381,59 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 	CMario* mario = dynamic_cast<CMario*>(player);
+	if(mario->gety() < -80)
+		DebugOut(L"%f\n", mario->gety());;
 	if (mario->getIsInMap() == 0)
 	{
-		// khi mario đang bay hoặc đang rơi thì sẽ set lấy cy
-		CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
+		float cyt = cy;
+		if (mario->getlevel() == MARIO_LEVEL_SMALL || mario->getlevel() == MARIO_LEVEL_BIG)
+			cy = 0.0f;
+		else
+		{
+			//mario level tail
+			if (mario->gety() < 77.0f)
+			{
+				if (mario->GetState() == MARIO_STATE_FLYING)
+					cy = cy + 44.0f;
+				else
+				{
+					if (mario->getIsOnCloud() == true)
+					{
+						if (i >= 0)
+						{
+							i -= 1;
+						}
+						cy = cyt + i;
+					}
+					else
+						cy = 0.0f;
+				}
+
+				if (mario->gety() < -65)
+				{
+					mario->setIsOnClound(true);
+					if (i >=15)
+					{
+						i -= 1;
+						cx = cx + 3.0f;
+					}
+					cy = cyt + i ;
+				}
+			}
+			else
+			{
+				mario->setIsOnClound(false);
+
+				cy = 0.0f; i = 44.0f;
+			}
+			
+		}
+		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	else
 		CGame::GetInstance()->SetCamPos(0.0f, 0.0f /*cy*/);
+
+
 
 	PurgeDeletedObjects();
 }

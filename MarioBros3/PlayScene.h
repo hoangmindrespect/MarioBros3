@@ -17,7 +17,7 @@ public:
 	static LPGAMEOBJECT player;					
 	static vector<LPGAMEOBJECT> objects;
 	static vector<LPGAMEOBJECT> stop;
-
+	float i = 44.0f;
 	vector<int> index;
 	BOOLEAN isCreateGoomba = false;
 	void AddObject(LPGAMEOBJECT e);
