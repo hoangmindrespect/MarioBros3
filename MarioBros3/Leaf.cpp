@@ -4,7 +4,14 @@ void CLeaf::Render()
 {
 
 	CSprites* s = CSprites::GetInstance();
-	s->Get(idsprite)->Draw(x, y);
+	if (nx > 0)
+	{
+		s->Get(ID_ANI_LEAF_RIGHT)->Draw(x, y);
+	}
+	else
+	{
+		s->Get(ID_ANI_LEAF_LEFT)->Draw(x, y);
+	}
 
 	RenderBoundingBox();
 }
@@ -19,7 +26,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			if (x < rightmax)
 			{
 				x += 0.08f * dt;
-				y += 0.05f * dt;
+				y += 0.04f * dt;
+				nx = -1;
 			}
 			else
 			{
@@ -33,7 +41,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			if (x > rightmin)
 			{
 				x -= 0.08f * dt;
-				y += 0.05f * dt;
+				y += 0.04f * dt;
+				nx = 1;
 			}
 			else
 			{

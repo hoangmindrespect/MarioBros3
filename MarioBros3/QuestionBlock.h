@@ -13,7 +13,7 @@
 
 #define	QUESTIONBLOCK_WIDTH 16
 #define QUESTIONBLOCK_BBOX_WIDTH 16
-#define QUESTIONBLOCK_BBOX_HEIGHT 16
+#define QUESTIONBLOCK_BBOX_HEIGHT 15
 
 
 
@@ -21,7 +21,7 @@
 class CQuestionBlock : public CGameObject {
 	int type;//1: coin, 2: redmush, 3: greenmush, 4: leaf
 
-	float miny = y - 26;
+	float miny = y - 10;
 	float maxy = y;
 	bool IsUp = false; // => Is use for vertical question block
 	bool IsDown = false;// => Is use for vertical questionblock

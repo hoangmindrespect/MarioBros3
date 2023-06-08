@@ -485,7 +485,5 @@ AssetFile/GrassInMap.txt
 
 8 	6	-240	8	8	52	1	1
 
-
-
 # MARIO
-0	680	120	0
+0	50	120	0

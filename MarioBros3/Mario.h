@@ -7,6 +7,8 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.08f
+#define MARIO_PREPARE_RUNNING_SPEED		0.12f
+
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0004f
@@ -60,6 +62,9 @@
 
 #define ID_ANI_MARIO_WALKING_RIGHT 500
 #define ID_ANI_MARIO_WALKING_LEFT 501
+
+#define ID_ANI_MARIO_PREPARE_RIGHT 520
+#define ID_ANI_MARIO_PREPARE_LEFT 521
 
 #define ID_ANI_MARIO_RUNNING_RIGHT 600
 #define ID_ANI_MARIO_RUNNING_LEFT 601
@@ -164,12 +169,6 @@
 #define MARIO_FLYING_TIME 5000
 #define MARIO_BRACE_TIME 1000
 
-struct IsCanMove
-{
-	float x;
-	float y;
-	bool canMoveRight, canMoveLeft, canMoveUp, canMoveDown;
-};
 
 class CMario : public CGameObject
 {
@@ -205,7 +204,6 @@ class CMario : public CGameObject
 	ULONGLONG flying_start;
 	ULONGLONG bracing_start;
 	int coin; 
-	vector<IsCanMove> A;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -245,11 +243,7 @@ public:
 		isOnPlatform = false;
 		isSwitch = false;
 		coin = 0;
-		IsCanMove a ;
-		a.x = 72;
-		a.y = 70;
-		a.canMoveDown = a.canMoveLeft = a.canMoveRight = a.canMoveUp = false;
-		A.push_back(a);
+		
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

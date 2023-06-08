@@ -21,6 +21,7 @@ public:
 	vector<int> index;
 	BOOLEAN isCreateGoomba = false;
 	void AddObject(LPGAMEOBJECT e);
+	void AddObject1(LPGAMEOBJECT e);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 

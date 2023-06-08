@@ -145,17 +145,37 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	}
 	case DIK_1:
-		mario->SetLevel(MARIO_LEVEL_SMALL);
-		break;
+	{
+		if (mario->getIsInMap() == false)
+		{
+			mario->SetLevel(MARIO_LEVEL_SMALL);
+			break;
+		}
+	}
 	case DIK_2:
-		mario->SetLevel(MARIO_LEVEL_BIG);
-		break;
+	{
+		if (mario->getIsInMap() == false)
+		{
+			mario->SetLevel(MARIO_LEVEL_BIG);
+			break;
+		}
+	}
 	case DIK_3:
-		mario->SetLevel(MARIO_LEVEL_TAIL);
-		break;
+	{	
+		if (mario->getIsInMap() == false)
+		{
+			mario->SetLevel(MARIO_LEVEL_TAIL);
+			break;
+		}
+	}
 	case DIK_0:
-		mario->SetState(MARIO_STATE_DIE);
-		break;
+	{
+		if (mario->getIsInMap() == false)
+		{
+			mario->SetState(MARIO_STATE_DIE);
+			break;
+		}
+	}
 	case DIK_R: // reset
 		//Reload();
 		break;

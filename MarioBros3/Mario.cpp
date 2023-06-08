@@ -281,9 +281,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
-	
 	this->SetLevel(MARIO_LEVEL_BIG);
-	
 	e->obj->Delete();
 }
 
@@ -305,18 +303,16 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		{
 			if (level == MARIO_LEVEL_SMALL)
 			{
-				CRedMushroom* mushroom = new CRedMushroom(x, y - 95.0f);
-				scene->AddObject(mushroom);
+				CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+				scene->AddObject1(mushroom);
 			}
 			else  if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL)
 			{
-				CLeaf* leaf = new CLeaf(x, y - 35.0f);
+				CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 35.0f);
 				scene->AddObject(leaf);
 			}
 		}
-
 	}
-
 }
 
 void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
@@ -345,11 +341,9 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 {
-	DebugOut(L"Piranha collide");
 
 	if (isAttackByTail)
 	{
-		DebugOut(L"Piranha die");
 		e->obj->Delete();
 	}
 	else
@@ -599,15 +593,18 @@ int CMario::GetAniIdBig()
 				if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X) {
-					if (state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
-						aniId = ID_ANI_MARIO_WALKING_RIGHT;
-					else
+					
 						aniId = ID_ANI_MARIO_RUNNING_RIGHT;
 
 				}
 					
 				else if (ax == MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				{
+					if (state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
+						aniId = ID_ANI_MARIO_PREPARE_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				}
 			}
 			else // vx < 0
 			{
@@ -615,13 +612,17 @@ int CMario::GetAniIdBig()
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 				{
-					if (state == MARIO_STATE_PREPARE_RUNNING_LEFT)
-						aniId = ID_ANI_MARIO_WALKING_LEFT;
-					else
+					
 						aniId = ID_ANI_MARIO_RUNNING_LEFT;
 				}
 				else if (ax == -MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_WALKING_LEFT;
+				{
+					if (state == MARIO_STATE_PREPARE_RUNNING_LEFT)
+						aniId = ID_ANI_MARIO_PREPARE_LEFT;
+					else
+						aniId = ID_ANI_MARIO_WALKING_LEFT;
+
+				}
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
@@ -798,7 +799,7 @@ void CMario::SetState(int state)
 	{
 		if (isSitting) break;
 		running_start = GetTickCount64();
-		maxVx = MARIO_WALKING_SPEED;
+		maxVx = MARIO_PREPARE_RUNNING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
 		break;
@@ -807,7 +808,7 @@ void CMario::SetState(int state)
 	{
 		if (isSitting) break;
 		running_start = GetTickCount64();
-		maxVx = -MARIO_WALKING_SPEED;
+		maxVx = -MARIO_PREPARE_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;

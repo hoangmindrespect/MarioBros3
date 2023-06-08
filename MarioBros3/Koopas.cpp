@@ -91,12 +91,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 					CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 					if (mario->getlevel() == MARIO_LEVEL_SMALL)
 					{
-						CRedMushroom* mushroom = new CRedMushroom(x + 30.0f, y - 55.0f);
-						scene->AddObject(mushroom);
+						CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+						scene->AddObject1(mushroom);
 					}
 					else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
 					{
-						CLeaf* leaf = new CLeaf(x + 30.0f, y - 35.0f);
+						CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 45.0f);
 						scene->AddObject(leaf);
 					}
 				}

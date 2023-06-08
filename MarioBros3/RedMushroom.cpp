@@ -7,8 +7,11 @@
 CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = REDMUSHROOM_GRAVITY;
-	vx = GOOMBA_WALKING_SPEED;
+	this->ay = 0;
+	ymax = y - 16.0f;
+	isOut = false;
+	IsUp = IsDown = false;
+	vx = 0;
 }
 
 void CRedMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -21,6 +24,7 @@ void CRedMushroom::GetBoundingBox(float& left, float& top, float& right, float& 
 
 void CRedMushroom::OnNoCollision(DWORD dt)
 {
+	//DebugOut(L"hihih");
 	x += vx * dt;
 	y += vy * dt;
 };
@@ -29,24 +33,7 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	
 	if (dynamic_cast<CRedMushroom*>(e->obj)) return;
-	else if (dynamic_cast<CPlatform*>(e->obj))
-	{
-		CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
-		if (p->IsBlocking() == 0)
-		{
-			if (e->ny < 0)
-			{
-				SetYWhenCollideColorbox(p);
-			}
-		}
-	}
-	else if (dynamic_cast<CQuestionBlock*>(e->obj))
-	{
-		CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
-		sety(p->gety() - 23.0f);
-		vy = 0;
-	}
-
+	
 	if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0)
 	{
@@ -57,19 +44,46 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 }
-void CRedMushroom::SetYWhenCollideColorbox(LPGAMEOBJECT gameobject)
-{
-	if (gameobject->gety() - gety() < REDMUSHROOM_BBOX_HEIGHT)
-	{
-		sety(gameobject->gety() - REDMUSHROOM_BBOX_HEIGHT - 1.0f);
-		vy = 0;
-	}
-}
 
 void CRedMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+
+	if (!IsUp || !IsDown)
+	{
+		if (IsUp == false && y > miny)
+			y -= 0.2f * dt;
+		else
+		{
+			IsUp = true;
+			if (IsDown == false && y < maxy)
+				y += 0.2f * dt;
+			else
+			{
+				y = maxy;
+				IsDown = true;
+			}
+		}
+		
+	}
+	else
+	{
+		if (isOut == false)
+		{
+			if (y < ymax)
+			{
+				this->ax = 0;
+				this->ay = REDMUSHROOM_GRAVITY;
+				vx = GOOMBA_WALKING_SPEED;
+				isOut = true;
+			}
+			else
+			{
+				vy = -0.01f;
+			}
+		}
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

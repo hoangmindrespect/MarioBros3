@@ -44,9 +44,14 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 #define MAX_SCENE_LINE 1024
 
+void CPlayScene::AddObject1(LPGAMEOBJECT object)
+{
+	objects.insert(objects.begin() + 180,object);
+}
+
 void CPlayScene::AddObject(LPGAMEOBJECT object)
 {
-	objects.push_back(object);
+	objects.push_back( object);
 }
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -376,14 +381,14 @@ void CPlayScene::Update(DWORD dt)
 
 	if (player->getx() > 689)
 	{
-		/*if (isCreateGoomba == false)
+		if (isCreateGoomba == false)
 		{
 			CGoomba* g1 = new CGoomba(889, 102, 1);
 			CGoomba* g2 = new CGoomba(959, 102, 1);
 			objects.push_back(g1);
 			objects.push_back(g2);
 			isCreateGoomba = true;
-		}*/
+		}
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -401,7 +406,7 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = dynamic_cast<CMario*>(player);
 	if (mario->gety() > 400)
 		mario->SetState(MARIO_STATE_DIE);
-	//DebugOut(L"%d\n", mario->GetState());;
+
 	if (mario->getIsInMap() == 0)
 	{
 		float cyt = cy;
