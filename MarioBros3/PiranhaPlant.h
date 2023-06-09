@@ -34,13 +34,16 @@ class CPiranhaPlant : public CGameObject {
 	float ymax1;
 	bool IsStart_Fire;
 	bool IsStart_Up;
+	bool IsStart_Down;
 	ULONGLONG timeStart_Fire;
 	ULONGLONG timeStart_Up;
+	ULONGLONG timeStart_Down;
 public:
 	CPiranhaPlant(float x, float y, int model) : CGameObject(x, y) {
-		ymax = y - 31.0f;
-		ymax1 = x - 23.0f;
+		ymax = y - 41.0f;
+		ymax1 = x - 33.0f;
 		this->model = model;
+		IsStart_Down = false;
 		IsStart_Fire = false;
 		IsStart_Up = true; // at the first time meet mario it up immediately!
 		state = PIRANHA_STATE_UP_LEFT;
@@ -50,6 +53,8 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
+	friend void KeepMoving(CPiranhaPlant* a);
+
 };
 
 

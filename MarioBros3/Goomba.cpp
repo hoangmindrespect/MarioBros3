@@ -1,5 +1,6 @@
 #include "Goomba.h"
-
+#include "Platform.h"
+#include "debug.h"
 CGoomba::CGoomba(float x, float y, int t):CGameObject(x, y)
 {
 	this->type = t;
@@ -36,9 +37,9 @@ void CGoomba::OnNoCollision(DWORD dt)
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
 
-	if (e->ny != 0 )
+	if (e->ny != 0)
 	{
 		vy = 0;
 	}
@@ -46,6 +47,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -53,7 +55,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_BY_KOOPAS) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_BY_KOOPAS) && (GetTickCount64() - die_start > 500) )
 	{
 		isDeleted = true;
 		return;
@@ -97,7 +99,7 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_DIE_BY_KOOPAS:
 			die_start = GetTickCount64();
-			vx = 0;
+			vx = 0.01f;;
 			vy = -0.5f;
 			break;
 	}

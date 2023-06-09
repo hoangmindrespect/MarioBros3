@@ -37,15 +37,23 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (abs((CPlayScene::player)->getx() - x) <= 131.0f)
 		{
-			if (abs((CPlayScene::player)->getx() - x) > 26.0f)
+			if ((CPlayScene::player)->getx() <= x + 24.0f && (CPlayScene::player)->getx() >= x - 26.0f)
 			{
+				if (y != ymax + 41.0f)
+				{
+					goto label;
+				}
+			}
+			else
+			{
+				label:
 				if (IsStart_Up == false)
 				{
 					timeStart_Up = GetTickCount64();
 					IsStart_Up = true;
 				}
-				ULONGLONG now1 = GetTickCount64();
-				if (now1 - timeStart_Up >= 2000)
+
+				if (GetTickCount64() - timeStart_Up >= 2000)
 				{
 					if (y >= ymax)
 					{
@@ -57,20 +65,12 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						{
 							timeStart_Fire = GetTickCount64();
 							IsStart_Fire = true;
+							
 						}
 
-						if ((CPlayScene::player)->gety() > y)
-							if ((CPlayScene::player)->getx() < x)
-								state = PIRANHA_STATE_DOWN_LEFT;
-							else
-								state = PIRANHA_STATE_DOWN_RIGHT;
-						else
-							if ((CPlayScene::player)->getx() < x)
-								state = PIRANHA_STATE_UP_LEFT;
-							else
-								state = PIRANHA_STATE_UP_RIGHT;
-						ULONGLONG now = GetTickCount64();
-						if (now - timeStart_Fire >= 1500)
+						KeepMoving(this);
+
+						if (GetTickCount64() - timeStart_Fire >= 2000)
 						{
 							CGameObject* bul = nullptr;
 							if (state == PIRANHA_STATE_DOWN_LEFT)
@@ -85,82 +85,40 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 							IsStart_Fire = false;
 							IsStart_Up = false;
 						}
-
 					}
 				}
 				else
 				{
-					y += 0.05f * dt;
-					if (y > ymax + 47.0f)
+					if (y < ymax + 41.0f)
 					{
-						y = ymax + 47.0f;
-					}
-				}
-			}
-			else
-			{
-				if (IsStart_Up)
-				{
-					
-					ULONGLONG now1 = GetTickCount64();
-					if (now1 - timeStart_Up >= 2000)
-					{
-						if (y >= ymax)
+						if (!IsStart_Down)
 						{
-							y -= 0.05f * dt;
+							timeStart_Down = GetTickCount64();
+							IsStart_Down = true;
 						}
-						else if (y < ymax)
+						
+						if (GetTickCount64() - timeStart_Down > 1000)
 						{
-							if (IsStart_Fire == false)
-							{
-								timeStart_Fire = GetTickCount64();
-								IsStart_Fire = true;
-							}
-
-							if ((CPlayScene::player)->gety() > y)
-								if ((CPlayScene::player)->getx() < x)
-									state = PIRANHA_STATE_DOWN_LEFT;
-								else
-									state = PIRANHA_STATE_DOWN_RIGHT;
-							else
-								if ((CPlayScene::player)->getx() < x)
-									state = PIRANHA_STATE_UP_LEFT;
-								else
-									state = PIRANHA_STATE_UP_RIGHT;
-							ULONGLONG now = GetTickCount64();
-							if (now - timeStart_Fire >= 1500)
-							{
-								CGameObject* bul = nullptr;
-								if (state == PIRANHA_STATE_DOWN_LEFT)
-									bul = new CBullet(x - 4, y - 8, -0.05f, 0.02f);
-								else if (state == PIRANHA_STATE_UP_LEFT)
-									bul = new CBullet(x - 4, y - 8, -0.05f, -0.02f);
-								else if (state == PIRANHA_STATE_DOWN_RIGHT)
-									bul = new CBullet(x + 4, y - 8, 0.05f, 0.02f);
-								else
-									bul = new CBullet(x + 4, y - 8, 0.05f, -0.02f);
-								CPlayScene::objects.push_back(bul);
-								IsStart_Fire = false;
-								IsStart_Up = false;
-							}
-
+							y += 0.05f * dt;
+							
 						}
+						else
+							KeepMoving(this);
+						
 					}
 					else
 					{
-						y += 0.05f * dt;
-						if (y > ymax + 47.0f)
-						{
-							y = ymax + 47.0f;
-						}
+						y = ymax + 41.0f;
+						IsStart_Down = false;
 					}
 				}
 			}
 		}
 		else
 		{
-			y = ymax + 47.0f;
+			y = ymax + 41.0f;
 			IsStart_Fire = false;
+			IsStart_Down = false;
 			IsStart_Up = true;
 		}
 	}
@@ -168,50 +126,59 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (abs((CPlayScene::player)->getx() - x) <= 131.0f)
 		{
-			if (IsStart_Up == false)
+			if ((CPlayScene::player)->getx() <= x + 24.0f && (CPlayScene::player)->getx() >= x - 26.0f)
 			{
-				timeStart_Up = GetTickCount64();
-				IsStart_Up = true;
-			}
-			ULONGLONG now1 = GetTickCount64();
-			if (now1 - timeStart_Up >= 3000)
-			{
-				if (y >= ymax)
+				if (y != ymax + 33.0f)
 				{
-					y -= 0.05f * dt;
-				}
-				else if (y < ymax)
-				{
-					if (IsStart_Fire == false)
-					{
-						timeStart_Fire = GetTickCount64();
-						IsStart_Fire = true;
-					}
-					if (GetTickCount64() - timeStart_Fire >= 1500)
-					{
-						IsStart_Fire = false;
-						IsStart_Up = false;
-					}
-
+					goto label2;
 				}
 			}
 			else
 			{
-				y += 0.05f * dt;
-				if (y > ymax + 23.0f)
+				label2:
+				if (IsStart_Up == false)
 				{
-					y = ymax + 23.0f;
+					timeStart_Up = GetTickCount64();
+					IsStart_Up = true;
+				}
+				if (GetTickCount64() - timeStart_Up >= 3000)
+				{
+					if (y >= ymax)
+					{
+						y -= 0.05f * dt;
+					}
+					else if (y < ymax)
+					{
+						if (IsStart_Fire == false)
+						{
+							timeStart_Fire = GetTickCount64();
+							IsStart_Fire = true;
+						}
+						if (GetTickCount64() - timeStart_Fire >= 1500)
+						{
+							IsStart_Fire = false;
+							IsStart_Up = false;
+						}
+
+					}
+				}
+				else
+				{
+					y += 0.05f * dt;
+					if (y > ymax + 33.0f)
+					{
+						y = ymax + 33.0f;
+					}
 				}
 			}
 		}
 		else
 		{
-			y = ymax + 23.0f;
+			y = ymax + 33.0f;
 			IsStart_Up = true;
 		}
 	}
 	
-	//DebugOut(L"ma: %f, pi: %f\n", (CPlayScene::player)->getx(), x);
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
@@ -232,4 +199,18 @@ void CPiranhaPlant::GetBoundingBox(float& l, float& t, float& r, float& b)
 		r = l + PIRANHA_BBOX_WIDTH;
 		b = t + PIRANHA_BBOX_HEIGHT;
 	}
+}
+
+void KeepMoving(CPiranhaPlant* a)
+{
+	if ((CPlayScene::player)->gety() > a->y)
+		if ((CPlayScene::player)->getx() < a->x)
+			a->SetState(PIRANHA_STATE_DOWN_LEFT);
+		else
+			a->SetState(PIRANHA_STATE_DOWN_RIGHT);
+	else
+		if ((CPlayScene::player)->getx() < a->x)
+			a->SetState(PIRANHA_STATE_UP_LEFT);
+		else
+			a->SetState(PIRANHA_STATE_UP_RIGHT);
 }
