@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
-
+#include "Koopas.h"
 #include "Animation.h"
 #include "Animations.h"
 #include "PlayScene.h"
@@ -40,7 +40,7 @@
 
 #define MARIO_STATE_RELEASE_RUNNING_RIGHT	1258
 #define MARIO_STATE_RELEASE_RUNNING_LEFT	1259
-
+#define MARIO_STATE_HOLDING_KOOPAS 1260
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 #define TIME_READY_TO_RUN	3000
@@ -81,6 +81,18 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
+#define ID_ANI_MARIO_HOLD_WALK_RIGHT 1006
+#define ID_ANI_MARIO_HOLD_WALK_LEFT 1007
+
+#define ID_ANI_MARIO_HOLD_JUMP_RIGHT 1008
+#define ID_ANI_MARIO_HOLD_JUMP_LEFT 1009
+
+#define ID_ANI_MARIO_HOLD_IDLE_RIGHT 1004
+#define ID_ANI_MARIO_HOLD_IDLE_LEFT 1005
+
+#define ID_ANI_MARIO_KICK_RIGHT 1002
+#define ID_ANI_MARIO_KICK_LEFT 1003
+
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
@@ -102,6 +114,18 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1602
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1603
+
+#define ID_ANI_MARIO_SMALL_HOLD_WALK_RIGHT 1606
+#define ID_ANI_MARIO_SMALL_HOLD_WALK_LEFT 1607
+
+#define ID_ANI_MARIO_SMALL_HOLD_JUMP_RIGHT 1608
+#define ID_ANI_MARIO_SMALL_HOLD_JUMP_LEFT 1609
+
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT 1604
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT 1605
+
 // TAIL MARIO
 #define ID_ANI_MARIO_TAIL_IDLE_RIGHT 1700
 #define ID_ANI_MARIO_TAIL_IDLE_LEFT 1701
@@ -120,7 +144,6 @@
 #define ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT 1708
 #define ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT 1709
 
-
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT 1710
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT 1711
 
@@ -135,6 +158,18 @@
 
 #define ID_ANI_MARIO_TAIL_LOW_FLYING_RIGHT	1718
 #define ID_ANI_MARIO_TAIL_LOW_FLYING_LEFT	1719
+
+#define ID_ANI_MARIO_TAIL_KICK_RIGHT 1721
+#define ID_ANI_MARIO_TAIL_KICK_LEFT 1722
+
+#define ID_ANI_MARIO_TAIL_HOLD_WALK_RIGHT 1723
+#define ID_ANI_MARIO_TAIL_HOLD_WALK_LEFT 1724
+
+#define ID_ANI_MARIO_TAIL_HOLD_JUMP_RIGHT 1725
+#define ID_ANI_MARIO_TAIL_HOLD_JUMP_LEFT 1726
+
+#define ID_ANI_MARIO_TAIL_HOLD_IDLE_RIGHT 1727
+#define ID_ANI_MARIO_TAIL_HOLD_IDLE_LEFT 1728
 
 #define ID_ANI_MARIO_SMALL_IN_MAP	1720
 
@@ -186,7 +221,8 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	BOOLEAN isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
 
-
+	BOOLEAN isHolding;
+	BOOLEAN isKicking;
 	// handle flying
 	BOOLEAN isChangeDirection;
 	BOOLEAN isStart; // biến bool để tính thời gian bay
@@ -203,6 +239,8 @@ class CMario : public CGameObject
 	ULONGLONG running_start;
 	ULONGLONG flying_start;
 	ULONGLONG bracing_start;
+	ULONGLONG kicking_start;
+
 	int coin; 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -221,6 +259,7 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 	int IsInMap;
+	CKoopas* Koopas = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -232,6 +271,9 @@ public:
 		isFlying = false;
 		isRealse = false;
 		isOnCloud = false;
+		isHolding = false;
+		isKicking = false;
+
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 

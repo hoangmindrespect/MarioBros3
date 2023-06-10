@@ -56,7 +56,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
 				// when collide with goomba - is a collidable object it will be change direction => change direction 2 times equal dont change
-				vx = -vx;
+				//vx = -vx;
 			}
 		}
 	}
@@ -130,6 +130,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 		
 	}
+	
 
 	if (e->obj->IsBlocking() == 0)
 		return;
@@ -171,25 +172,35 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-	if ((state == KOOPAS_STATE_DIE_DOWN) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
+
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD || state == KOOPAS_STATE_DIE_UP)
 	{
-		if(n > 0)
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
-		else 
-			SetState(KOOPAS_STATE_WALKING_LEFT);
-		y -= 18;
-		ay = KOOPAS_GRAVITY;
-	}
-	else if ((state == KOOPAS_STATE_DIE_UP) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
-	{
-		if (n > 0)
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
-		else
-			SetState(KOOPAS_STATE_WALKING_LEFT);
-		y -= 18;
-		ay = KOOPAS_GRAVITY;
+		if (GetTickCount64() - die_start > 100000)
+		{
+			if (n > 0)
+				SetState(KOOPAS_STATE_WALKING_RIGHT);
+			else
+				SetState(KOOPAS_STATE_WALKING_LEFT);
+			y -= 18;
+			ay = KOOPAS_GRAVITY;
+		}
+		
 	}
 	
+	if (state == KOOPAS_STATE_IS_HOLD)
+	{
+		/*CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+		if (mario->getnx() > 0)
+		{
+			x = mario->getx() + 15.0f;
+			y = mario->gety() + 2.0f;
+		}
+		else
+		{
+			x = mario->getx() - 15.0f;
+			y = mario->gety() + 2.0f;
+		}*/
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -203,7 +214,7 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 	else if (state == KOOPAS_STATE_WALKING_LEFT)
 		aniId = ID_ANI_KOOPAS_WALKING_LEFT;
-	else if (state == KOOPAS_STATE_DIE_DOWN)
+	else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN;
 	else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
@@ -247,7 +258,13 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_DIE_UP_SPIN:
 		ay = KOOPAS_GRAVITY;
 		break;
+	case KOOPAS_STATE_IS_HOLD:
+	{
+		vx = 0;
+		vy = 0;
 
+		break;
+	}
 	}
 
 }

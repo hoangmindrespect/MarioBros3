@@ -7,9 +7,9 @@
 #define ID_ANI_LEAF_RIGHT 16002
 #define ID_ANI_LEAF_LEFT 16003
 
-#define	LEAF_WIDTH 16
-#define LEAF_BBOX_WIDTH 16
-#define LEAF_BBOX_HEIGHT 16
+#define	LEAF_WIDTH 14
+#define LEAF_BBOX_WIDTH 14
+#define LEAF_BBOX_HEIGHT 14
 
 class CLeaf : public CGameObject {
 	float maxy;

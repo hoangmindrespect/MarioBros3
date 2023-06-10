@@ -53,7 +53,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					IsStart_Up = true;
 				}
 
-				if (GetTickCount64() - timeStart_Up >= 2000)
+				if (GetTickCount64() - timeStart_Up >= 3000)
 				{
 					if (y >= ymax)
 					{

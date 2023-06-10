@@ -209,7 +209,13 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
 	case DIK_A: // key up => reset prepare to run
+	{
+		if (mario->GetState() == MARIO_STATE_HOLDING_KOOPAS)
+		{
+
+		}
 		break;
+	}
 	case DIK_X:
 	{
 		

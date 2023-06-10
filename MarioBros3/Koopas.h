@@ -18,6 +18,7 @@
 #define KOOPAS_STATE_DIE_UP 206
 #define KOOPAS_STATE_DIE_DOWN_SPIN 209
 #define KOOPAS_STATE_DIE_UP_SPIN 210
+#define KOOPAS_STATE_IS_HOLD 211
 
 
 #define ID_ANI_KOOPAS_WALKING_RIGHT 5052
@@ -55,6 +56,12 @@ public:
 	}
 	void setVy(float i) {
 		vy = i;
+	}
+	void setX(float x) {
+		this->x = x;
+	}
+	void setY(float x) {
+		this->y = x;
 	}
 };
 
