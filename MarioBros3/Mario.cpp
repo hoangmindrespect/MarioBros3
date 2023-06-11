@@ -81,12 +81,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isHolding = false;
 				isKicking = true;
 				kicking_start = GetTickCount64();
-				Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+				if(Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN)
+					Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+				else
+					Koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
+				Koopas->sety(Koopas->gety() - 5.0f);
+
 				if (x < Koopas->getx())
 					Koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
 				else
 					Koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
-				Koopas->sety(Koopas->gety() - 2.0f);
 			}
 		}
 
@@ -492,11 +496,17 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			
 			isKicking = true;
 			kicking_start = GetTickCount64();
-			koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+			if(koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+				koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+			else
+				koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
 		}
 		else
 		{
-			koopas->SetState(KOOPAS_STATE_IS_HOLD);
+			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+				koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
+			else
+				koopas->SetState(KOOPAS_STATE_IS_HOLD_UP);
 			isHolding = true; Koopas = koopas;
 		}
 	}
@@ -506,7 +516,10 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		if (e->ny != 0)
 		{
 			koopas->sety(koopas->gety() - 7.0f);
-			koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)
+				koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+			else
+				koopas->SetState(KOOPAS_STATE_DIE_UP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (e->nx != 0)

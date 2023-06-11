@@ -173,7 +173,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD || state == KOOPAS_STATE_DIE_UP)
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
 		if (GetTickCount64() - die_start > 100000)
 		{
@@ -187,20 +187,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		
 	}
 	
-	if (state == KOOPAS_STATE_IS_HOLD)
-	{
-		/*CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-		if (mario->getnx() > 0)
-		{
-			x = mario->getx() + 15.0f;
-			y = mario->gety() + 2.0f;
-		}
-		else
-		{
-			x = mario->getx() - 15.0f;
-			y = mario->gety() + 2.0f;
-		}*/
-	}
+	
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -214,11 +201,11 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 	else if (state == KOOPAS_STATE_WALKING_LEFT)
 		aniId = ID_ANI_KOOPAS_WALKING_LEFT;
-	else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD)
+	else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN;
 	else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
-	else if (state == KOOPAS_STATE_DIE_UP)
+	else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
 		aniId = ID_ANI_KOOPAS_DIE_UP;
 	else if (state == KOOPAS_STATE_DIE_UP_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
@@ -258,13 +245,14 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_DIE_UP_SPIN:
 		ay = KOOPAS_GRAVITY;
 		break;
-	case KOOPAS_STATE_IS_HOLD:
-	{
+	case KOOPAS_STATE_IS_HOLD_DOWN:
 		vx = 0;
 		vy = 0;
-
 		break;
-	}
+	case KOOPAS_STATE_IS_HOLD_UP:
+		vx = 0;
+		vy = 0;
+		break;
 	}
 
 }
