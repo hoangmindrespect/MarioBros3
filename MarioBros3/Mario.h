@@ -326,7 +326,7 @@ public:
 	int getlevel() { return level; }
 	int getnx() { return nx; }
 	float getvx() { return vx; }
-
+	bool getIsAttack() { return isAttackByTail; }
 	int getIsInMap() { return IsInMap; }
 	bool getIsMoveUp() { return isMoveUp ; }
 	bool getIsMoveDown() { return isMoveDown; }
@@ -335,5 +335,8 @@ public:
 	bool getIsOnPlatForm() { return isOnPlatform; }
 	bool getIsOnCloud() { return isOnCloud; }
 	ULONGLONG getFlyingStart() { return flying_start; }
+
+	//friend function
+	friend void DeLevel(CMario* a);
 };
 

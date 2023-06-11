@@ -20,7 +20,8 @@
 #define KOOPAS_STATE_DIE_UP_SPIN 210
 #define KOOPAS_STATE_IS_HOLD_DOWN 211
 #define KOOPAS_STATE_IS_HOLD_UP 212
-
+#define KOOPAS_STATE_RETURN_DOWN 215
+#define KOOPAS_STATE_RETURN_UP 217
 
 #define ID_ANI_KOOPAS_WALKING_RIGHT 5052
 #define ID_ANI_KOOPAS_WALKING_LEFT 5050
@@ -30,6 +31,8 @@
 #define ID_ANI_KOOPAS_DIE_DOWN_SPIN 5053
 #define ID_ANI_KOOPAS_DIE_UP_SPIN 5055
 
+#define ID_ANI_KOOPAS_RETURN_DOWN 5056
+#define ID_ANI_KOOPAS_RETURN_UP 5057
 class CKoopas : public CGameObject
 {
 protected:
@@ -37,7 +40,7 @@ protected:
 	float ay;
 	int n;
 	ULONGLONG die_start;
-
+	ULONGLONG return_start;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -64,5 +67,7 @@ public:
 	void setY(float x) {
 		this->y = x;
 	}
+	ULONGLONG getDieStart() { return die_start; }
+	ULONGLONG getReturnStart() { return return_start; }
 };
 

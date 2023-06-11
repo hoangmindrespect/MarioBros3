@@ -55,8 +55,6 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 			{
 				goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-				// when collide with goomba - is a collidable object it will be change direction => change direction 2 times equal dont change
-				//vx = -vx;
 			}
 		}
 	}
@@ -175,7 +173,22 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
-		if (GetTickCount64() - die_start > 100000)
+		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
+		{
+			if(state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
+				SetState(KOOPAS_STATE_RETURN_DOWN);
+			else
+			{
+				SetState(KOOPAS_STATE_RETURN_UP);
+			}
+			return_start = GetTickCount64();
+		}
+		
+	}
+
+	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
+	{
+		if (GetTickCount64() - return_start > 2000)
 		{
 			if (n > 0)
 				SetState(KOOPAS_STATE_WALKING_RIGHT);
@@ -184,7 +197,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y -= 18;
 			ay = KOOPAS_GRAVITY;
 		}
-		
 	}
 	
 	
@@ -209,6 +221,11 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_DIE_UP;
 	else if (state == KOOPAS_STATE_DIE_UP_SPIN)
 		aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
+	else if (state == KOOPAS_STATE_RETURN_DOWN)
+		aniId = ID_ANI_KOOPAS_RETURN_DOWN;
+	else if(state == KOOPAS_STATE_RETURN_UP)
+		aniId = ID_ANI_KOOPAS_RETURN_UP;
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
@@ -226,12 +243,26 @@ void CKoopas::SetState(int state)
 		ay = 0;
 		break;
 	case KOOPAS_STATE_DIE_UP:
-		die_start = GetTickCount64();
-		//y += 6;
-		vx = 0;
-		vy = -0.4f;
-		ay = KOOPAS_GRAVITY;
+	{
+		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+		if (mario->getIsAttack())
+		{
+			die_start = GetTickCount64();
+			vx = 0;
+			vy = -0.3f;
+			ay = KOOPAS_GRAVITY;
+		}
+		else
+		{
+			die_start = GetTickCount64();
+			y += 6;
+			vx = 0;
+			vy = 0;
+			ay = 0;
+		}
+		
 		break;
+	}
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
 		n = 1;
@@ -252,7 +283,11 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_IS_HOLD_UP:
 		vx = 0;
 		vy = 0;
+		ay = 0;
 		break;
+	case KOOPAS_STATE_RETURN_UP:
+		ay = 0;
+		vy = 0;
 	}
 
 }

@@ -72,7 +72,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					SetState(MARIO_STATE_RUNNING_LEFT);
 			}
 		}
-
+		
 		if (isHolding)
 		{
 			LPGAME game = CGame::GetInstance();
@@ -83,14 +83,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				kicking_start = GetTickCount64();
 				if(Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN)
 					Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
-				else
+				else if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_UP)
 					Koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
-				Koopas->sety(Koopas->gety() - 5.0f);
 
 				if (x < Koopas->getx())
 					Koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
 				else
 					Koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
+			}
+			else // if keep pressing DIK_A and koopas time out
+			{
+				if (GetTickCount64() - Koopas->getDieStart() > KOOPAS_DIE_TIMEOUT + 2000)
+				{
+					isHolding = false;
+					DeLevel(this);
+				}
 			}
 		}
 
@@ -313,21 +320,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					if (level == MARIO_LEVEL_TAIL)
-					{
-						level = MARIO_LEVEL_BIG;
-						StartUntouchable();
-					}
-					else if (level == MARIO_LEVEL_BIG)
-					{
-						level = MARIO_LEVEL_SMALL;
-						StartUntouchable();
-					}
-					else
-					{
-						SetState(MARIO_STATE_DIE);
-						die_start = GetTickCount64();
-					}
+					DeLevel(this);
 				}
 			}
 		}
@@ -387,22 +380,7 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 {
 	if (untouchable == 0)
 	{
-		if (level == MARIO_LEVEL_TAIL)
-		{
-			level = MARIO_LEVEL_BIG;
-			StartUntouchable();
-		}
-		else if (level == MARIO_LEVEL_BIG)
-		{
-			level = MARIO_LEVEL_SMALL;
-
-			StartUntouchable();
-		}
-		else if (level == MARIO_LEVEL_SMALL)
-		{
-			e->src_obj->SetState(MARIO_STATE_DIE);
-			die_start = GetTickCount64();
-		}
+		DeLevel(this);
 		e->obj->Delete();
 	}
 }
@@ -418,21 +396,7 @@ void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (level == MARIO_LEVEL_TAIL)
-			{
-				level = MARIO_LEVEL_BIG;
-				StartUntouchable();
-			}
-			else if (level == MARIO_LEVEL_BIG)
-			{
-				level = MARIO_LEVEL_SMALL;
-				StartUntouchable();
-			}
-			else if (level == MARIO_LEVEL_SMALL)
-			{
-				e->src_obj->SetState(MARIO_STATE_DIE);
-				die_start = GetTickCount64();
-			}
+			DeLevel(this);
 		}
 	}
 }
@@ -463,21 +427,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			{
 				if (untouchable == 0)
 				{
-					if (level == MARIO_LEVEL_TAIL)
-					{
-						level = MARIO_LEVEL_BIG;
-						StartUntouchable();
-					}
-					else if (level == MARIO_LEVEL_BIG)
-					{
-						level = MARIO_LEVEL_SMALL;
-						StartUntouchable();
-					}
-					else
-					{
-						SetState(MARIO_STATE_DIE);
-						die_start = GetTickCount64();
-					}
+					DeLevel(this);
 				}
 			}
 		}
@@ -488,6 +438,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 		if (!game->IsKeyDown(DIK_A))
 		{
+
+			//kick: die + collide + not pressA => kick
 			if (x < koopas->getx())
 				koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
 			else
@@ -526,21 +478,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (untouchable == 0)
 			{
-				if (level == MARIO_LEVEL_TAIL)
-				{
-					level = MARIO_LEVEL_BIG;
-					StartUntouchable();
-				}
-				else if (level == MARIO_LEVEL_BIG)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					SetState(MARIO_STATE_DIE);
-					die_start = GetTickCount64();
-				}
+				DeLevel(this);
 			}
 		}
 	}
@@ -1054,16 +992,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RELEASE_JUMP:
 	{
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		/*if (nx > 0)
-		{
-			ax = MARIO_ACCEL_RUN_X;
-			maxVx = MARIO_RUNNING_SPEED;
-		}
-		else
-		{
-			ax = -MARIO_ACCEL_RUN_X;
-			maxVx = -MARIO_RUNNING_SPEED;
-		}*/
+		
 		break;
 	}
 
@@ -1184,5 +1113,24 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 ;
 	}
 	level = l;
+}
+
+void DeLevel(CMario* a)
+{
+	if (a->level == MARIO_LEVEL_TAIL)
+	{
+		a->level = MARIO_LEVEL_BIG;
+		a->StartUntouchable();
+	}
+	else if (a->level == MARIO_LEVEL_BIG)
+	{
+		a->level = MARIO_LEVEL_SMALL;
+		a->StartUntouchable();
+	}
+	else
+	{
+		a->SetState(MARIO_STATE_DIE);
+		a->die_start = GetTickCount64();
+	}
 }
 
