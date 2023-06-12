@@ -18,6 +18,7 @@ void CCurtains::Render()
 	{
 		CSprites* s = CSprites::GetInstance();
 		s->Get(166039)->Draw(x, y);
+		s->Get(166044)->Draw(x, y + 63);
 
 		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(45431)->Render(x + 5, y + 25);
@@ -34,7 +35,7 @@ void CCurtains::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	else if(y < 94 && !isDown)
 	{
 		isUp = true;
-		y += 0.07 * dt;
+		y += 0.2 * dt;
 	}
 	else
 	{

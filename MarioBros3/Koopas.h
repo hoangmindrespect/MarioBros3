@@ -41,6 +41,8 @@ protected:
 	int n;
 	ULONGLONG die_start;
 	ULONGLONG return_start;
+	BOOLEAN shaking;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

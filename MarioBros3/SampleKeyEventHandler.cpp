@@ -9,6 +9,10 @@
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
+	if (KeyCode == DIK_W)
+	{
+		CGame::GetInstance()->InitiateSwitchScene(5);
+	}
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	if (!mario)
 		return;
@@ -180,9 +184,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
-	/*case DIK_X:
-		mario->SetState(MARIO_STATE_LOW_FLY);
-		break;*/
+	
 	case DIK_A:
 		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 		if (mario->getlevel() == MARIO_LEVEL_TAIL)

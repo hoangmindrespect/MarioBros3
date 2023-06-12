@@ -16,6 +16,8 @@
 #include "Leaf.h"
 #include "Leaf.h"
 #include "Platform.h"
+#include "Effect.h"
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (IsInMap == 0)
@@ -81,9 +83,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isHolding = false;
 				isKicking = true;
 				kicking_start = GetTickCount64();
-				if(Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN)
+				if(Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN ||Koopas->GetState() == KOOPAS_STATE_RETURN_DOWN)
 					Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
-				else if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_UP)
+				else if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_UP || Koopas->GetState() == KOOPAS_STATE_RETURN_UP)
 					Koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
 
 				if (x < Koopas->getx())
@@ -432,7 +434,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP)
+	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_UP)
 	{
 		LPGAME game = CGame::GetInstance();
 
@@ -448,7 +450,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			
 			isKicking = true;
 			kicking_start = GetTickCount64();
-			if(koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+			if(koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN)
 				koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
 			else
 				koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
@@ -1117,6 +1119,8 @@ void CMario::SetLevel(int l)
 
 void DeLevel(CMario* a)
 {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
 	if (a->level == MARIO_LEVEL_TAIL)
 	{
 		a->level = MARIO_LEVEL_BIG;

@@ -19,7 +19,7 @@ public:
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-
+	bool getIntoAni() { return intoAni; }
 	int IsBlocking() { return 0; }
 };
 

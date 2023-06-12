@@ -15,6 +15,8 @@ AssetFile/redmushroom.txt
 AssetFile/bullet.txt
 AssetFile/piranha.txt
 AssetFile/GrassInMap.txt
+AssetFile/effect.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -487,4 +489,4 @@ AssetFile/GrassInMap.txt
 5 	2135	135	12	24	1	1	1	1	0	1
 
 # MARIO
-0	50	120	0
+0	1950	120	0

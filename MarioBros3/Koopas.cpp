@@ -8,6 +8,7 @@
 #include "RedMushroom.h"
 #include "Leaf.h"
 #include "Brick.h"
+#include "Effect.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -44,6 +45,8 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	else if (dynamic_cast<CGoomba*>(e->obj))
 	{
@@ -63,8 +66,20 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		CBrick* b = dynamic_cast<CBrick*>(e->obj);
 		if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 		{
+			
 			if (b->getModel() == 2)
+			{
+				CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
+				CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
+				CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
+				CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
+				scene->AddObject(a);
+				scene->AddObject(b);
+				scene->AddObject(c); scene->AddObject(d);
 				e->obj->Delete();
+			}
+
+			
 		}
 	}
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
@@ -196,6 +211,18 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(KOOPAS_STATE_WALKING_LEFT);
 			y -= 18;
 			ay = KOOPAS_GRAVITY;
+			
+		}
+		else
+		{
+			if (!shaking)
+			{
+				x -= 1; shaking = true;
+			}
+			else
+			{
+				x += 1; shaking = false;
+			}
 		}
 	}
 	

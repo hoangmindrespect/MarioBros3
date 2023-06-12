@@ -1,0 +1,15 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#broke brick
+23100	1089	103	1098	112	60
+23101	1101	103	1110	112	60
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#broke brick
+35201	23100	100	23101	100
+
+#change from small to big right and left
+35202	12121	100	11121	100
+35203	12626	100	11111	100
