@@ -259,6 +259,7 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 	int IsInMap;
+	int IsInIntro;
 	CKoopas* Koopas = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -319,7 +320,7 @@ public:
 	void setNx(int a) { nx = a; }
 	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
 	void setIsOnClound(bool a) { isOnCloud = a; }
-
+	
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

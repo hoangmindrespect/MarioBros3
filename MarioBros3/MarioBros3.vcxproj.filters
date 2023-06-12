@@ -132,6 +132,9 @@
     <ClInclude Include="ColorBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Curtains.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -233,6 +236,9 @@
     <ClCompile Include="ColorBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Curtains.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -289,6 +295,9 @@
     <Text Include="AssetFile\GrassInMap.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
+    <Text Include="AssetFile\scene3.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\bbox.png">
@@ -325,6 +334,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="..\..\..\Downloads\Mario Untitled-1.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\intro.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

@@ -20,6 +20,8 @@
 #include "GrassInMap.h"
 #include "MarioStop.h"
 #include "ColorBox.h"
+#include "Curtains.h"
+
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
@@ -138,9 +140,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		CMario* mario = dynamic_cast<CMario*>(player);
 		if (type == 1)
+		{
 			mario->setIsInMap(1);
+		}
 		else
 			mario->setIsInMap(0);
+
+		
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
@@ -270,6 +276,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
+	case 20: obj = new CCurtains(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -379,6 +386,7 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
+	if (player == NULL) return;
 	if (player->getx() > 689)
 	{
 		if (isCreateGoomba == false)
@@ -391,8 +399,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload
 
 	// Update camera to follow mario
 	float cx, cy;

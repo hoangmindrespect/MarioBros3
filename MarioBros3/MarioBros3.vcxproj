@@ -142,6 +142,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
+    <ClInclude Include="Curtains.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
+    <ClCompile Include="Curtains.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -221,6 +223,7 @@
     <Text Include="AssetFile\Road.txt" />
     <Text Include="AssetFile\scene1.txt" />
     <Text Include="AssetFile\scene2.txt" />
+    <Text Include="AssetFile\scene3.txt" />
     <Text Include="AssetFile\ScoreGame.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +234,7 @@
     <Image Include="textures\enemies1_flip_horizontal.png" />
     <Image Include="textures\enemies1_flip_vertical.png" />
     <Image Include="textures\hud.png" />
+    <Image Include="textures\intro.png" />
     <Image Include="textures\item.png" />
     <Image Include="textures\mario.png" />
     <Image Include="textures\misc.png" />

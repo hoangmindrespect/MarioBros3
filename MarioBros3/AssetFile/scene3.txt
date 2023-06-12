@@ -1,0 +1,29 @@
+# list of object assets to load in this scene
+[ASSETS]
+AssetFile/mario.txt
+AssetFile/coin.txt
+AssetFile/Road.txt
+AssetFile/brick.txt
+AssetFile/Background.txt
+AssetFile/ColorBox.txt
+AssetFile/goomba.txt
+AssetFile/Pipe.txt
+AssetFile/koopas.txt
+AssetFile/ScoreGame.txt
+AssetFile/questionblock.txt
+AssetFile/redmushroom.txt
+AssetFile/bullet.txt
+AssetFile/piranha.txt
+AssetFile/GrassInMap.txt
+
+#
+[OBJECTS]
+# type	x	y	extra_settings per object type
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+# See OBJECT_TYPE constants in AssetIDs.h
+
+6	128	94	1000	1000	1	166037
+6	128	214	1000	1000	1	166037
+
+20	128	94
+5 	16	204	32	36	8	96012	96012	96012	1	0
