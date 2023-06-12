@@ -5,6 +5,7 @@
 #include "Animations.h"
 #include "PlayScene.h"
 #include "debug.h"
+#include "Effect.h"
 
 #define MARIO_WALKING_SPEED		0.08f
 #define MARIO_PREPARE_RUNNING_SPEED		0.12f
@@ -226,7 +227,7 @@ class CMario : public CGameObject
 	// handle flying
 	BOOLEAN isChangeDirection;
 	BOOLEAN isStart; // biến bool để tính thời gian bay
-
+	BOOLEAN isChanging;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -240,6 +241,7 @@ class CMario : public CGameObject
 	ULONGLONG flying_start;
 	ULONGLONG bracing_start;
 	ULONGLONG kicking_start;
+	ULONGLONG time_switching;
 
 	int coin; 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -261,6 +263,7 @@ class CMario : public CGameObject
 	int IsInMap;
 	int IsInIntro;
 	CKoopas* Koopas = NULL;
+	CEffect* Effect = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -274,7 +277,8 @@ public:
 		isOnCloud = false;
 		isHolding = false;
 		isKicking = false;
-
+		isSwitch = false;
+		isChanging = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -284,7 +288,6 @@ public:
 		attack_start = -1;
 		running_start = 0;
 		isOnPlatform = false;
-		isSwitch = false;
 		coin = 0;
 		
 	}
@@ -320,7 +323,8 @@ public:
 	void setNx(int a) { nx = a; }
 	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
 	void setIsOnClound(bool a) { isOnCloud = a; }
-	
+	void setIsSwitch(bool a) { isSwitch = a; }
+	void setIsChanging(bool a) { isChanging = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -335,8 +339,10 @@ public:
 	bool getIsMoveLeft() { return isMoveLeft; }
 	bool getIsOnPlatForm() { return isOnPlatform; }
 	bool getIsOnCloud() { return isOnCloud; }
+	bool getIsSwitch() { return isSwitch; }
+	bool getIsChanging() { return isChanging; }
 	ULONGLONG getFlyingStart() { return flying_start; }
-
+	ULONGLONG getTimeSwitch() { return time_switching; }
 	//friend function
 	friend void DeLevel(CMario* a);
 };

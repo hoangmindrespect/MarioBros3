@@ -31,6 +31,13 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		ax = 0;
 		ay = 0.003f;
 	}
+	else if (k == 5)
+	{
+		vx = 0;
+		vy = 0;
+		ax = 0;
+		ay = 0;
+	}
 }
 
 void CEffect::Render()

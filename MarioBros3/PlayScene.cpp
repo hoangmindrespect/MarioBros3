@@ -55,6 +55,7 @@ void CPlayScene::AddObject(LPGAMEOBJECT object)
 {
 	objects.push_back( object);
 }
+
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -374,8 +375,17 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way
-	
+	CMario* mario = dynamic_cast<CMario*>(player);
 	vector<LPGAMEOBJECT> coObjects;
+	if (mario->getIsChanging())
+	{
+		if (GetTickCount64() - mario->getTimeSwitch() > 1000)
+		{
+			mario->setIsChanging(false);
+		}
+		else
+			return;
+	}
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
@@ -410,7 +420,6 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	CMario* mario = dynamic_cast<CMario*>(player);
 	if (mario->gety() > 400)
 		mario->SetState(MARIO_STATE_DIE);
 
