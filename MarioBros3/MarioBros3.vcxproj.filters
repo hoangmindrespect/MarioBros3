@@ -138,6 +138,9 @@
     <ClInclude Include="Effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -245,6 +248,9 @@
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -346,6 +352,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\intro.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\reward.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

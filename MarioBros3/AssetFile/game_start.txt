@@ -25,3 +25,4 @@ height	240
 90	textures\hud.png
 100	textures\worldmap.png
 110	textures\intro.png
+120	textures\reward.png

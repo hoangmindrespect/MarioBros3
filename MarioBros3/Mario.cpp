@@ -17,7 +17,7 @@
 #include "Leaf.h"
 #include "Platform.h"
 #include "Effect.h"
-
+#include "Goal.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	
@@ -300,7 +300,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
-		OnCollisionWithLeaf(e);	
+		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CGoal*>(e->obj))
+		OnCollisionWithGoal(e);
 	
 }
 
@@ -416,6 +418,12 @@ void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithGoal(LPCOLLISIONEVENT e)
+{
+	CGoal* a = dynamic_cast<CGoal*>(e->obj);
+	a->setIsCollide(true);
+	isEndScene = true;
+}
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
@@ -637,15 +645,6 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 
-	if (isChanging)
-	{
-		if (nx > 0)
-			return aniId = 35202;
-		else
-			return aniId = 35203;
-	}
-
-
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -661,6 +660,34 @@ int CMario::GetAniIdBig()
 				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
 			else
 				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+		}
+
+		if (isHolding)
+		{
+			if (isOnPlatform)
+			{
+				if (nx > 0)
+				{
+					if (vx != 0)
+						aniId = ID_ANI_MARIO_HOLD_WALK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_HOLD_IDLE_RIGHT;
+				}
+				else
+				{
+					if (vx != 0)
+						aniId = ID_ANI_MARIO_HOLD_WALK_LEFT;
+					else
+						aniId = ID_ANI_MARIO_HOLD_IDLE_LEFT;
+				}
+			}
+			else
+			{
+				if (nx > 0)
+					aniId = ID_ANI_MARIO_HOLD_JUMP_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_HOLD_JUMP_LEFT;
+			}
 		}
 	}
 	else
@@ -756,7 +783,13 @@ int CMario::GetAniIdBig()
 			}
 		}
 	}
-
+	if (isChanging)
+	{
+		if (nx > 0)
+			return aniId = 35202;
+		else
+			return aniId = 35203;
+	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
 	return aniId;

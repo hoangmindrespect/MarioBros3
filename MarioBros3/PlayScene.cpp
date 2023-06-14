@@ -21,7 +21,7 @@
 #include "MarioStop.h"
 #include "ColorBox.h"
 #include "Curtains.h"
-
+#include "Goal.h"
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
@@ -201,7 +201,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_GRASS_IN_MAP: obj = new CGrassInMap(x, y); break;
-
+	case OBJECT_TYPE_GOAL: obj = new CGoal(x, y); break;
 	case OBJECT_TYPE_PIPE:
 	{
 
@@ -414,7 +414,6 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
@@ -468,6 +467,11 @@ void CPlayScene::Update(DWORD dt)
 				i = 44.0f;
 			}
 			
+		}
+		//mario đến đích
+		if (mario->getx() > 2715.71f)
+		{
+			return;
 		}
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}

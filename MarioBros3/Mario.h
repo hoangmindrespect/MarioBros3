@@ -221,6 +221,7 @@ class CMario : public CGameObject
 	BOOLEAN	isAttackByTail;
 	BOOLEAN isOnPlatform;
 	BOOLEAN isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
+	BOOLEAN isEndScene;
 
 	BOOLEAN isHolding;
 	BOOLEAN isKicking;
@@ -253,7 +254,7 @@ class CMario : public CGameObject
 	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 	
 
 	int GetAniIdBig();
@@ -279,6 +280,7 @@ public:
 		isKicking = false;
 		isSwitch = false;
 		isChanging = false;
+		isEndScene = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -325,6 +327,7 @@ public:
 	void setIsOnClound(bool a) { isOnCloud = a; }
 	void setIsSwitch(bool a) { isSwitch = a; }
 	void setIsChanging(bool a) { isChanging = a; }
+	void setIsEndScene(bool a) { isEndScene = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -341,6 +344,7 @@ public:
 	bool getIsOnCloud() { return isOnCloud; }
 	bool getIsSwitch() { return isSwitch; }
 	bool getIsChanging() { return isChanging; }
+	bool getIsEndScene() { return isEndScene; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getTimeSwitch() { return time_switching; }
 	//friend function
