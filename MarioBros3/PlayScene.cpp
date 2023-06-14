@@ -379,12 +379,24 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	if (mario->getIsChanging())
 	{
-		if (GetTickCount64() - mario->getTimeSwitch() > 1000)
+		if (mario->getlevel() == MARIO_LEVEL_BIG)
 		{
-			mario->setIsChanging(false);
+			if (GetTickCount64() - mario->getTimeSwitch() > 1000)
+			{
+				mario->setIsChanging(false);
+			}
+			else
+				return;
 		}
-		else
-			return;
+		else if (mario->getlevel() == MARIO_LEVEL_TAIL)
+		{
+			if (GetTickCount64() - mario->getTimeSwitch() > 500)
+			{
+				mario->setIsChanging(false);
+			}
+			else
+				return;
+		}
 	}
 	for (size_t i = 1; i < objects.size(); i++)
 	{

@@ -11,7 +11,13 @@
 #define LEAF_BBOX_WIDTH 14
 #define LEAF_BBOX_HEIGHT 14
 
+
 class CLeaf : public CGameObject {
+	float ax;
+	float ay;
+	float maxVx;
+	float maxVy;
+
 	float maxy;
 	int idsprite;
 	bool IsUp;
@@ -25,11 +31,19 @@ public:
 		idsprite = ID_ANI_LEAF_RIGHT;
 		IsUp = IsLeft =  false;
 		IsRight = true;
+		this->ax = 0;
+		this->ay = 0.001f;
+		this->vy = -0.5f;
+		this->vx = 0;
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
+	virtual int IsCollidable() { return 1; };
+	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
 };
 
 

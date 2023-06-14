@@ -8,6 +8,13 @@
 23102	232	243	247	270	40
 23103	160	243	175	270	40
 
+
+#become tail
+23104	192	0	207	15	30
+23105	208	0	223	15	30
+23106	224	0	239	15	30
+23107	240	0	255	15	30
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 #broke brick
@@ -16,3 +23,9 @@
 #change from small to big right and left
 35202	23102	100	11121	100
 35203	23103	100	11111	100
+
+#become tails
+35204	23104	80	23105	80	23106	80	23107	80
+
+#defeat in tail
+

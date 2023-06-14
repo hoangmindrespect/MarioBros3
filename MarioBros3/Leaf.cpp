@@ -1,4 +1,5 @@
 #include "Leaf.h"
+#include "Mario.h"
 
 void CLeaf::Render()
 {
@@ -16,49 +17,60 @@ void CLeaf::Render()
 	RenderBoundingBox();
 }
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
-	if (IsUp == false && y > maxy)
-		y -= 0.3f * dt;
-	else
+
+	vx += ax * dt;
+	vy += ay * dt;
+
+	if (IsRight == true && IsLeft == false)
 	{
-		IsUp = true;
-		if (IsRight == true && IsLeft == false)
+		if (x < rightmax)
 		{
-			if (x < rightmax)
-			{
-				x += 0.08f * dt;
-				y += 0.04f * dt;
-				nx = -1;
-			}
-			else
-			{
-				IsRight = false;
-				IsLeft = true;
-			}
-
+			vx = 0.08;
+			vy = 0.04;
+			nx = -1;
 		}
-		if (IsRight == false && IsLeft == true)
+		else
 		{
-			if (x > rightmin)
-			{
-				x -= 0.08f * dt;
-				y += 0.04f * dt;
-				nx = 1;
-			}
-			else
-			{
-				IsRight = true;
-				IsLeft = false;
-			}
+			IsRight = false;
+			IsLeft = true;
+		}
 
+	}
+	if (IsRight == false && IsLeft == true)
+	{
+		if (x > rightmin)
+		{
+			vx = -0.08;
+			vy = 0.04;
+			nx = 1;
+		}
+		else
+		{
+			IsRight = true;
+			IsLeft = false;
 		}
 
 	}
 	CGameObject::Update(dt, coObjects);
-		}
+	 CCollision::GetInstance()->Process(this, dt, coObjects);
+
+}
 void CLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - LEAF_BBOX_WIDTH / 2;
 	t = y - LEAF_BBOX_HEIGHT / 2;
 	r = l + LEAF_BBOX_WIDTH;
 	b = t + LEAF_BBOX_HEIGHT;
+}
+
+void CLeaf::OnNoCollision(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+};
+
+
+void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	
 }

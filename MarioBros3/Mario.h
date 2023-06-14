@@ -229,6 +229,7 @@ class CMario : public CGameObject
 	BOOLEAN isChangeDirection;
 	BOOLEAN isStart; // biến bool để tính thời gian bay
 	BOOLEAN isChanging;
+	BOOLEAN isChangingTail;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -280,6 +281,7 @@ public:
 		isKicking = false;
 		isSwitch = false;
 		isChanging = false;
+
 		isEndScene = false;
 		maxVx = 0.0f;
 		ax = 0.0f;

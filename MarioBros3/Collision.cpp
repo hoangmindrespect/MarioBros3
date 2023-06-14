@@ -6,6 +6,8 @@ int CCollisionEvent::WasCollided() {
 		t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable(nx, ny) == 1;
 }
 #include "debug.h"
+#include "Leaf.h"
+#include "Mario.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
@@ -169,8 +171,16 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
-		if (e->WasCollided()==1)
-			coEvents.push_back(e);
+		if (e->WasCollided() == 1)
+		{
+			if (dynamic_cast<CLeaf*>(objSrc))
+			{
+				if (dynamic_cast<CMario*>(objDests->at(i)))
+					coEvents.push_back(e);
+			}
+			else
+				coEvents.push_back(e);
+		}
 		else
 			delete e;
 	}

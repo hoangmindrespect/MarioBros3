@@ -510,6 +510,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	SetLevel(MARIO_LEVEL_TAIL);
+	isChanging = true;
+	time_switching = GetTickCount64();
 	e->obj->Delete();
 }
 
@@ -932,6 +934,9 @@ int CMario::GetAniIdTail()
 				aniId = ID_ANI_MARIO_TAIL_HOLD_JUMP_LEFT;
 		}
 	}
+
+	if (isChanging)
+		return aniId = 35204;
 
 	if (aniId == -1)
 	{
