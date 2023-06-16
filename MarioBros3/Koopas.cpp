@@ -64,22 +64,23 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CBrick*>(e->obj))
 	{
 		CBrick* b = dynamic_cast<CBrick*>(e->obj);
-		if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+		if (e->nx != 0)
 		{
-			
-			if (b->getModel() == 2)
+			if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 			{
-				CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
-				CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
-				CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
-				CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
-				scene->AddObject(a);
-				scene->AddObject(b);
-				scene->AddObject(c); scene->AddObject(d);
-				e->obj->Delete();
-			}
 
-			
+				if (b->getModel() == 2)
+				{
+					CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
+					CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
+					CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
+					CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
+					scene->AddObject(a);
+					scene->AddObject(b);
+					scene->AddObject(c); scene->AddObject(d);
+					e->obj->Delete();
+				}
+			}
 		}
 	}
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
