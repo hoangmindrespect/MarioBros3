@@ -26,7 +26,7 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		if (x < rightmax)
 		{
 			vx = 0.08;
-			vy = 0.04;
+			vy = 0.03;
 			nx = -1;
 		}
 		else
@@ -41,7 +41,7 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		if (x > rightmin)
 		{
 			vx = -0.08;
-			vy = 0.04;
+			vy = 0.03;
 			nx = 1;
 		}
 		else
@@ -52,7 +52,7 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 	}
 	CGameObject::Update(dt, coObjects);
-	 CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 }
 void CLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)

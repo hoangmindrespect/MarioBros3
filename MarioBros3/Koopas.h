@@ -33,6 +33,7 @@
 
 #define ID_ANI_KOOPAS_RETURN_DOWN 5056
 #define ID_ANI_KOOPAS_RETURN_UP 5057
+
 class CKoopas : public CGameObject
 {
 protected:

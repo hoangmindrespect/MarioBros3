@@ -13,16 +13,12 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE_BY_KOOPAS 201
-#define RED_GOOMBA_STATE_FLY_WALK	206
 #define GOOMBA_STATE_DIE 200
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
 #define ID_ANI_GOOMBA_DIE_BY_KOOPAS 5002
 
-#define ID_ANI_RED_GOOMBA_WALKING 5003
-#define ID_ANI_RED_GOOMBA_WING_RIGHT 5004
-#define ID_ANI_RED_GOOMBA_WING_LEFT 5005
 #define ID_ANI_RED_GOOMBA_DIE 5006
 #define ID_ANI_RED_GOOMBA_DIE_BY_KOOPAS 5007
 
@@ -31,9 +27,7 @@ class CGoomba : public CGameObject
 protected:
 	float ax;				
 	float ay; 
-	int type; // check type of goomba, red flying goomba or normal goomba
 	ULONGLONG die_start;
-
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
@@ -45,7 +39,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	
-	CGoomba(float x, float y, int t);
+	CGoomba(float x, float y);
 	virtual void SetState(int state);
 };
 

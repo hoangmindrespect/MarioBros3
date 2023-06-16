@@ -18,6 +18,8 @@
 #include "Platform.h"
 #include "Effect.h"
 #include "Goal.h"
+#include "RedGoomba.h"
+#include "RedGoomba.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	
@@ -303,6 +305,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CGoal*>(e->obj))
 		OnCollisionWithGoal(e);
+	else if (dynamic_cast<CRedGoomba*>(e->obj))
+		OnCollisionWithRedGoomba(e);
 	
 }
 
@@ -332,7 +336,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (untouchable == 0)
 			{
-				if (goomba->GetState() != GOOMBA_STATE_DIE)
+				if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 				{
 					DeLevel(this);
 				}
@@ -341,6 +345,46 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
+{
+	CRedGoomba* goomba = dynamic_cast<CRedGoomba*>(e->obj);
+	if (e->ny < 0)
+	{
+		if (goomba->GetState() != RED_GOOMBA_STATE_DIE && goomba->GetState() != RED_GOOMBA_STATE_DIE_BY_KOOPAS)
+		{
+			if (goomba->GetState() == RED_GOOMBA_STATE_WALKING_NONE_WINGS)
+			{
+				goomba->SetState(RED_GOOMBA_STATE_DIE);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+			else //with wings
+			{
+				goomba->SetState(RED_GOOMBA_STATE_WALKING_NONE_WINGS);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+		}
+	}
+	else // hit by RED Goomba
+	{
+		if (isAttackByTail)
+		{
+			if (goomba->GetState() != RED_GOOMBA_STATE_DIE && goomba->GetState() != RED_GOOMBA_STATE_DIE_BY_KOOPAS)
+			{
+				goomba->SetState(RED_GOOMBA_STATE_DIE_BY_KOOPAS);
+			}
+		}
+		else
+		{
+			if (untouchable == 0)
+			{
+				if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
+				{
+					DeLevel(this);
+				}
+			}
+		}
+	}
+}
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
@@ -386,7 +430,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 			}
 			else  if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL)
 			{
-				CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 35.0f);
+				CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 55.0f);
 				scene->AddObject(leaf);
 			}
 		}

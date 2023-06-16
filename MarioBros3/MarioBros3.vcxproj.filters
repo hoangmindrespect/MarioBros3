@@ -126,9 +126,6 @@
     <ClInclude Include="MarioStop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Wings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ColorBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -139,6 +136,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Goal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RedGoomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,9 +236,6 @@
     <ClCompile Include="MarioStop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Wings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ColorBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -249,6 +246,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Goal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RedGoomba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -355,6 +355,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\reward.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\enemy.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

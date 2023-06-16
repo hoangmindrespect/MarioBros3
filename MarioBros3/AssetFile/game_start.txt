@@ -26,3 +26,4 @@ height	240
 100	textures\worldmap.png
 110	textures\intro.png
 120	textures\reward.png
+130	textures\enemy.png
