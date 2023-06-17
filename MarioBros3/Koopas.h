@@ -34,11 +34,23 @@
 #define ID_ANI_KOOPAS_RETURN_DOWN 5056
 #define ID_ANI_KOOPAS_RETURN_UP 5057
 
+
+#define ID_ANI_GREEN_KOOPAS_WALKING_RIGHT 5059
+#define ID_ANI_GREEN_KOOPAS_WALKING_LEFT 5058
+
+#define ID_ANI_GREEN_KOOPAS_DIE_DOWN 5060
+#define ID_ANI_GREEN_KOOPAS_DIE_UP 5062
+#define ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN 5061
+#define ID_ANI_GREEN_KOOPAS_DIE_UP_SPIN 5063
+
+#define ID_ANI_GREEN_KOOPAS_RETURN_DOWN 5064
+#define ID_ANI_GREEN_KOOPAS_RETURN_UP 5065	
 class CKoopas : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
+	int color; // 1 red 2 green
 	int n;
 	ULONGLONG die_start;
 	ULONGLONG return_start;
@@ -56,7 +68,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CKoopas(float x, float y);
+	CKoopas(float x, float y, int color);
 	virtual void SetState(int state);
 	void setVx(float i) {
 		vx = i;

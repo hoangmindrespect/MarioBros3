@@ -9,8 +9,9 @@
 #include "Leaf.h"
 #include "Brick.h"
 #include "Effect.h"
-CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
+CKoopas::CKoopas(float x, float y, int color) :CGameObject(x, y)
 {
+	this->color = color;
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
@@ -236,25 +237,48 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int aniId = KOOPAS_STATE_WALKING_RIGHT;
-	if (state == KOOPAS_STATE_WALKING_RIGHT)
-		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-	else if (state == KOOPAS_STATE_WALKING_LEFT)
-		aniId = ID_ANI_KOOPAS_WALKING_LEFT;
-	else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-		aniId = ID_ANI_KOOPAS_DIE_DOWN;
-	else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
-		aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
-	else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
-		aniId = ID_ANI_KOOPAS_DIE_UP;
-	else if (state == KOOPAS_STATE_DIE_UP_SPIN)
-		aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
-	else if (state == KOOPAS_STATE_RETURN_DOWN)
-		aniId = ID_ANI_KOOPAS_RETURN_DOWN;
-	else if(state == KOOPAS_STATE_RETURN_UP)
-		aniId = ID_ANI_KOOPAS_RETURN_UP;
-
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (color == 1)
+	{
+		int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+		if (state == KOOPAS_STATE_WALKING_RIGHT)
+			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+		else if (state == KOOPAS_STATE_WALKING_LEFT)
+			aniId = ID_ANI_KOOPAS_WALKING_LEFT;
+		else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
+			aniId = ID_ANI_KOOPAS_DIE_DOWN;
+		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
+			aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
+		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
+			aniId = ID_ANI_KOOPAS_DIE_UP;
+		else if (state == KOOPAS_STATE_DIE_UP_SPIN)
+			aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
+		else if (state == KOOPAS_STATE_RETURN_DOWN)
+			aniId = ID_ANI_KOOPAS_RETURN_DOWN;
+		else if (state == KOOPAS_STATE_RETURN_UP)
+			aniId = ID_ANI_KOOPAS_RETURN_UP;
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	}
+	else if (color == 2)
+	{
+		int aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
+		if (state == KOOPAS_STATE_WALKING_RIGHT)
+			aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
+		else if (state == KOOPAS_STATE_WALKING_LEFT)
+			aniId = ID_ANI_GREEN_KOOPAS_WALKING_LEFT;
+		else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
+			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
+		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
+			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN;
+		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
+			aniId = ID_ANI_GREEN_KOOPAS_DIE_UP;
+		else if (state == KOOPAS_STATE_DIE_UP_SPIN)
+			aniId = ID_ANI_GREEN_KOOPAS_DIE_UP_SPIN;
+		else if (state == KOOPAS_STATE_RETURN_DOWN)
+			aniId = ID_ANI_GREEN_KOOPAS_RETURN_DOWN;
+		else if (state == KOOPAS_STATE_RETURN_UP)
+			aniId = ID_ANI_GREEN_KOOPAS_RETURN_UP;
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	}
 	RenderBoundingBox();
 }
 
