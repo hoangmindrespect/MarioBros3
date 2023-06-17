@@ -23,6 +23,8 @@
 #include "Curtains.h"
 #include "Goal.h"
 #include "RedGoomba.h"
+#include "JumpKoopas.h"
+
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
@@ -158,6 +160,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPAS: {int model = (int)atof(tokens[3].c_str());
 		obj = new CKoopas(x, y, model); break;
 	}
+	case OBJECT_TYPE_JUMP_KOOPAS: obj = new CJumpKoopas(x, y); break;
 	case OBJECT_TYPE_BRICK: 
 	{
 		int model = (int)atof(tokens[3].c_str());

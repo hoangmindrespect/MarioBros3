@@ -20,6 +20,7 @@
 #include "Goal.h"
 #include "RedGoomba.h"
 #include "RedGoomba.h"
+#include "JumpKoopas.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	
@@ -43,14 +44,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			untouchable = 0;
 		}
 		
-		/*if (isSwitch)
-		{
-			if (GetTickCount64() - time_switching > 1500)
-			{
-				isSwitch = false;
-			}
-		}*/
-
 		if (state == MARIO_STATE_DIE)
 		{
 			if (GetTickCount64() - die_start > 2000)
@@ -94,22 +87,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isHolding = false;
 				isKicking = true;
 				kicking_start = GetTickCount64();
-				if(Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN ||Koopas->GetState() == KOOPAS_STATE_RETURN_DOWN)
-					Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
-				else if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_UP || Koopas->GetState() == KOOPAS_STATE_RETURN_UP)
-					Koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
+				if(Koopas)
+					KickKoopas(Koopas, this);
+				if(JumpKoopas)
+					KickJumpKoopas(JumpKoopas, this);
 
-				if (x < Koopas->getx())
-					Koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
-				else
-					Koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
 			}
 			else // if keep pressing DIK_A and koopas time out
 			{
-				if (GetTickCount64() - Koopas->getDieStart() > KOOPAS_DIE_TIMEOUT + 2000)
+				if (Koopas)
 				{
-					isHolding = false;
-					DeLevel(this);
+					if (GetTickCount64() - Koopas->getDieStart() > KOOPAS_DIE_TIMEOUT + 2000)
+					{
+						isHolding = false;
+						DeLevel(this);
+					}
+				}
+				if (JumpKoopas)
+				{
+					if (GetTickCount64() - JumpKoopas->getDieStart() > KOOPAS_DIE_TIMEOUT + 2000)
+					{
+						isHolding = false;
+						DeLevel(this);
+					}
 				}
 			}
 		}
@@ -205,45 +205,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		LPGAME game = CGame::GetInstance();
 		if (game->IsKeyDown(DIK_A))
 		{
-			if (level == MARIO_LEVEL_TAIL)
-			{
-				if (nx > 0)
-				{
-					Koopas->setX(x + 15.0f);
-					Koopas->setY(y + 2.0f);
-				}
-				else
-				{
-					Koopas->setX(x - 15.0f);
-					Koopas->setY(y + 2.0f);
-				}
-			}
-			else if(level == MARIO_LEVEL_BIG)
-			{
-				if (nx > 0)
-				{
-					Koopas->setX(x + 10.0f);
-					Koopas->setY(y + 2.0f);
-				}
-				else
-				{
-					Koopas->setX(x - 10.0f);
-					Koopas->setY(y + 2.0f);
-				}
-			}
-			else
-			{
-				if (nx > 0)
-				{
-					Koopas->setX(x + 7.0f);
-					Koopas->setY(y - 3.0f);
-				}
-				else
-				{
-					Koopas->setX(x - 7.0f);
-					Koopas->setY(y - 3.0f);
-				}
-			}
+			SetPositionDefendKoopas(this, Koopas, JumpKoopas);
 		}
 	}
 		
@@ -307,6 +269,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoal(e);
 	else if (dynamic_cast<CRedGoomba*>(e->obj))
 		OnCollisionWithRedGoomba(e);
+	else if(dynamic_cast<CJumpKoopas*>(e->obj))
+		OnCollisionWithJumpKoopas(e);
+
 	
 }
 
@@ -539,6 +504,115 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 			else
 				koopas->SetState(KOOPAS_STATE_DIE_UP);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (e->nx != 0)
+		{
+			if (untouchable == 0)
+			{
+				DeLevel(this);
+			}
+		}
+	}
+}
+void CMario::OnCollisionWithJumpKoopas(LPCOLLISIONEVENT e) 
+{
+	CJumpKoopas* koopas = dynamic_cast<CJumpKoopas*>(e->obj);
+	if (koopas->GetState() == JUMP_KOOPAS_STATE_JUMPING)
+	{
+		if (e->ny < 0)
+		{
+			if (koopas->getnx() > 0)
+			{
+				koopas->SetState(JUMP_KOOPAS_STATE_WALKING_RIGHT);
+			}
+			else
+				koopas->SetState(JUMP_KOOPAS_STATE_WALKING_LEFT);
+
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (e->nx != 0)
+		{
+
+			if (isAttackByTail)
+			{
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_UP);
+			}
+			else
+			{
+				if (untouchable == 0)
+				{
+					DeLevel(this);
+				}
+			}
+		}
+	}
+	else if (koopas->GetState() == JUMP_KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == JUMP_KOOPAS_STATE_WALKING_RIGHT)
+	{
+		if (e->ny < 0)
+		{
+			if (koopas->GetState() != JUMP_KOOPAS_STATE_DIE_DOWN)
+			{
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_DOWN);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+		}
+		else if (e->nx != 0)
+		{
+
+			if (isAttackByTail)
+			{
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_UP);
+			}
+			else
+			{
+				if (untouchable == 0)
+				{
+					DeLevel(this);
+				}
+			}
+		}
+	}
+	else if (koopas->GetState() == JUMP_KOOPAS_STATE_DIE_DOWN || koopas->GetState() == JUMP_KOOPAS_STATE_DIE_UP || koopas->GetState() == JUMP_KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == JUMP_KOOPAS_STATE_RETURN_UP)
+	{
+		LPGAME game = CGame::GetInstance();
+
+		if (!game->IsKeyDown(DIK_A))
+		{
+
+			//kick: die + collide + not pressA => kick
+			if (x < koopas->getx())
+				koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
+			else
+				koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
+			koopas->sety(koopas->gety() - 5.0f);
+
+			isKicking = true;
+			kicking_start = GetTickCount64();
+			if (koopas->GetState() == JUMP_KOOPAS_STATE_DIE_DOWN || koopas->GetState() == JUMP_KOOPAS_STATE_RETURN_DOWN)
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_DOWN_SPIN);
+			else
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_UP_SPIN);
+		}
+		else
+		{
+			if (koopas->GetState() == JUMP_KOOPAS_STATE_DIE_DOWN)
+				koopas->SetState(JUMP_KOOPAS_STATE_IS_HOLD_DOWN);
+			else
+				koopas->SetState(JUMP_KOOPAS_STATE_IS_HOLD_UP);
+			isHolding = true; JumpKoopas = koopas;
+		}
+	}
+	else if (koopas->GetState() == JUMP_KOOPAS_STATE_DIE_UP_SPIN || koopas->GetState() == JUMP_KOOPAS_STATE_DIE_DOWN_SPIN)
+	{
+		// make defend koopas stop
+		if (e->ny != 0)
+		{
+			koopas->sety(koopas->gety() - 7.0f);
+			if (koopas->GetState() == JUMP_KOOPAS_STATE_DIE_DOWN_SPIN)
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_DOWN);
+			else
+				koopas->SetState(JUMP_KOOPAS_STATE_DIE_UP);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (e->nx != 0)
@@ -1249,4 +1323,118 @@ void DeLevel(CMario* a)
 		a->die_start = GetTickCount64();
 	}
 }
+void KickKoopas(CKoopas* Koopas, CMario* mario)
+{
+	if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_DOWN || Koopas->GetState() == KOOPAS_STATE_RETURN_DOWN)
+		Koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+	else if (Koopas->GetState() == KOOPAS_STATE_IS_HOLD_UP || Koopas->GetState() == KOOPAS_STATE_RETURN_UP)
+		Koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
+
+	if (mario->getx() < Koopas->getx())
+		Koopas->setVx(abs(KOOPAS_SPINNING_SPEED));
+	else
+		Koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
+}
+void KickJumpKoopas(CJumpKoopas* JumpKoopas, CMario* mario)
+{
+	if (JumpKoopas->GetState() == JUMP_KOOPAS_STATE_IS_HOLD_DOWN || JumpKoopas->GetState() == JUMP_KOOPAS_STATE_RETURN_DOWN)
+		JumpKoopas->SetState(JUMP_KOOPAS_STATE_DIE_DOWN_SPIN);
+	else if (JumpKoopas->GetState() == JUMP_KOOPAS_STATE_IS_HOLD_UP || JumpKoopas->GetState() == JUMP_KOOPAS_STATE_RETURN_UP)
+		JumpKoopas->SetState(JUMP_KOOPAS_STATE_DIE_UP_SPIN);
+
+	if (mario->getx() < JumpKoopas->getx())
+		JumpKoopas->setVx(abs(KOOPAS_SPINNING_SPEED));
+	else
+		JumpKoopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
+}
+
+void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas, CJumpKoopas* JumpKoopas)
+{
+	if (Koopas)
+	{
+		if (mario->getlevel() == MARIO_LEVEL_TAIL)
+		{
+			if (mario->getnx() > 0)
+			{
+				Koopas->setX(mario->getx() + 15.0f);
+				Koopas->setY(mario->gety() + 2.0f);
+			}
+			else
+			{
+				Koopas->setX(mario->getx() - 15.0f);
+				Koopas->setY(mario->gety() + 2.0f);
+			}
+		}
+		else if (mario->getlevel() == MARIO_LEVEL_BIG)
+		{
+			if (mario->getnx() > 0)
+			{
+				Koopas->setX(mario->getx() + 10.0f);
+				Koopas->setY(mario->gety() + 2.0f);
+			}
+			else
+			{
+				Koopas->setX(mario->getx() - 10.0f);
+				Koopas->setY(mario->gety() + 2.0f);
+			}
+		}
+		else
+		{
+			if (mario->getnx() > 0)
+			{
+				Koopas->setX(mario->getx() + 7.0f);
+				Koopas->setY(mario->gety() - 3.0f);
+			}
+			else
+			{
+				Koopas->setX(mario->getx() - 7.0f);
+				Koopas->setY(mario->gety() - 3.0f);
+			}
+		}
+	}
+	else if (JumpKoopas)
+	{
+		if (mario->getlevel() == MARIO_LEVEL_TAIL)
+		{
+			if (mario->getnx() > 0)
+			{
+				JumpKoopas->setX(mario->getx() + 15.0f);
+				JumpKoopas->setY(mario->gety() + 2.0f);
+			}
+			else
+			{
+				JumpKoopas->setX(mario->getx() - 15.0f);
+				JumpKoopas->setY(mario->gety() + 2.0f);
+			}
+		}
+		else if (mario->getlevel() == MARIO_LEVEL_BIG)
+		{
+			if (mario->getnx() > 0)
+			{
+				JumpKoopas->setX(mario->getx() + 10.0f);
+				JumpKoopas->setY(mario->gety() + 2.0f);
+			}
+			else
+			{
+				JumpKoopas->setX(mario->getx() - 10.0f);
+				JumpKoopas->setY(mario->gety() + 2.0f);
+			}
+		}
+		else
+		{
+			if (mario->getnx() > 0)
+			{
+				JumpKoopas->setX(mario->getx() + 7.0f);
+				JumpKoopas->setY(mario->gety() - 3.0f);
+			}
+			else
+			{
+				JumpKoopas->setX(mario->getx() - 7.0f);
+				JumpKoopas->setY(mario->gety() - 3.0f);
+			}
+		}
+	}
+	
+}
+
 

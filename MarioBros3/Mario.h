@@ -6,6 +6,7 @@
 #include "PlayScene.h"
 #include "debug.h"
 #include "Effect.h"
+#include "JumpKoopas.h"
 
 #define MARIO_WALKING_SPEED		0.08f
 #define MARIO_PREPARE_RUNNING_SPEED		0.12f
@@ -220,7 +221,7 @@ class CMario : public CGameObject
 	bool isRealse;
 	bool isFlying;
 	bool isSitting;
-	bool	isAttackByTail;
+	bool isAttackByTail;
 	bool isOnPlatform;
 	bool isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
 	bool isEndScene;
@@ -257,6 +258,7 @@ class CMario : public CGameObject
 	void OnCollisionWithRedBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithJumpKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 	
@@ -268,11 +270,11 @@ class CMario : public CGameObject
 	int IsInMap;
 	int IsInIntro;
 	CKoopas* Koopas = NULL;
-	CEffect* Effect = NULL;
+	CJumpKoopas* JumpKoopas = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		//IsInMap = k;
+		IsInMap = 0;
 		isEndTurn = isMoveDown = isMoveLeft = isMoveRight = isMoveUp = isSwitch = false;;
 		isChangeDirection = false;
 		isSitting = false;
@@ -354,5 +356,8 @@ public:
 	ULONGLONG getTimeSwitch() { return time_switching; }
 	//friend function
 	friend void DeLevel(CMario* a);
+	friend void KickKoopas(CKoopas* Koopas, CMario* mario);
+	friend void KickJumpKoopas(CJumpKoopas* JumpKoopas, CMario* mario);
+	friend void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas = NULL, CJumpKoopas* JumpKoopas = NULL);
 };
 

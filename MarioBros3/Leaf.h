@@ -15,9 +15,6 @@
 class CLeaf : public CGameObject {
 	float ax;
 	float ay;
-	float maxVx;
-	float maxVy;
-
 	float maxy;
 	int idsprite;
 	bool IsUp;

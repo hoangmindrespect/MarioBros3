@@ -13,7 +13,6 @@
 #define BRICK_BBOX_HEIGHT 15
 
 class CBrick : public CGameObject {
-	BOOLEAN isCanBreakBrick;
 	int model;
 public:
 	CBrick(float x, float y, int mo) : CGameObject(x, y) { this->model = mo; }

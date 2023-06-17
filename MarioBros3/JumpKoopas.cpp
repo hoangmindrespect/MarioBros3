@@ -1,4 +1,4 @@
-#include "Koopas.h"
+#include "JumpKoopas.h"
 #include"ColorBox.h"
 #include "Goomba.h"
 #include "debug.h"
@@ -9,20 +9,21 @@
 #include "Leaf.h"
 #include "Brick.h"
 #include "Effect.h"
-CKoopas::CKoopas(float x, float y, int color) :CGameObject(x, y)
+CJumpKoopas::CJumpKoopas(float x, float y) :CGameObject(x, y)
 {
-	this->color = color;
-	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
-	die_start = -1;
-	n = 1;
-	this->vx = KOOPAS_WALKING_SPEED;
-	SetState(KOOPAS_STATE_WALKING_RIGHT);
+	this->ax = 0;
+	this->vx = -KOOPAS_WALKING_SPEED;
+	this->vy = 0;
+	isJumping = false;
+	SetState(JUMP_KOOPAS_STATE_JUMPING);
+	nx = -1;
+	jumping_start = GetTickCount64();
 }
 
-void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CJumpKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	)
+	if (state == JUMP_KOOPAS_STATE_DIE_DOWN || state == JUMP_KOOPAS_STATE_DIE_DOWN_SPIN || state == JUMP_KOOPAS_STATE_DIE_UP_SPIN || state == JUMP_KOOPAS_STATE_DIE_UP)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_DIE / 2;
@@ -38,13 +39,13 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 	}
 }
 
-void CKoopas::OnNoCollision(DWORD dt)
+void CJumpKoopas::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
 };
 
-void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
+void CJumpKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 
@@ -127,16 +128,16 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (state == KOOPAS_STATE_WALKING_RIGHT || state == KOOPAS_STATE_WALKING_LEFT)
 			{
 				vx = -vx;
-				n = -n;
-				if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
+				nx = -nx;
+				if (nx < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
 					SetState(KOOPAS_STATE_WALKING_LEFT);
-				if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
+				if (nx > 0 && state == KOOPAS_STATE_WALKING_LEFT)
 					SetState(KOOPAS_STATE_WALKING_RIGHT);
 			}
 		}
-		
+
 	}
-	
+
 
 	if (e->obj->IsBlocking() == 0)
 		return;
@@ -148,45 +149,54 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
-		n = -n;
-		if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
-			SetState(KOOPAS_STATE_WALKING_LEFT);
-		if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
+		nx = -nx;
+		if (nx < 0 && state == JUMP_KOOPAS_STATE_WALKING_RIGHT)
+			SetState(JUMP_KOOPAS_STATE_WALKING_LEFT);
+		if (nx > 0 && state == JUMP_KOOPAS_STATE_WALKING_LEFT)
+			SetState(JUMP_KOOPAS_STATE_WALKING_RIGHT);
 	}
 }
 
-void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CJumpKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
+	if (state == JUMP_KOOPAS_STATE_JUMPING)
+	{
+		if (GetTickCount64() - jumping_start > 800)
+		{
+			SetState(JUMP_KOOPAS_STATE_JUMPING);
+			jumping_start = GetTickCount64();
+		}
+	}
+
+	if (state == JUMP_KOOPAS_STATE_DIE_DOWN || state == JUMP_KOOPAS_STATE_IS_HOLD_DOWN || state == JUMP_KOOPAS_STATE_IS_HOLD_UP || state == JUMP_KOOPAS_STATE_DIE_UP)
 	{
 		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
 		{
-			if(state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-				SetState(KOOPAS_STATE_RETURN_DOWN);
+			if (state == JUMP_KOOPAS_STATE_DIE_DOWN || state == JUMP_KOOPAS_STATE_IS_HOLD_DOWN)
+				SetState(JUMP_KOOPAS_STATE_RETURN_DOWN);
 			else
 			{
-				SetState(KOOPAS_STATE_RETURN_UP);
+				SetState(JUMP_KOOPAS_STATE_RETURN_UP);
 			}
 			return_start = GetTickCount64();
 		}
-		
+
 	}
 
-	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
+	if (state == JUMP_KOOPAS_STATE_RETURN_DOWN || state == JUMP_KOOPAS_STATE_RETURN_UP)
 	{
 		if (GetTickCount64() - return_start > 2000)
 		{
-			if (n > 0)
-				SetState(KOOPAS_STATE_WALKING_RIGHT);
+			if (nx > 0)
+				SetState(JUMP_KOOPAS_STATE_WALKING_RIGHT);
 			else
-				SetState(KOOPAS_STATE_WALKING_LEFT);
+				SetState(JUMP_KOOPAS_STATE_WALKING_LEFT);
 			y -= 18;
 			ay = KOOPAS_GRAVITY;
-			
+
 		}
 		else
 		{
@@ -200,74 +210,57 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	
-	
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
-void CKoopas::Render()
+void CJumpKoopas::Render()
 {
-	if (color == 1)
+	int aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
+	if (state == JUMP_KOOPAS_STATE_JUMPING)
 	{
-		int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-		if (state == KOOPAS_STATE_WALKING_RIGHT)
-			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-		else if (state == KOOPAS_STATE_WALKING_LEFT)
-			aniId = ID_ANI_KOOPAS_WALKING_LEFT;
-		else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-			aniId = ID_ANI_KOOPAS_DIE_DOWN;
-		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
-			aniId = ID_ANI_KOOPAS_DIE_DOWN_SPIN;
-		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
-			aniId = ID_ANI_KOOPAS_DIE_UP;
-		else if (state == KOOPAS_STATE_DIE_UP_SPIN)
-			aniId = ID_ANI_KOOPAS_DIE_UP_SPIN;
-		else if (state == KOOPAS_STATE_RETURN_DOWN)
-			aniId = ID_ANI_KOOPAS_RETURN_DOWN;
-		else if (state == KOOPAS_STATE_RETURN_UP)
-			aniId = ID_ANI_KOOPAS_RETURN_UP;
-		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+		if (nx > 0)
+			aniId = ID_ANI_GREEN_KOOPAS_MOVING_RIGHT;
+		else
+			aniId = ID_ANI_GREEN_KOOPAS_MOVING_LEFT;
 	}
-	else if (color == 2)
-	{
-		int aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
-		if (state == KOOPAS_STATE_WALKING_RIGHT)
-			aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
-		else if (state == KOOPAS_STATE_WALKING_LEFT)
-			aniId = ID_ANI_GREEN_KOOPAS_WALKING_LEFT;
-		else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
-		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
-			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN;
-		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
-			aniId = ID_ANI_GREEN_KOOPAS_DIE_UP;
-		else if (state == KOOPAS_STATE_DIE_UP_SPIN)
-			aniId = ID_ANI_GREEN_KOOPAS_DIE_UP_SPIN;
-		else if (state == KOOPAS_STATE_RETURN_DOWN)
-			aniId = ID_ANI_GREEN_KOOPAS_RETURN_DOWN;
-		else if (state == KOOPAS_STATE_RETURN_UP)
-			aniId = ID_ANI_GREEN_KOOPAS_RETURN_UP;
-		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	}
+	else if (state == JUMP_KOOPAS_STATE_WALKING_RIGHT)
+		aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
+	else if (state == JUMP_KOOPAS_STATE_WALKING_LEFT)
+		aniId = ID_ANI_GREEN_KOOPAS_WALKING_LEFT;
+	else if (state == JUMP_KOOPAS_STATE_DIE_DOWN || state == JUMP_KOOPAS_STATE_IS_HOLD_DOWN)
+		aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
+	else if (state == JUMP_KOOPAS_STATE_DIE_DOWN_SPIN)
+		aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN;
+	else if (state == JUMP_KOOPAS_STATE_DIE_UP || state == JUMP_KOOPAS_STATE_IS_HOLD_UP)
+		aniId = ID_ANI_GREEN_KOOPAS_DIE_UP;
+	else if (state == JUMP_KOOPAS_STATE_DIE_UP_SPIN)
+		aniId = ID_ANI_GREEN_KOOPAS_DIE_UP_SPIN;
+	else if (state == JUMP_KOOPAS_STATE_RETURN_DOWN)
+		aniId = ID_ANI_GREEN_KOOPAS_RETURN_DOWN;
+	else if (state == JUMP_KOOPAS_STATE_RETURN_UP)
+		aniId = ID_ANI_GREEN_KOOPAS_RETURN_UP;
+
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
 
-void CKoopas::SetState(int state)
+
+void CJumpKoopas::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case KOOPAS_STATE_DIE_DOWN:
+	case JUMP_KOOPAS_STATE_DIE_DOWN:
 		die_start = GetTickCount64();
 		y += 6;
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
-	case KOOPAS_STATE_DIE_UP:
+	case JUMP_KOOPAS_STATE_DIE_UP:
 	{
 		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 		if (mario->getIsAttack())
@@ -285,34 +278,41 @@ void CKoopas::SetState(int state)
 			vy = 0;
 			ay = 0;
 		}
-		
 		break;
 	}
-	case KOOPAS_STATE_WALKING_RIGHT:
+	case JUMP_KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
-		n = 1;
+		nx = 1;
 		break;
-	case KOOPAS_STATE_WALKING_LEFT:
+	case JUMP_KOOPAS_STATE_WALKING_LEFT:
 		vx = -KOOPAS_WALKING_SPEED;
-		n = -1;
+		nx = -1;
 		break;
-	case KOOPAS_STATE_DIE_DOWN_SPIN:
-		ay = KOOPAS_GRAVITY;
-	case KOOPAS_STATE_DIE_UP_SPIN:
+	case JUMP_KOOPAS_STATE_DIE_DOWN_SPIN:
 		ay = KOOPAS_GRAVITY;
 		break;
-	case KOOPAS_STATE_IS_HOLD_DOWN:
+	case JUMP_KOOPAS_STATE_DIE_UP_SPIN:
+		ay = KOOPAS_GRAVITY;
+		break;
+	case JUMP_KOOPAS_STATE_IS_HOLD_DOWN:
 		vx = 0;
 		vy = 0;
 		break;
-	case KOOPAS_STATE_IS_HOLD_UP:
+	case JUMP_KOOPAS_STATE_IS_HOLD_UP:
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
-	case KOOPAS_STATE_RETURN_UP:
+	case JUMP_KOOPAS_STATE_RETURN_UP:
 		ay = 0;
 		vy = 0;
+		break;
+	case JUMP_KOOPAS_STATE_JUMPING:
+	{
+		ay = KOOPAS_GRAVITY;
+		vy = -0.26f;
+		break;
+	}
 	}
 
 }

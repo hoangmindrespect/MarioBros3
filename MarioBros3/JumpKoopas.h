@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GameObject.h"
 
 #define KOOPAS_GRAVITY 0.001f
@@ -12,61 +13,58 @@
 
 #define KOOPAS_DIE_TIMEOUT 5000
 
-#define KOOPAS_STATE_WALKING_RIGHT 105
-#define KOOPAS_STATE_WALKING_LEFT 106
-#define KOOPAS_STATE_DIE_DOWN 205
-#define KOOPAS_STATE_DIE_UP 206
-#define KOOPAS_STATE_DIE_DOWN_SPIN 209
-#define KOOPAS_STATE_DIE_UP_SPIN 210
-#define KOOPAS_STATE_IS_HOLD_DOWN 211
-#define KOOPAS_STATE_IS_HOLD_UP 212
-#define KOOPAS_STATE_RETURN_DOWN 215
-#define KOOPAS_STATE_RETURN_UP 217
+#define JUMP_KOOPAS_STATE_JUMPING 111222
 
-#define ID_ANI_KOOPAS_WALKING_RIGHT 5052
-#define ID_ANI_KOOPAS_WALKING_LEFT 5050
+#define JUMP_KOOPAS_STATE_WALKING_RIGHT 100005
+#define JUMP_KOOPAS_STATE_WALKING_LEFT 100006
 
-#define ID_ANI_KOOPAS_DIE_DOWN 5051
-#define ID_ANI_KOOPAS_DIE_UP 5054
-#define ID_ANI_KOOPAS_DIE_DOWN_SPIN 5053
-#define ID_ANI_KOOPAS_DIE_UP_SPIN 5055
+#define JUMP_KOOPAS_STATE_DIE_DOWN 200005
+#define JUMP_KOOPAS_STATE_DIE_UP 200006
 
-#define ID_ANI_KOOPAS_RETURN_DOWN 5056
-#define ID_ANI_KOOPAS_RETURN_UP 5057
+#define JUMP_KOOPAS_STATE_DIE_DOWN_SPIN 200009
+#define JUMP_KOOPAS_STATE_DIE_UP_SPIN 200010
 
+#define JUMP_KOOPAS_STATE_IS_HOLD_DOWN 200011
+#define JUMP_KOOPAS_STATE_IS_HOLD_UP 200012
+
+#define JUMP_KOOPAS_STATE_RETURN_DOWN 200015
+#define JUMP_KOOPAS_STATE_RETURN_UP 200017
+
+#define ID_ANI_GREEN_KOOPAS_MOVING_RIGHT 5067
+#define ID_ANI_GREEN_KOOPAS_MOVING_LEFT 5066
 
 #define ID_ANI_GREEN_KOOPAS_WALKING_RIGHT 5059
 #define ID_ANI_GREEN_KOOPAS_WALKING_LEFT 5058
 
 #define ID_ANI_GREEN_KOOPAS_DIE_DOWN 5060
 #define ID_ANI_GREEN_KOOPAS_DIE_UP 5062
+
 #define ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN 5061
 #define ID_ANI_GREEN_KOOPAS_DIE_UP_SPIN 5063
 
 #define ID_ANI_GREEN_KOOPAS_RETURN_DOWN 5064
 #define ID_ANI_GREEN_KOOPAS_RETURN_UP 5065	
-class CKoopas : public CGameObject
+
+class CJumpKoopas : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
-	int color; // 1 red 2 green
-	int n;
 	ULONGLONG die_start;
 	ULONGLONG return_start;
-	BOOLEAN shaking;
+	ULONGLONG jumping_start;
+	bool shaking;
+	bool isJumping;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
 public:
-	CKoopas(float x, float y, int color);
+	CJumpKoopas(float x, float y);
 	virtual void SetState(int state);
 	void setVx(float i) {
 		vx = i;
@@ -80,7 +78,9 @@ public:
 	void setY(float x) {
 		this->y = x;
 	}
+	
 	ULONGLONG getDieStart() { return die_start; }
 	ULONGLONG getReturnStart() { return return_start; }
+	int getnx() { return nx; }
 };
 

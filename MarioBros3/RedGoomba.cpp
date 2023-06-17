@@ -168,7 +168,7 @@ void CRedGoomba::SetState(int state)
 		}
 		case RED_GOOMBA_STATE_JUMPING_WITH_WINGS:
 		{
-			vy = -0.2f;
+			vy = -0.23f;
 			ay = RED_GOOMBA_GRAVITY;
 			ax = 0;
 			break;
