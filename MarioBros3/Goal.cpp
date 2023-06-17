@@ -38,7 +38,7 @@ void CGoal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	}
 	else
 	{
-		y -= 0.2 * dt;
+		y -= 0.2f * dt;
 	}
 	
 	CGameObject::Update(dt, coObjects);

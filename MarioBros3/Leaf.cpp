@@ -25,8 +25,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (x < rightmax)
 		{
-			vx = 0.08;
-			vy = 0.03;
+			vx = 0.08f;
+			vy = 0.03f;
 			nx = -1;
 		}
 		else
@@ -40,8 +40,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (x > rightmin)
 		{
-			vx = -0.08;
-			vy = 0.03;
+			vx = -0.08f;
+			vy = 0.03f;
 			nx = 1;
 		}
 		else

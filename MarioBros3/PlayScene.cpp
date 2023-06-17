@@ -137,7 +137,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		int type = atof(tokens[3].c_str());
+		int type = (int)atof(tokens[3].c_str());
 		obj = new CMario(x, y);
 		player = (CMario*)obj;
 		CMario* mario = dynamic_cast<CMario*>(player);
@@ -155,33 +155,28 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_RED_GOOMBA: obj = new CRedGoomba(x, y); break;
-	case OBJECT_TYPE_KOOPAS:
-	{
-		obj = new CKoopas(x, y);
-		index.push_back(objects.size());
-		break;
-	}
+	case OBJECT_TYPE_KOOPAS:obj = new CKoopas(x, y); break;
 	case OBJECT_TYPE_BRICK: 
 	{
-		int model = atof(tokens[3].c_str());
+		int model = (int)atof(tokens[3].c_str());
 		obj = new CBrick(x, y, model);
 		break;
 	}
 	case OBJECT_TYPE_COIN: 
 	{	
-		int model = atof(tokens[3].c_str());
+		int model = (int)atof(tokens[3].c_str());
 		obj = new CCoin(x, y, model);
 		break;
 	}
 	case OBJECT_TYPE_PIRANHA: 
 	{
-		int model = atof(tokens[3].c_str());
+		int model = (int)atof(tokens[3].c_str());
 		obj = new CPiranhaPlant(x, y, model);
 		break;
 	}
 	case OBJECT_TYPE_QUESTIONBLOCK:
 	{
-		int type = atof(tokens[3].c_str());
+		int type = (int)atof(tokens[3].c_str());
 		obj = new CQuestionBlock(x, y, type);
 		break;
 	}
@@ -257,13 +252,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_MARIO_STOP:
 	{
-		float spriteid = (float)atof(tokens[3].c_str());
-		float canMoveRight = (float)atof(tokens[4].c_str());
-		int canMoveLeft = atoi(tokens[5].c_str());
-		int canMoveDown = atoi(tokens[6].c_str());
-		int canMoveUp = atoi(tokens[7].c_str());
-		int idScene = atoi(tokens[8].c_str());
-		int type = atoi(tokens[9].c_str());
+		int spriteid = (int)atof(tokens[3].c_str());
+		int canMoveRight = (int)atof(tokens[4].c_str());
+		int canMoveLeft = (int)atoi(tokens[5].c_str());
+		int canMoveDown = (int)atoi(tokens[6].c_str());
+		int canMoveUp = (int)atoi(tokens[7].c_str());
+		int idScene = (int)atoi(tokens[8].c_str());
+		int type = (int)atoi(tokens[9].c_str());
 
 		obj = new CMarioStop(
 			x, y,

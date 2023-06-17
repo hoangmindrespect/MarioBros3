@@ -24,7 +24,7 @@ void CPipe::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	float yy = y - this->cellHeight / 2 + rect.right / 1.3;
+	float yy = y - this->cellHeight / 2 + rect.right / 1.3f;
 
 	CGame::GetInstance()->Draw(x - cx, yy - cy, bbox, nullptr, BBOX_ALPHA, rect.right, rect.bottom - 1);
 }

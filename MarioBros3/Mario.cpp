@@ -832,9 +832,9 @@ int CMario::GetAniIdBig()
 	if (isChanging)
 	{
 		if (nx > 0)
-			return aniId = 35202;
+			return aniId = ID_ANI_MARIO_UP_LEVEL_RIGHT;
 		else
-			return aniId = 35203;
+			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
 	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
@@ -980,7 +980,7 @@ int CMario::GetAniIdTail()
 	}
 
 	if (isChanging)
-		return aniId = 35204;
+		return aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
 
 	if (aniId == -1)
 	{
@@ -1037,12 +1037,12 @@ void CMario::SetState(int state)
 		vy = -MARIO_WALKING_SPEED;
 		if (nx < 0)
 		{
-			maxVx = -MARIO_RUNNING_SPEED + 0.03;
+			maxVx = -MARIO_RUNNING_SPEED + 0.03f;
 			ax = -MARIO_ACCEL_RUN_X;
 		}
 		else
 		{
-			maxVx = MARIO_RUNNING_SPEED - 0.03;
+			maxVx = MARIO_RUNNING_SPEED - 0.03f;
 			ax = MARIO_ACCEL_RUN_X;
 		}
 		break;

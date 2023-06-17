@@ -1,8 +1,6 @@
 #include "SampleKeyEventHandler.h"
-
 #include "debug.h"
 #include "Game.h"
-
 #include "Mario.h"
 #include "PlayScene.h"
 #include "MarioStop.h"
@@ -275,7 +273,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 										mario->setNx(1);
 										mario->SetVy(-MARIO_WALKING_SPEED);
 										mario->Setax(MARIO_ACCEL_RUN_X);
-										mario->setMaxVx(MARIO_RUNNING_SPEED - 0.03);
+										mario->setMaxVx(MARIO_RUNNING_SPEED - 0.03f);
 									}
 								}
 							}
@@ -330,7 +328,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							mario->setIsOnPlatForm(true);
 							mario->SetVy(-MARIO_WALKING_SPEED);
 							mario->Setax(MARIO_ACCEL_RUN_X);
-							mario->setMaxVx(MARIO_RUNNING_SPEED -0.03);
+							mario->setMaxVx(MARIO_RUNNING_SPEED -0.03f);
 						}
 						
 						
@@ -368,7 +366,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 										mario->setNx(-1);
 										mario->SetVy(-MARIO_WALKING_SPEED);
 										mario->Setax(-MARIO_ACCEL_RUN_X);
-										mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03);
+										mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03f);
 									}
 								}
 								
@@ -420,7 +418,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							mario->setIsOnPlatForm(true);
 							mario->SetVy(-MARIO_WALKING_SPEED);
 							mario->Setax(-MARIO_ACCEL_RUN_X);
-							mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03);
+							mario->setMaxVx(-MARIO_RUNNING_SPEED + 0.03f);
 						}
 						
 					}

@@ -30,12 +30,12 @@ void CCurtains::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	
 	if(y > -88 && !isUp)
 	{
-		y -= 0.07 * dt; 
+		y -= 0.07f * dt; 
 	}
 	else if(y < 94 && !isDown)
 	{
 		isUp = true;
-		y += 0.2 * dt;
+		y += 0.2f * dt;
 	}
 	else
 	{

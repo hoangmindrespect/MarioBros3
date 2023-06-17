@@ -173,7 +173,9 @@
 #define ID_ANI_MARIO_TAIL_HOLD_IDLE_LEFT 1728
 
 #define ID_ANI_MARIO_SMALL_IN_MAP	1720
-
+#define ID_ANI_MARIO_UP_LEVEL_TAIL 35204
+#define ID_ANI_MARIO_UP_LEVEL_BIG_LEFT 35203
+#define ID_ANI_MARIO_UP_LEVEL_RIGHT 35202
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -208,28 +210,28 @@
 
 class CMario : public CGameObject
 {
-	BOOLEAN isEndTurn; // user for moving in map
-	BOOLEAN isMoveLeft;
-	BOOLEAN isMoveRight;
-	BOOLEAN isMoveUp;
-	BOOLEAN isMoveDown;
+	bool isEndTurn; // user for moving in map
+	bool isMoveLeft;
+	bool isMoveRight;
+	bool isMoveUp;
+	bool isMoveDown;
 
-	BOOLEAN isSwitch;
-	BOOLEAN isRealse;
-	BOOLEAN isFlying;
-	BOOLEAN isSitting;
-	BOOLEAN	isAttackByTail;
-	BOOLEAN isOnPlatform;
-	BOOLEAN isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
-	BOOLEAN isEndScene;
+	bool isSwitch;
+	bool isRealse;
+	bool isFlying;
+	bool isSitting;
+	bool	isAttackByTail;
+	bool isOnPlatform;
+	bool isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
+	bool isEndScene;
 
-	BOOLEAN isHolding;
-	BOOLEAN isKicking;
+	bool isHolding;
+	bool isKicking;
 	// handle flying
-	BOOLEAN isChangeDirection;
-	BOOLEAN isStart; // biến bool để tính thời gian bay
-	BOOLEAN isChanging;
-	BOOLEAN isChangingTail;
+	bool isChangeDirection;
+	bool isStart; // biến bool để tính thời gian bay
+	bool isChanging;
+	bool isChangingTail;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
