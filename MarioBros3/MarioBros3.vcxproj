@@ -151,7 +151,6 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="GrassInMap.h" />
-    <ClInclude Include="JumpKoopas.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Leaf.h" />
@@ -191,7 +190,6 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="GrassInMap.cpp" />
-    <ClCompile Include="JumpKoopas.cpp" />
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />

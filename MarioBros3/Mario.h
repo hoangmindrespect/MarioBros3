@@ -6,7 +6,6 @@
 #include "PlayScene.h"
 #include "debug.h"
 #include "Effect.h"
-#include "JumpKoopas.h"
 
 #define MARIO_WALKING_SPEED		0.08f
 #define MARIO_PREPARE_RUNNING_SPEED		0.12f
@@ -258,7 +257,6 @@ class CMario : public CGameObject
 	void OnCollisionWithRedBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
-	void OnCollisionWithJumpKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 	
@@ -270,7 +268,6 @@ class CMario : public CGameObject
 	int IsInMap;
 	int IsInIntro;
 	CKoopas* Koopas = NULL;
-	CJumpKoopas* JumpKoopas = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -357,7 +354,6 @@ public:
 	//friend function
 	friend void DeLevel(CMario* a);
 	friend void KickKoopas(CKoopas* Koopas, CMario* mario);
-	friend void KickJumpKoopas(CJumpKoopas* JumpKoopas, CMario* mario);
-	friend void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas = NULL, CJumpKoopas* JumpKoopas = NULL);
+	friend void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas);
 };
 

@@ -9,20 +9,32 @@
 #include "Leaf.h"
 #include "Brick.h"
 #include "Effect.h"
-CKoopas::CKoopas(float x, float y, int color) :CGameObject(x, y)
+CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 {
-	this->color = color;
+	this->type = type;
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	die_start = -1;
-	n = 1;
-	this->vx = KOOPAS_WALKING_SPEED;
-	SetState(KOOPAS_STATE_WALKING_RIGHT);
+
+	if(type == 1 || type  == 2)
+	{
+		nx = 1;
+		this->vx = KOOPAS_WALKING_SPEED;
+		SetState(KOOPAS_STATE_WALKING_RIGHT);
+	}
+	else
+	{
+		isJumping = false;
+		SetState(JUMP_KOOPAS_STATE_JUMPING);
+		nx = -1;
+		this->vx = -KOOPAS_WALKING_SPEED;
+		jumping_start = GetTickCount64();
+	}
 }
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	)
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	|| state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_DIE / 2;
@@ -127,10 +139,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			if (state == KOOPAS_STATE_WALKING_RIGHT || state == KOOPAS_STATE_WALKING_LEFT)
 			{
 				vx = -vx;
-				n = -n;
-				if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
+				nx = -nx;
+				if (nx < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
 					SetState(KOOPAS_STATE_WALKING_LEFT);
-				if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
+				if (nx > 0 && state == KOOPAS_STATE_WALKING_LEFT)
 					SetState(KOOPAS_STATE_WALKING_RIGHT);
 			}
 		}
@@ -148,10 +160,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
-		n = -n;
-		if (n < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
+		nx = -nx;
+		if (nx < 0 && state == KOOPAS_STATE_WALKING_RIGHT)
 			SetState(KOOPAS_STATE_WALKING_LEFT);
-		if (n > 0 && state == KOOPAS_STATE_WALKING_LEFT)
+		if (nx > 0 && state == KOOPAS_STATE_WALKING_LEFT)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 	}
 }
@@ -161,6 +173,15 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (state == JUMP_KOOPAS_STATE_JUMPING)
+	{
+		if (GetTickCount64() - jumping_start > 800)
+		{
+			SetState(JUMP_KOOPAS_STATE_JUMPING);
+			jumping_start = GetTickCount64();
+		}
+	}
+	
 	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
 		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
@@ -180,11 +201,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (GetTickCount64() - return_start > 2000)
 		{
-			if (n > 0)
+			if (nx > 0)
 				SetState(KOOPAS_STATE_WALKING_RIGHT);
 			else
 				SetState(KOOPAS_STATE_WALKING_LEFT);
-			y -= 18;
+			y -= 10;
 			ay = KOOPAS_GRAVITY;
 			
 		}
@@ -210,7 +231,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	if (color == 1)
+	if (type == 1)
 	{
 		int aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 		if (state == KOOPAS_STATE_WALKING_RIGHT)
@@ -231,10 +252,17 @@ void CKoopas::Render()
 			aniId = ID_ANI_KOOPAS_RETURN_UP;
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	}
-	else if (color == 2)
+	else if (type == 2 || type == 3)
 	{
 		int aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
-		if (state == KOOPAS_STATE_WALKING_RIGHT)
+		if (state == JUMP_KOOPAS_STATE_JUMPING)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_GREEN_KOOPAS_MOVING_RIGHT;
+			else
+				aniId = ID_ANI_GREEN_KOOPAS_MOVING_LEFT;
+		}
+		else if (state == KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
 		else if (state == KOOPAS_STATE_WALKING_LEFT)
 			aniId = ID_ANI_GREEN_KOOPAS_WALKING_LEFT;
@@ -250,6 +278,7 @@ void CKoopas::Render()
 			aniId = ID_ANI_GREEN_KOOPAS_RETURN_DOWN;
 		else if (state == KOOPAS_STATE_RETURN_UP)
 			aniId = ID_ANI_GREEN_KOOPAS_RETURN_UP;
+
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	}
 	RenderBoundingBox();
@@ -262,10 +291,10 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_DIE_DOWN:
 		die_start = GetTickCount64();
-		y += 6;
+		y += 3;
 		vx = 0;
 		vy = 0;
-		ay = 0;
+		ay = KOOPAS_GRAVITY;
 		break;
 	case KOOPAS_STATE_DIE_UP:
 	{
@@ -282,24 +311,26 @@ void CKoopas::SetState(int state)
 			die_start = GetTickCount64();
 			y += 6;
 			vx = 0;
-			vy = 0;
-			ay = 0;
+			ay = KOOPAS_GRAVITY;
 		}
 		
 		break;
 	}
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
-		n = 1;
+		nx = 1;
 		break;
 	case KOOPAS_STATE_WALKING_LEFT:
 		vx = -KOOPAS_WALKING_SPEED;
-		n = -1;
+		nx = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:
 		ay = KOOPAS_GRAVITY;
+		vy = 0;
+		break;
 	case KOOPAS_STATE_DIE_UP_SPIN:
 		ay = KOOPAS_GRAVITY;
+		vy = 0;
 		break;
 	case KOOPAS_STATE_IS_HOLD_DOWN:
 		vx = 0;
@@ -313,6 +344,11 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_RETURN_UP:
 		ay = 0;
 		vy = 0;
+		break;
+	case JUMP_KOOPAS_STATE_JUMPING:
+		ay = KOOPAS_GRAVITY;
+		vy = -0.26f;
+		break;
 	}
-
+	
 }

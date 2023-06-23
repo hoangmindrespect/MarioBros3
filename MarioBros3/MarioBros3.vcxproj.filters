@@ -142,9 +142,6 @@
     <ClInclude Include="RedGoomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JumpKoopas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -253,9 +250,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RedGoomba.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JumpKoopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

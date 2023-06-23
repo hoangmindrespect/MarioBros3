@@ -11,7 +11,7 @@
 #define KOOPAS_BBOX_HEIGHT_DIE 13
 
 #define KOOPAS_DIE_TIMEOUT 5000
-
+#define JUMP_KOOPAS_STATE_JUMPING 111222
 #define KOOPAS_STATE_WALKING_RIGHT 105
 #define KOOPAS_STATE_WALKING_LEFT 106
 #define KOOPAS_STATE_DIE_DOWN 205
@@ -22,6 +22,9 @@
 #define KOOPAS_STATE_IS_HOLD_UP 212
 #define KOOPAS_STATE_RETURN_DOWN 215
 #define KOOPAS_STATE_RETURN_UP 217
+
+#define ID_ANI_GREEN_KOOPAS_MOVING_RIGHT 5067
+#define ID_ANI_GREEN_KOOPAS_MOVING_LEFT 5066
 
 #define ID_ANI_KOOPAS_WALKING_RIGHT 5052
 #define ID_ANI_KOOPAS_WALKING_LEFT 5050
@@ -50,11 +53,12 @@ class CKoopas : public CGameObject
 protected:
 	float ax;
 	float ay;
-	int color; // 1 red 2 green
-	int n;
+	int type; // 1 red 2 green 3 jump
 	ULONGLONG die_start;
 	ULONGLONG return_start;
-	BOOLEAN shaking;
+	ULONGLONG jumping_start;
+	bool shaking;
+	bool isJumping;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -82,5 +86,6 @@ public:
 	}
 	ULONGLONG getDieStart() { return die_start; }
 	ULONGLONG getReturnStart() { return return_start; }
+	int getnx() { return nx; }
 };
 
