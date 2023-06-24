@@ -9,7 +9,8 @@
 
 #define MARIO_WALKING_SPEED		0.08f
 #define MARIO_PREPARE_RUNNING_SPEED		0.12f
-
+#define DISTANCE_MOVING_IN_MAP 32.0f
+#define MARIO_MOVING_IN_MAP_SPEED 0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0004f
@@ -332,6 +333,9 @@ public:
 	void setIsSwitch(bool a) { isSwitch = a; }
 	void setIsChanging(bool a) { isChanging = a; }
 	void setIsEndScene(bool a) { isEndScene = a; }
+	void setIsEndTurn(bool a) { isEndTurn = a; }
+	void setYtmp(float a) { ytmp = a; }
+	void setXtmp(float a) { xtmp = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -349,11 +353,15 @@ public:
 	bool getIsSwitch() { return isSwitch; }
 	bool getIsChanging() { return isChanging; }
 	bool getIsEndScene() { return isEndScene; }
+	bool getIsEndTurn() { return isEndTurn; }
+	float getYtmp() { return ytmp; }
+	float getXtmp() { return xtmp; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getTimeSwitch() { return time_switching; }
 	//friend function
 	friend void DeLevel(CMario* a);
 	friend void KickKoopas(CKoopas* Koopas, CMario* mario);
+	friend void ControlMoveInWorldMap(CMario* mario, DWORD dt);
 	friend void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas);
 };
 

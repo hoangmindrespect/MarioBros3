@@ -24,6 +24,8 @@
 #include "Goal.h"
 #include "RedGoomba.h"
 
+#define DEAD_ZONE 400.0f
+
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
@@ -400,10 +402,17 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
+	// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (objects[i]->gety() > DEAD_ZONE)
+			if (!dynamic_cast<CMario*>(objects[i]))
+				objects[i]->Delete();
 		objects[i]->Update(dt, &coObjects);
 	}
+
+	if (mario->gety() > DEAD_ZONE)
+		mario->SetState(MARIO_STATE_DIE);
 
 	if (player == NULL) return;
 	if (player->getx() > 689)
@@ -421,7 +430,6 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -430,9 +438,6 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	if (mario->gety() > 400)
-		mario->SetState(MARIO_STATE_DIE);
-
 	if (mario->getIsInMap() == 0)
 	{
 		float cyt = cy;

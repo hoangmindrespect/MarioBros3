@@ -349,9 +349,6 @@
     <Image Include="textures\worldmap.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="..\..\..\Downloads\Mario Untitled-1.png">
-      <Filter>Resource Files\Textures</Filter>
-    </Image>
     <Image Include="textures\intro.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>

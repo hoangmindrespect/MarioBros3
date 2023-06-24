@@ -20,9 +20,9 @@
 #include "Goal.h"
 #include "RedGoomba.h"
 #include "RedGoomba.h"
+#include "HUD.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	
 	if (IsInMap == 0)
 	{
 		if(!isFlying && !isRealse)
@@ -116,13 +116,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (isEndTurn == false)
 			{
-				ytmp = y + 32.0f;
+				ytmp = y + DISTANCE_MOVING_IN_MAP;
 				isEndTurn = true;
 			}
-			
+
 			if (y <= ytmp) {
-				y += dt * 0.1f;
-				
+				y += dt * MARIO_MOVING_IN_MAP_SPEED;
+
 			}
 			else
 			{
@@ -136,11 +136,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (isEndTurn == false)
 			{
-				ytmp = y - 32.0f;
+				ytmp = y - DISTANCE_MOVING_IN_MAP;
 				isEndTurn = true;
 			}
 			if (y > ytmp)
-				y -= dt * 0.1f;
+				y -= dt * MARIO_MOVING_IN_MAP_SPEED;
 			else
 			{
 				vy = 0.0f;
@@ -153,11 +153,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (isEndTurn == false)
 			{
-				xtmp = x + 32.0f;
+				xtmp = x + DISTANCE_MOVING_IN_MAP;
 				isEndTurn = true;
 			}
 			if (x <= xtmp)
-				x += 0.1f * dt;
+				x += MARIO_MOVING_IN_MAP_SPEED * dt;
 			else
 			{
 				vx = 0.0f;
@@ -170,11 +170,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (isEndTurn == false)
 			{
-				xtmp = x - 32.0f;
+				xtmp = x - DISTANCE_MOVING_IN_MAP;
 				isEndTurn = true;
 			}
 			if (x > xtmp)
-				x -= 0.1f * dt;
+				x -= MARIO_MOVING_IN_MAP_SPEED * dt;
 			else
 			{
 				vx = 0.0f;
@@ -188,7 +188,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
+	CHUD::GetInstance()->setPosition(x + HUD_WIDTH / 2, 212.0f);
+	for (int i = 0; i < CPlayScene::objects.size(); i++)
+	{
+		if (dynamic_cast<CHUD*>(CPlayScene::objects[i]))
+			break;
+		else
+		{
+			if(i == CPlayScene::objects.size() - 1)
+				CPlayScene::objects.push_back(CHUD::GetInstance());
 
+		}
+	}
 	if (isHolding)
 	{
 		LPGAME game = CGame::GetInstance();
@@ -1288,5 +1299,81 @@ void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas)
 		}
 	}
 }
+
+//void ControlMoveInWorldMap(CMario* mario, DWORD dt)
+//{
+//	mario->SetVx(0.0f);
+//	mario->SetVy(0.0f);
+//	DebugOut(L"hi into control\n");
+//	if (mario->getIsMoveDown())
+//	{
+//		if (!mario->getIsEndTurn())
+//		{
+//			mario->setYtmp(mario->gety() + DISTANCE_MOVING_IN_MAP);
+//			mario->setIsEndTurn(true);
+//		}
+//
+//		if (mario->gety() <= mario->getYtmp()) {
+//			mario->sety(mario->gety() + dt * 0.1f);
+//		}
+//		else
+//		{
+//			mario->sety(mario->getYtmp());
+//			mario->SetVy(0.0f);
+//			mario->setIsEndTurn(false);
+//			mario->SetIsMoveDown(false);
+//		}
+//	}
+//	else if (mario->getIsMoveUp())
+//	{
+//		if (!mario->getIsEndTurn())
+//		{
+//			mario->setYtmp(mario->gety() - DISTANCE_MOVING_IN_MAP);
+//			mario->setIsEndTurn(true);
+//		}
+//		if (mario->gety() > mario->getYtmp())
+//			mario->sety(mario->gety() - dt * 0.1f);
+//		else
+//		{
+//			mario->SetVy(0.0f);
+//			mario->sety(mario->getYtmp());
+//			mario->setIsEndTurn(false);
+//			mario->SetIsMoveUp(false);
+//		};
+//	}
+//	else if (mario->getIsMoveRight()){
+//		if (!mario->getIsEndTurn())
+//		{
+//			mario->setXtmp(mario->getx() + DISTANCE_MOVING_IN_MAP);
+//			mario->setIsEndTurn(true);
+//		}
+//		if (mario->getx() <= mario->getXtmp())
+//			mario->setXtmp(mario->getx() + 0.1 * dt);
+//		else
+//		{
+//			mario->SetVx(0.0f);
+//			mario->setx(mario->getXtmp());
+//			mario->setIsEndTurn(false);
+//			mario->SetIsMoveRight(false);
+//		};
+//	}
+//	else if (mario->getIsMoveLeft())
+//	{
+//		if (!mario->getIsEndTurn())
+//		{
+//			mario->setXtmp(mario->getx() - DISTANCE_MOVING_IN_MAP);
+//			mario->setIsEndTurn(true);
+//		}
+//		if (mario->getx() > mario->getXtmp())
+//			mario->setXtmp(mario->getx() - 0.1 * dt);
+//		else
+//		{
+//			mario->SetVx(0.0f);
+//			mario->setx(mario->getXtmp());
+//			mario->setIsEndTurn(false);
+//			mario->SetIsMoveLeft(false);
+//		};
+//	}
+//}
 
 

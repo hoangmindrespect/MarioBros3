@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Sprites.h"
 
+
 CGameObject::CGameObject()
 {
 	x = y = 0;
