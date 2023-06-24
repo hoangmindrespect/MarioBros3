@@ -233,6 +233,8 @@ class CMario : public CGameObject
 	bool isStart; // biến bool để tính thời gian bay
 	bool isChanging;
 	bool isChangingTail;
+
+	//bool isCreateHud;
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -267,7 +269,7 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 	int IsInMap;
-	int IsInIntro;
+	//int IsInIntro;
 	CKoopas* Koopas = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -284,7 +286,9 @@ public:
 		isKicking = false;
 		isSwitch = false;
 		isChanging = false;
-
+		isChangingTail = false;
+		isStart = false;
+		//isCreateHud = false;
 		isEndScene = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -294,9 +298,14 @@ public:
 		untouchable_start = -1;
 		attack_start = -1;
 		running_start = 0;
+		bracing_start = -1;
+		die_start = -1;
+		flying_start = -1;
+		kicking_start = -1;
+		time_switching = -1;
+		xtmp = ytmp = 0.0f;
 		isOnPlatform = false;
 		coin = 0;
-		
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -336,6 +345,7 @@ public:
 	void setIsEndTurn(bool a) { isEndTurn = a; }
 	void setYtmp(float a) { ytmp = a; }
 	void setXtmp(float a) { xtmp = a; }
+	void setDieStart() { die_start = GetTickCount64(); }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -358,10 +368,10 @@ public:
 	float getXtmp() { return xtmp; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getTimeSwitch() { return time_switching; }
+	ULONGLONG getDieStart() { return die_start; }
 	//friend function
 	friend void DeLevel(CMario* a);
 	friend void KickKoopas(CKoopas* Koopas, CMario* mario);
 	friend void ControlMoveInWorldMap(CMario* mario, DWORD dt);
-	friend void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas);
 };
 

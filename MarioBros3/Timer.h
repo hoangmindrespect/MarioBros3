@@ -1,16 +1,21 @@
 #pragma once
-
 #include "GameObject.h"
-#define HUD_WIDTH 256.0f
-#define HUD_HEIGHT 48.0f
-// 
-// The most popular type of object in Mario! 
-// 
-class CHUD : public CGameObject
+
+#define TIMER_WIDTH 24.0F
+#define TIMER_HEIGHT 7.0F
+
+#define TIMER_X_DEFAULT 140.0f
+
+class CTimer : public CGameObject
 {
 protected:
+	float time;
+	float start;
+	int tick;
 public:
-	CHUD(float x, float y) :CGameObject(x, y){}
+	CTimer(float x, float y) :CGameObject(x, y) {
+		time = 300.0f; start = GetTickCount64() / 1000.0f; tick = 3;
+	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
@@ -19,7 +24,9 @@ public:
 	void setPosition(float x, float y) { this->x = x; this->y = y; }
 };
 
-typedef CHUD* LPHUD;
+typedef CTimer* LPTIMER;
+
+
 
 
 

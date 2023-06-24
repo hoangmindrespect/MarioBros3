@@ -47,7 +47,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (GetTickCount64() - die_start > 2000)
 			{
-				CGame::GetInstance()->InitiateSwitchScene(1);; die_start = 0;
+				CGame::GetInstance()->InitiateSwitchScene(1); 
+				die_start = 0;
 			}
 		}
 
@@ -186,29 +187,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	isOnPlatform = false;
+	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	CHUD::GetInstance()->setPosition(x + HUD_WIDTH / 2, 212.0f);
-	for (int i = 0; i < CPlayScene::objects.size(); i++)
-	{
-		if (dynamic_cast<CHUD*>(CPlayScene::objects[i]))
-			break;
-		else
-		{
-			if(i == CPlayScene::objects.size() - 1)
-				CPlayScene::objects.push_back(CHUD::GetInstance());
-
-		}
-	}
-	if (isHolding)
-	{
-		LPGAME game = CGame::GetInstance();
-		if (game->IsKeyDown(DIK_A))
-		{
-			SetPositionDefendKoopas(this, Koopas);
-		}
-	}
-		
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -1251,53 +1231,6 @@ void KickKoopas(CKoopas* Koopas, CMario* mario)
 		Koopas->setVx(-abs(KOOPAS_SPINNING_SPEED));
 
 	Koopas = NULL;
-}
-
-//set coordinate of koopas suit with mario
-void SetPositionDefendKoopas(CMario* mario, CKoopas* Koopas)
-{
-	if (Koopas)
-	{
-		if (mario->getlevel() == MARIO_LEVEL_TAIL)
-		{
-			if (mario->getnx() > 0)
-			{
-				Koopas->setX(mario->getx() + 15.0f);
-				Koopas->setY(mario->gety() + 2.0f);
-			}
-			else
-			{
-				Koopas->setX(mario->getx() - 15.0f);
-				Koopas->setY(mario->gety() + 2.0f);
-			}
-		}
-		else if (mario->getlevel() == MARIO_LEVEL_BIG)
-		{
-			if (mario->getnx() > 0)
-			{
-				Koopas->setX(mario->getx() + 10.0f);
-				Koopas->setY(mario->gety() + 2.0f);
-			}
-			else
-			{
-				Koopas->setX(mario->getx() - 10.0f);
-				Koopas->setY(mario->gety() + 2.0f);
-			}
-		}
-		else
-		{
-			if (mario->getnx() > 0)
-			{
-				Koopas->setX(mario->getx() + 7.0f);
-				Koopas->setY(mario->gety() - 3.0f);
-			}
-			else
-			{
-				Koopas->setX(mario->getx() - 7.0f);
-				Koopas->setY(mario->gety() - 3.0f);
-			}
-		}
-	}
 }
 
 //void ControlMoveInWorldMap(CMario* mario, DWORD dt)

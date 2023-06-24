@@ -23,7 +23,7 @@
 #include "Curtains.h"
 #include "Goal.h"
 #include "RedGoomba.h"
-
+#include "Timer.h"
 #define DEAD_ZONE 400.0f
 
 using namespace std;
@@ -277,6 +277,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
 	case 20: obj = new CCurtains(x, y); break;
+	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -401,14 +402,19 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
-
+	mario->Update(dt, &coObjects);
 	// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->gety() > DEAD_ZONE)
+		{
 			if (!dynamic_cast<CMario*>(objects[i]))
+			{
 				objects[i]->Delete();
-		objects[i]->Update(dt, &coObjects);
+			} 
+		}
+		if(!dynamic_cast<CMario*>(objects[i]))
+			objects[i]->Update(dt, &coObjects);
 	}
 
 	if (mario->gety() > DEAD_ZONE)

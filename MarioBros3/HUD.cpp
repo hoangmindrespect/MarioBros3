@@ -5,9 +5,9 @@
 #include "PlayScene.h"
 #include "Game.h"
 
-CHUD* CHUD::__instance = NULL;
-float CHUD::initialX = 0.0f; // Giá trị mặc định cho X
-float CHUD::initialY = 0.0f; // Giá trị mặc định cho Y
+//CHUD* CHUD::__instance = NULL;
+//float CHUD::initialX = 0.0f; // Giá trị mặc định cho X
+//float CHUD::initialY = 0.0f; // Giá trị mặc định cho Y
 
 void CHUD::RenderBoundingBox()
 {
@@ -27,8 +27,7 @@ void CHUD::RenderBoundingBox()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
-	float xx = x - 24.0f/ 2 + rect.right / 2;
-
+	float xx = x - HUD_WIDTH/ 2 + rect.right / 2;
 	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
@@ -44,26 +43,28 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
-	CPlayScene::player->GetPosition(cx, cy);
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
 	if (cx < 0)
 		x = HUD_WIDTH / 2;
 	else
 		x = cx + HUD_WIDTH / 2;
-	
+
 	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CHUD::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 24.0f;
-	t = y - 24.0f;
-	r = l + 24.0f * 10;
-	b = t + 24.0f;
+	l = x - HUD_WIDTH / 2;
+	t = y - HUD_HEIGHT / 2;
+	r = l + HUD_WIDTH;
+	b = t + HUD_HEIGHT;
 }
 
-CHUD* CHUD::GetInstance()
-{
-	if (__instance == NULL) __instance = new CHUD(initialX, initialY);
-	return __instance;
-}
+//CHUD* CHUD::GetInstance()
+//{
+//	if (__instance == NULL) __instance = new CHUD(initialX, initialY);
+//	return __instance;
+//}

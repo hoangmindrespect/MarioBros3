@@ -222,6 +222,52 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	
+	if (state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP)
+	{
+		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+		float mx = mario->getx();
+		float my = mario->gety();
+		vx = vy = 0;
+		if (mario->getlevel() == MARIO_LEVEL_TAIL)
+		{
+			if (mario->getnx() > 0)
+			{
+				x = mx + 15.0f;
+				y = my + 2.0f;
+			}
+			else
+			{
+				x = mx - 15.0f;
+				y = my + 2.0f;
+			}
+		}
+		else if (mario->getlevel() == MARIO_LEVEL_BIG)
+		{
+			if (mario->getnx() > 0)
+			{
+				x = mx + 10.0f;
+				y = my + 2.0f;
+			}
+			else
+			{
+				x = mx - 10.0f;
+				y = my + 2.0f;
+			}
+		}
+		else
+		{
+			if (mario->getnx() > 0)
+			{
+				x = mx + 7.0f;
+				y = my - 3.0f;
+			}
+			else
+			{
+				x = mx - 7.0f;
+				y = my - 3.0f;
+			}
+		}
+	}
 	
 
 	CGameObject::Update(dt, coObjects);
@@ -318,10 +364,12 @@ void CKoopas::SetState(int state)
 	}
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
+		y -= 2.0f;
 		nx = 1;
 		break;
 	case KOOPAS_STATE_WALKING_LEFT:
 		vx = -KOOPAS_WALKING_SPEED;
+		y -= 2.0f;
 		nx = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:
