@@ -346,6 +346,7 @@ void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 	isChanging = true;
 	time_switching = GetTickCount64();
 	e->obj->Delete();
+	point += 1000;
 }
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
@@ -355,6 +356,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 	{
+		point += 100;
 		p->SetState(QUESTIONBLOCK_STATE_EMPTY);
 		
 		if (p->getType() == 1)
@@ -424,7 +426,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 			else
 				koopas->SetState(KOOPAS_STATE_WALKING_LEFT);
-
+			point += 100;
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (e->nx != 0)
@@ -451,6 +453,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			{
 				koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				point += 100;
 			}
 		}
 		else if (e->nx != 0)
@@ -459,6 +462,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			if (isAttackByTail)
 			{
 				koopas->SetState(KOOPAS_STATE_DIE_UP);
+				point += 100;
 			}
 			else
 			{
@@ -526,6 +530,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 	isChanging = true;
 	time_switching = GetTickCount64();
 	e->obj->Delete();
+	point += 1000;
 }
 
 

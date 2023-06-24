@@ -620,6 +620,7 @@ AssetFile/effect.txt
 #hud
 14	0	212
 23	400	209
+24	400	209
 #goal
 21	2732	99
 

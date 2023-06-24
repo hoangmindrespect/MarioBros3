@@ -32,7 +32,7 @@ void CTimer::Render()
 	CSprites* s = CSprites::GetInstance();
 	ULONGLONG time_tmp = time;
 	float distance = 0.0f;
-	while (time_tmp > 0)
+	while (distance != 24.0f)
 	{
 		switch (time_tmp % 10)
 		{

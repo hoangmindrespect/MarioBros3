@@ -251,6 +251,7 @@ class CMario : public CGameObject
 	ULONGLONG time_switching;
 
 	int coin; 
+	int point;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -305,7 +306,7 @@ public:
 		time_switching = -1;
 		xtmp = ytmp = 0.0f;
 		isOnPlatform = false;
-		coin = 0;
+		coin = point = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -366,6 +367,8 @@ public:
 	bool getIsEndTurn() { return isEndTurn; }
 	float getYtmp() { return ytmp; }
 	float getXtmp() { return xtmp; }
+	int getCoin() { return coin; }
+	int getPoint() { return point; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getTimeSwitch() { return time_switching; }
 	ULONGLONG getDieStart() { return die_start; }
