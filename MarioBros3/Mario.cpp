@@ -61,6 +61,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isRealse = true;
 				flying_start = 0;
 			}
+			else
+				count_time_prepare_running = 1900;
 		}
 		if (GetTickCount64() - attack_start > MARIO_ATTACK_TIME)
 		{
@@ -70,12 +72,42 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		
 		if (state == MARIO_STATE_PREPARE_RUNNING_LEFT || state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
 		{
-			if (GetTickCount64() - running_start > 2000)
+			count_time_prepare_running = GetTickCount64() - running_start;
+			if (pre_count_time_prepare_running > 0)
+			{
+				count_time_prepare_running += pre_count_time_prepare_running;
+				pre_count_time_prepare_running = 0;
+			}
+			if (count_time_prepare_running > 1800)
 			{
 				if(nx > 0)
 					SetState(MARIO_STATE_RUNNING_RIGHT);
 				else
 					SetState(MARIO_STATE_RUNNING_LEFT);
+				running_start = -1;
+				count_time_prepare_running = 1800;
+			}
+		}
+		else
+		{
+			if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT)
+			{
+				count_time_prepare_running = 1800;
+			}
+			else
+			{
+				if (count_time_prepare_running > 0)
+				{
+					if (count_time_prepare_running - 40 < 0)
+					{
+						count_time_prepare_running = 0;
+					}
+					else
+					{
+						count_time_prepare_running -= 40;
+					}
+					pre_count_time_prepare_running = count_time_prepare_running;
+				}
 			}
 		}
 		
@@ -893,7 +925,7 @@ int CMario::GetAniIdTail()
 						else if (ax == MARIO_ACCEL_RUN_X)
 						{
 							if (state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
-								aniId = ID_ANI_MARIO_TAIL_WALKING_RIGHT;
+								aniId = ID_ANI_MARIO_TAIL_PREPARE_RUNNING_RIGHT;
 							else
 								aniId = ID_ANI_MARIO_TAIL_RUNNING_RIGHT;
 						}
@@ -909,7 +941,7 @@ int CMario::GetAniIdTail()
 						else if (ax == -MARIO_ACCEL_RUN_X)
 						{
 							if (state == MARIO_STATE_PREPARE_RUNNING_LEFT)
-								aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
+								aniId = ID_ANI_MARIO_TAIL_PREPARE_RUNNING_LEFT;
 							else
 								aniId = ID_ANI_MARIO_TAIL_RUNNING_LEFT;
 						}

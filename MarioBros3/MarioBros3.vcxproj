@@ -162,6 +162,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PointInHUD.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="PowerFlyingHUD.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedGoomba.h" />
     <ClInclude Include="RedMushroom.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PointInHUD.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="PowerFlyingHUD.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedGoomba.cpp" />
     <ClCompile Include="RedMushroom.cpp" />

@@ -25,6 +25,8 @@
 #include "RedGoomba.h"
 #include "Timer.h"
 #include "PointInHUD.h"
+#include "PowerFlyingHUD.h"
+
 #define DEAD_ZONE 400.0f
 
 using namespace std;
@@ -280,6 +282,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case 20: obj = new CCurtains(x, y); break;
 	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
 	case OBJECT_TYPE_POINT: obj = new CPointInHUD(x, y); break;
+	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

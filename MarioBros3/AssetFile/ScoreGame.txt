@@ -36,9 +36,23 @@
 #number 100
 164022	60	88	71	97	90
 
-#number 100
+#number 1000
 164023	119	88	134	97	90
+
+#arrow white
+164024	63	161	72	170	90
+
+#arrow black
+164025	90	161	99	170	90
+
+#F mode HUD - white
+164026	72	162	87	169	90
+
+#F mode HUD - black
+164027	99	162	114	169	90
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 166022	164022	100
 166023	164023	100
+166024	164026	80	164027	80

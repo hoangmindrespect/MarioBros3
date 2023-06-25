@@ -11,10 +11,9 @@ class CTimer : public CGameObject
 protected:
 	float time;
 	float start;
-	int tick;
 public:
 	CTimer(float x, float y) :CGameObject(x, y) {
-		time = 300.0f; start = GetTickCount64() / 1000.0f; tick = 3;
+		time = 300.0f; start = GetTickCount64() / 1000.0f;
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -140,6 +140,9 @@
 #define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 1705
 #define ID_ANI_MARIO_TAIL_RUNNING_LEFT 1704
 
+#define ID_ANI_MARIO_TAIL_PREPARE_RUNNING_LEFT 1750
+#define ID_ANI_MARIO_TAIL_PREPARE_RUNNING_RIGHT 1751
+
 #define ID_ANI_MARIO_TAIL_BRACE_RIGHT 1707
 #define ID_ANI_MARIO_TAIL_BRACE_LEFT 1706
 
@@ -244,9 +247,10 @@ class CMario : public CGameObject
 	ULONGLONG die_start;
 	ULONGLONG untouchable_start;
 	ULONGLONG attack_start;
-	ULONGLONG running_start;
+	ULONGLONG running_start;		// time from preparing to running
+	LONGLONG count_time_prepare_running;		// after 1800ms for preparing mario will be on state running
+	LONGLONG pre_count_time_prepare_running;		// after 1800ms for preparing mario will be on state running
 	ULONGLONG flying_start;
-	ULONGLONG bracing_start;
 	ULONGLONG kicking_start;
 	ULONGLONG time_switching;
 
@@ -289,23 +293,25 @@ public:
 		isChanging = false;
 		isChangingTail = false;
 		isStart = false;
-		//isCreateHud = false;
 		isEndScene = false;
+		isOnPlatform = false;
+
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		level = MARIO_LEVEL_SMALL;
+
 		untouchable = 0;
 		untouchable_start = -1;
 		attack_start = -1;
-		running_start = 0;
-		bracing_start = -1;
+		running_start = 1;
 		die_start = -1;
 		flying_start = -1;
 		kicking_start = -1;
 		time_switching = -1;
+		count_time_prepare_running = 0;
+		pre_count_time_prepare_running = 0;
 		xtmp = ytmp = 0.0f;
-		isOnPlatform = false;
 		coin = point = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -369,7 +375,9 @@ public:
 	float getXtmp() { return xtmp; }
 	int getCoin() { return coin; }
 	int getPoint() { return point; }
+	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
+	ULONGLONG getRunningStart() { return running_start; }
 	ULONGLONG getTimeSwitch() { return time_switching; }
 	ULONGLONG getDieStart() { return die_start; }
 	//friend function
