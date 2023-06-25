@@ -38,25 +38,25 @@ void CPointInHUD::Render()
 		switch (point % 10)
 		{
 		case 0:
-			s->Get(164012)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_ZERO)->Draw(x + 48.0f - distance, y); break;
 		case 1:
-			s->Get(164013)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_ONE)->Draw(x + 48.0f - distance, y); break;
 		case 2:
-			s->Get(164014)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_TWO)->Draw(x + 48.0f - distance, y); break;
 		case 3:
-			s->Get(164015)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_THREE)->Draw(x + 48.0f - distance, y); break;
 		case 4:
-			s->Get(164016)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_FOUR)->Draw(x + 48.0f - distance, y); break;
 		case 5:
-			s->Get(164017)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_FIVE)->Draw(x + 48.0f - distance, y); break;
 		case 6:
-			s->Get(164018)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_SIX)->Draw(x + 48.0f - distance, y); break;
 		case 7:
-			s->Get(164019)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_SEVEN)->Draw(x + 48.0f - distance, y); break;
 		case 8:
-			s->Get(164020)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_EIGHT)->Draw(x + 48.0f - distance, y); break;
 		case 9:
-			s->Get(164021)->Draw(x + 48.0f - distance, y); break;
+			s->Get(ID_FONT_NUMBER_NINE)->Draw(x + 48.0f - distance, y); break;
 		default:
 			break;
 		}

@@ -11,10 +11,11 @@
 
 class CPlayScene: public CScene
 {
-
+protected:
 public:
 	// A play scene has to have player, right? 
-	static LPGAMEOBJECT player;					
+	static LPGAMEOBJECT player;
+	static int turn;
 	static vector<LPGAMEOBJECT> objects;
 	static vector<LPGAMEOBJECT> stop;
 	float i = 44.0f;

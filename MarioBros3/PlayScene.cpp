@@ -26,13 +26,15 @@
 #include "Timer.h"
 #include "PointInHUD.h"
 #include "PowerFlyingHUD.h"
+#include "TurnInHUD.h"
+#include "CoinInHUD.h"
 
 #define DEAD_ZONE 400.0f
 
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
-
+int::CPlayScene::turn = 4;
 LPGAMEOBJECT CPlayScene::player;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -283,6 +285,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
 	case OBJECT_TYPE_POINT: obj = new CPointInHUD(x, y); break;
 	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
+	case OBJECT_TYPE_TURN_IN_HUD: obj = new CTurnInHUD(x, y); break;
+	case OBJECT_TYPE_COIN_IN_HUD: obj = new CCoinInHUD(x, y); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

@@ -1,9 +1,9 @@
 #pragma once
 #include "GameObject.h"
 
-#define POINTINHUD_WIDTH 56.0F
-#define POINTINHUD_HEIGHT 7.0F
-#define POINTINHUD_X_DEFAULT 68.0f
+#define TURNINHUD_WIDTH 24.0F
+#define TURNINHUD_HEIGHT 7.0F
+#define TURNINHUD_X_DEFAULT 53.0f
 
 #define ID_FONT_NUMBER_ZERO	164012
 #define ID_FONT_NUMBER_ONE	164013
@@ -15,14 +15,13 @@
 #define ID_FONT_NUMBER_SEVEN	164019
 #define ID_FONT_NUMBER_EIGHT	164020
 #define ID_FONT_NUMBER_NINE	164021
-class CPointInHUD : public CGameObject
+
+class CTurnInHUD : public CGameObject
 {
 protected:
 	
 public:
-	CPointInHUD(float x, float y) :CGameObject(x, y) {
-		
-	}
+	CTurnInHUD(float x, float y) :CGameObject(x, y) {}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
@@ -31,7 +30,7 @@ public:
 	void setPosition(float x, float y) { this->x = x; this->y = y; }
 };
 
-typedef CPointInHUD* LPPOINTINHUD;
+typedef CTurnInHUD* LPTURNINHUD;
 
 
 

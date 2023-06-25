@@ -408,6 +408,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		{
 			CCoin* t = new CCoin(p->getx(), p->gety() - 15.0f, 1);
 			scene->AddObject(t);
+			coin += 1;
 		}
 		else if (p->getType() == 2) // question block contains item
 		{
@@ -1272,6 +1273,7 @@ void DeLevel(CMario* a)
 	else
 	{
 		a->SetState(MARIO_STATE_DIE);
+		CPlayScene::turn -= 1;
 		a->die_start = GetTickCount64();
 	}
 }

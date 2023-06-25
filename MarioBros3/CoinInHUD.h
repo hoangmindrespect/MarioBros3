@@ -1,9 +1,9 @@
 #pragma once
 #include "GameObject.h"
 
-#define POINTINHUD_WIDTH 56.0F
-#define POINTINHUD_HEIGHT 7.0F
-#define POINTINHUD_X_DEFAULT 68.0f
+#define COININHUD_WIDTH 24.0F
+#define COININHUD_HEIGHT 7.0F
+#define COININHUD_X_DEFAULT 148.0f
 
 #define ID_FONT_NUMBER_ZERO	164012
 #define ID_FONT_NUMBER_ONE	164013
@@ -15,13 +15,11 @@
 #define ID_FONT_NUMBER_SEVEN	164019
 #define ID_FONT_NUMBER_EIGHT	164020
 #define ID_FONT_NUMBER_NINE	164021
-class CPointInHUD : public CGameObject
+class CCoinInHUD : public CGameObject
 {
 protected:
-	
 public:
-	CPointInHUD(float x, float y) :CGameObject(x, y) {
-		
+	CCoinInHUD(float x, float y) :CGameObject(x, y) {
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -31,7 +29,7 @@ public:
 	void setPosition(float x, float y) { this->x = x; this->y = y; }
 };
 
-typedef CPointInHUD* LPPOINTINHUD;
+typedef CCoinInHUD* LPCOININHUD;
 
 
 

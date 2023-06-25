@@ -151,6 +151,12 @@
     <ClInclude Include="PowerFlyingHUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TurnInHUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CoinInHUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -268,6 +274,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PowerFlyingHUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TurnInHUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinInHUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

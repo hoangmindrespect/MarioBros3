@@ -141,6 +141,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="CoinInHUD.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="Curtains.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TurnInHUD.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="CoinInHUD.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="Curtains.cpp" />
@@ -214,6 +217,7 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TurnInHUD.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

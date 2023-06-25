@@ -31,7 +31,7 @@ void CPowerFlyingHUD::Render()
 {
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	CSprites* s = CSprites::GetInstance();
-	int ratio = mario->getCountTimePrepareRun() / 300; // kiểm tra số mũi tên trắng và đen
+	int ratio = (int)mario->getCountTimePrepareRun() / 300; // kiểm tra số mũi tên trắng và đen
 	float distance = 0.0f;
 	for (int i = 1; i <= ratio; i++)
 	{
@@ -50,7 +50,7 @@ void CPowerFlyingHUD::Render()
 		animations->Get(ID_BUTTON_FLYING_MODE_WHITE)->Render(x + distance + 3.0f, y);
 	}
 	else
-		s->Get(ID_BUTTON_FLYING_MODE_BLACK)->Draw(x + distance + 3.0F, y);
+		s->Get(ID_BUTTON_FLYING_MODE_BLACK)->Draw(x + distance + 3.0f, y);
 	RenderBoundingBox();
 }
 
