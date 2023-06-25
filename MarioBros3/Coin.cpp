@@ -1,4 +1,7 @@
 #include "Coin.h"
+#include "Effect.h"
+#include "QuestionBlock.h"
+#include "PlayScene.h"
 
 void CCoin::Render()
 {
@@ -22,6 +25,8 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				y = miny;
 				IsDown = true;
 				this->Delete();
+				CEffect* a = new CEffect(x, y, 6);
+				CPlayScene::objects.push_back(a);
 			}
 		}
 	}

@@ -31,10 +31,26 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 5)
+	else if (k == 5) // biến hình thành tail
 	{
 		vx = 0;
 		vy = 0;
+		ax = 0;
+		ay = 0;
+	}
+	else if (type == 6) // + 100 point
+	{
+		top = y - 50.0f;
+		vx = 0;
+		vy = -0.1f;
+		ax = 0;
+		ay = 0;
+	}
+	else if (type == 7) // + 1000 point
+	{
+		top = y - 50.0f;
+		vx = 0;
+		vy = -0.1f;
 		ax = 0;
 		ay = 0;
 	}
@@ -45,13 +61,21 @@ void CEffect::Render()
 	int idAni = -1;
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	if(type == 1 || type == 2 || type == 3 || type == 4)
-		idAni = 35201;
+		idAni = ID_ANI_BROKE_BRICK;
 	else if (type == 5)
 	{
 		if (mario->getnx() > 0)
-			idAni = 35202;
+			idAni = ID_ANI_SMALL_TO_BIG_RIGHT;
 		else
-			idAni = 35203;
+			idAni = ID_ANI_SMALL_TO_BIG_LEFT;
+	}
+	else if (type == 6)
+	{
+		idAni = ID_ANI_POINT_PLUS_100;
+	}
+	else if (type == 7)
+	{
+		idAni = ID_ANI_POINT_PLUS_1000;
 	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(idAni)->Render(x, y);
@@ -68,7 +92,11 @@ void CEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	
 	vx += ax * dt;
 	vy += ay * dt;
-
+	if (type == 6 || type == 7)
+	{
+		if (y < top)
+			this->Delete();
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

@@ -32,3 +32,13 @@
 
 #number 9
 164021	167	31	174	38	90
+
+#number 100
+164022	60	88	71	97	90
+
+#number 100
+164023	119	88	134	97	90
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+166022	164022	100
+166023	164023	100
