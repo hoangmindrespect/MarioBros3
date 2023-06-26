@@ -172,7 +172,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	if (state == JUMP_KOOPAS_STATE_JUMPING)
 	{
 		if (GetTickCount64() - jumping_start > 800)
@@ -181,50 +181,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			jumping_start = GetTickCount64();
 		}
 	}
-	
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
-	{
-		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
-		{
-			if(state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-				SetState(KOOPAS_STATE_RETURN_DOWN);
-			else
-			{
-				SetState(KOOPAS_STATE_RETURN_UP);
-			}
-			return_start = GetTickCount64();
-		}
-		
-	}
 
-	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
+	if (state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
 	{
-		if (GetTickCount64() - return_start > 2000)
-		{
-			if (nx > 0)
-				SetState(KOOPAS_STATE_WALKING_RIGHT);
-			else
-				SetState(KOOPAS_STATE_WALKING_LEFT);
-			y -= 10;
-			ay = KOOPAS_GRAVITY;
-			
-		}
-		else
-		{
-			if (!shaking)
-			{
-				x -= 1; shaking = true;
-			}
-			else
-			{
-				x += 1; shaking = false;
-			}
-		}
-	}
-	
-	if (state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP)
-	{
-		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 		float mx = mario->getx();
 		float my = mario->gety();
 		vx = vy = 0;
@@ -268,7 +227,47 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	
+
+
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
+	{
+		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
+		{
+			if(state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
+				SetState(KOOPAS_STATE_RETURN_DOWN);
+			else
+			{
+				SetState(KOOPAS_STATE_RETURN_UP);
+			}
+			return_start = GetTickCount64();
+		}
+		
+	}
+
+	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
+	{
+		if (GetTickCount64() - return_start > 2000)
+		{
+			if (nx > 0)
+				SetState(KOOPAS_STATE_WALKING_RIGHT);
+			else
+				SetState(KOOPAS_STATE_WALKING_LEFT);
+			y -= 10;
+			ay = KOOPAS_GRAVITY;
+			
+		}
+		else
+		{
+			if (!shaking)
+			{
+				x -= 1; shaking = true;
+			}
+			else
+			{
+				x += 1; shaking = false;
+			}
+		}
+	}	
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -359,7 +358,6 @@ void CKoopas::SetState(int state)
 			vx = 0;
 			ay = KOOPAS_GRAVITY;
 		}
-		
 		break;
 	}
 	case KOOPAS_STATE_WALKING_RIGHT:

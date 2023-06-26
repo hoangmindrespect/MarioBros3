@@ -219,7 +219,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	isOnPlatform = false;
-	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -1194,8 +1193,8 @@ void CMario::SetLevel(int l)
 	}
 	if (l == 3)
 	{
-		Tail = new CTail(x, y);
-		CPlayScene::objects.push_back(Tail);
+		//Tail = new CTail(x, y);
+		//CPlayScene::objects.push_back(Tail);
 	}
 	level = l;
 }
@@ -1208,7 +1207,7 @@ void DeLevel(CMario* a)
 	{
 		a->level = MARIO_LEVEL_BIG;
 		a->StartUntouchable();
-		a->Tail->Delete();
+		//a->Tail->Delete();
 	}
 	else if (a->level == MARIO_LEVEL_BIG)
 	{

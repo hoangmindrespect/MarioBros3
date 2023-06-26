@@ -376,6 +376,7 @@ public:
 	int getCoin() { return coin; }
 	int getPoint() { return point; }
 	bool getIsFallDown() { return isFallDown; }
+	bool getIsHolding() { return isHolding; }
 	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getRunningStart() { return running_start; }
@@ -384,6 +385,5 @@ public:
 	//friend function
 	friend void DeLevel(CMario* a);
 	friend void KickKoopas(CKoopas* Koopas, CMario* mario);
-	friend void ControlMoveInWorldMap(CMario* mario, DWORD dt);
 };
 
