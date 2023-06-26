@@ -54,7 +54,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (state == MARIO_STATE_FLYING)
 		{
-			if (GetTickCount64() - flying_start > 4000)
+			if (GetTickCount64() - flying_start > 6000)
 			{
 				SetState(MARIO_STATE_RELEASE_FLYING);
 				isFlying = false;
@@ -300,22 +300,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (isAttackByTail)
+		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 			{
-				goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-				//vy = -MARIO_JUMP_DEFLECT_SPEED;
-			}
-		}
-		else
-		{
-			if (untouchable == 0)
-			{
-				if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
-				{
-					DeLevel(this);
-				}
+				DeLevel(this);
 			}
 		}
 	}
@@ -348,22 +337,11 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by RED Goomba
 	{
-		if (isAttackByTail)
+		if (untouchable == 0)
 		{
-			if (goomba->GetState() != RED_GOOMBA_STATE_DIE && goomba->GetState() != RED_GOOMBA_STATE_DIE_BY_KOOPAS)
+			if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 			{
-				goomba->SetState(RED_GOOMBA_STATE_DIE_BY_KOOPAS);
-				point += 100;
-			}
-		}
-		else
-		{
-			if (untouchable == 0)
-			{
-				if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
-				{
-					DeLevel(this);
-				}
+				DeLevel(this);
 			}
 		}
 	}
@@ -437,17 +415,9 @@ void CMario::OnCollisionWithRedBullet(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedPiranhaPlant(LPCOLLISIONEVENT e)
 {
-
-	if (isAttackByTail)
+	if (untouchable == 0)
 	{
-		e->obj->Delete();
-	}
-	else
-	{
-		if (untouchable == 0)
-		{
-			DeLevel(this);
-		}
+		DeLevel(this);
 	}
 }
 
@@ -479,18 +449,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 		else if (e->nx != 0)
 		{
-
-			if (isAttackByTail)
-			{
-				koopas->SetState(KOOPAS_STATE_DIE_UP);
-			}
-			else
-			{
-				if (untouchable == 0)
-				{
-					DeLevel(this);
-				}
-			}
+			if (untouchable == 0)
+				DeLevel(this);
 		}
 	}
 	else if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT || koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
@@ -508,19 +468,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 		else if (e->nx != 0)
 		{
-			
-			if (isAttackByTail)
-			{
-				koopas->SetState(KOOPAS_STATE_DIE_UP);
-				point += 100;
-			}
-			else
-			{
-				if (untouchable == 0)
-				{
-					DeLevel(this);
-				}
-			}
+			if (untouchable == 0)
+				DeLevel(this);
 		}
 	}
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_UP)
@@ -1193,29 +1142,19 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else
 		{
-			if (isAttackByTail == true)
+			if (nx > 0)
 			{
-				left = x - (MARIO_BIG_BBOX_WIDTH + 8) / 2;
-				top = y - MARIO_BIG_BBOX_HEIGHT / 2;
-				right = left + (MARIO_BIG_BBOX_WIDTH + 8);
-				bottom = top + MARIO_BIG_BBOX_HEIGHT;
+				left = (x - (MARIO_TAIL_BBOX_WIDTH) / 2);
+				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
+				right = left + (MARIO_TAIL_BBOX_WIDTH)- 6.0f;
+				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
 			}
 			else
 			{
-				if (nx > 0)
-				{
-					left = (x - (MARIO_BIG_BBOX_WIDTH) / 2) + 5;
-					top = y - MARIO_BIG_BBOX_HEIGHT / 2;
-					right = left + (MARIO_BIG_BBOX_WIDTH) -3 ;
-					bottom = top + MARIO_BIG_BBOX_HEIGHT;
-				}
-				else
-				{
-					left = x - (MARIO_BIG_BBOX_WIDTH) / 2;
-					top = y - MARIO_BIG_BBOX_HEIGHT / 2;
-					right = left + (MARIO_BIG_BBOX_WIDTH) - 3;
-					bottom = top + MARIO_BIG_BBOX_HEIGHT;
-				}
+				left = x - (MARIO_TAIL_BBOX_WIDTH) / 2 + 6.0f;
+				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
+				right = left + (MARIO_TAIL_BBOX_WIDTH);
+				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
 			}
 		}
 	}
@@ -1253,6 +1192,11 @@ void CMario::SetLevel(int l)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 ;
 	}
+	if (l == 3)
+	{
+		Tail = new CTail(x, y);
+		CPlayScene::objects.push_back(Tail);
+	}
 	level = l;
 }
 
@@ -1264,6 +1208,7 @@ void DeLevel(CMario* a)
 	{
 		a->level = MARIO_LEVEL_BIG;
 		a->StartUntouchable();
+		a->Tail->Delete();
 	}
 	else if (a->level == MARIO_LEVEL_BIG)
 	{
@@ -1292,80 +1237,5 @@ void KickKoopas(CKoopas* Koopas, CMario* mario)
 	Koopas = NULL;
 }
 
-//void ControlMoveInWorldMap(CMario* mario, DWORD dt)
-//{
-//	mario->SetVx(0.0f);
-//	mario->SetVy(0.0f);
-//	DebugOut(L"hi into control\n");
-//	if (mario->getIsMoveDown())
-//	{
-//		if (!mario->getIsEndTurn())
-//		{
-//			mario->setYtmp(mario->gety() + DISTANCE_MOVING_IN_MAP);
-//			mario->setIsEndTurn(true);
-//		}
-//
-//		if (mario->gety() <= mario->getYtmp()) {
-//			mario->sety(mario->gety() + dt * 0.1f);
-//		}
-//		else
-//		{
-//			mario->sety(mario->getYtmp());
-//			mario->SetVy(0.0f);
-//			mario->setIsEndTurn(false);
-//			mario->SetIsMoveDown(false);
-//		}
-//	}
-//	else if (mario->getIsMoveUp())
-//	{
-//		if (!mario->getIsEndTurn())
-//		{
-//			mario->setYtmp(mario->gety() - DISTANCE_MOVING_IN_MAP);
-//			mario->setIsEndTurn(true);
-//		}
-//		if (mario->gety() > mario->getYtmp())
-//			mario->sety(mario->gety() - dt * 0.1f);
-//		else
-//		{
-//			mario->SetVy(0.0f);
-//			mario->sety(mario->getYtmp());
-//			mario->setIsEndTurn(false);
-//			mario->SetIsMoveUp(false);
-//		};
-//	}
-//	else if (mario->getIsMoveRight()){
-//		if (!mario->getIsEndTurn())
-//		{
-//			mario->setXtmp(mario->getx() + DISTANCE_MOVING_IN_MAP);
-//			mario->setIsEndTurn(true);
-//		}
-//		if (mario->getx() <= mario->getXtmp())
-//			mario->setXtmp(mario->getx() + 0.1 * dt);
-//		else
-//		{
-//			mario->SetVx(0.0f);
-//			mario->setx(mario->getXtmp());
-//			mario->setIsEndTurn(false);
-//			mario->SetIsMoveRight(false);
-//		};
-//	}
-//	else if (mario->getIsMoveLeft())
-//	{
-//		if (!mario->getIsEndTurn())
-//		{
-//			mario->setXtmp(mario->getx() - DISTANCE_MOVING_IN_MAP);
-//			mario->setIsEndTurn(true);
-//		}
-//		if (mario->getx() > mario->getXtmp())
-//			mario->setXtmp(mario->getx() - 0.1 * dt);
-//		else
-//		{
-//			mario->SetVx(0.0f);
-//			mario->setx(mario->getXtmp());
-//			mario->setIsEndTurn(false);
-//			mario->SetIsMoveLeft(false);
-//		};
-//	}
-//}
 
 

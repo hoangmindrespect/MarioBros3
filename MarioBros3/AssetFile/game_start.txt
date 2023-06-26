@@ -14,6 +14,7 @@ height	240
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
+-200	textures\bbox2.jpg
 10	textures\black.png
 20	textures\enemies1_flip_horizontal.png
 30	textures\enemies.png

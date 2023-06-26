@@ -12,6 +12,8 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define ID_TEX_BBOX2 -200		// special texture to draw object bounding box
+
 #define BBOX_ALPHA 0.0f		// Bounding box transparency
 #define BBOX_ALPHA1 0.25f
 class CGameObject

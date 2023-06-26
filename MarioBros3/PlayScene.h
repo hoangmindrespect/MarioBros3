@@ -18,7 +18,6 @@ public:
 	static int turn;
 	static vector<LPGAMEOBJECT> objects;
 	static vector<LPGAMEOBJECT> stop;
-	float i = 44.0f;
 	bool isCreateGoomba = false;
 	void AddObject(LPGAMEOBJECT e);
 	void AddObject1(LPGAMEOBJECT e);

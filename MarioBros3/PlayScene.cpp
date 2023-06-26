@@ -448,54 +448,71 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	float mario_x = cx;
+	float mario_y = cy;
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
+	float cyt = cy;
+	float fy = 0.0f;
 
 	if (cx < 0) cx = 0;
 	if (mario->getIsInMap() == 0)
 	{
-		float cyt = cy;
 		if (mario->getlevel() == MARIO_LEVEL_SMALL || mario->getlevel() == MARIO_LEVEL_BIG)
 			cy = 0.0f;
 		else
 		{
-			//mario level tail
-			if (mario->gety() < 77.0f)
+			if (mario_y < 77.0f)
 			{
 				if (mario->GetState() == MARIO_STATE_FLYING)
-					cy = cy + 44.0f;
+					cy = cyt + 44.0f;
 				else
 				{
-					if (mario->getIsOnCloud() == true)
+					if (mario->getIsOnPlatForm() == false)
 					{
-						if (i >= 0)
+						if (mario->getIsFallDown() == false)
 						{
-							i -= 1;
+							if (mario_y < -60.0f)
+							{
+								mario->setIsFallDown(true);
+								//fy = cy + 44.0f;
+							}
 						}
-						cy = cyt + i;
+						else
+						{
+							if (mario_y > 50.0f)
+								mario->setIsFallDown(false);
+						}
+
+						if (mario->getIsFallDown() == true)
+						{
+							cy = cyt;
+						}
+						else
+						{
+							cy = 0.0f;
+						}
 					}
 					else
-						cy = 0.0f;
-				}
-
-				if (mario->gety() < -65)
-				{
-					mario->setIsOnClound(true);
-					if (i >=15)
 					{
-						i -= 1;
-						cx = cx + 3.0f;
+						// xử lý lúc di chuyển trên platform trên cao
+						if (mario_y < -60.0f)
+						{
+							cy = cyt;
+						}
+						else
+						{
+							cy = 0.0f;
+						}
 					}
-					cy = cyt + i ;
+
 				}
 			}
 			else
 			{
-				mario->setIsOnClound(false);
-				
-					cy = 0.0f;
-				i = 44.0f;
+				cy = 0.0f;
+				mario->setIsFallDown(false);
 			}
 			
 		}

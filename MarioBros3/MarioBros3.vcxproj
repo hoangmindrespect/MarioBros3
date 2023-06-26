@@ -172,6 +172,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Tail.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TurnInHUD.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Tail.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TurnInHUD.cpp" />
@@ -244,6 +246,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\bbox.png" />
+    <Image Include="textures\bbox2.jpg" />
     <Image Include="textures\black.png" />
     <Image Include="textures\enemies.png" />
     <Image Include="textures\enemies1_flip_horizontal.png" />

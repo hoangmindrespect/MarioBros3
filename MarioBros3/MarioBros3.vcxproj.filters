@@ -157,6 +157,9 @@
     <ClInclude Include="CoinInHUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -282,6 +285,9 @@
     <ClCompile Include="CoinInHUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -386,6 +392,9 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="textures\enemy.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="textures\bbox2.jpg">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

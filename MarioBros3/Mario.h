@@ -6,6 +6,7 @@
 #include "PlayScene.h"
 #include "debug.h"
 #include "Effect.h"
+#include "Tail.h"
 
 #define MARIO_WALKING_SPEED		0.08f
 #define MARIO_PREPARE_RUNNING_SPEED		0.12f
@@ -206,7 +207,7 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_ATTACK_TIME 500
+#define MARIO_ATTACK_TIME 420
 #define MARIO_TIME_TO_RUN 1500
 #define MARIO_FLYING_TIME 5000
 #define MARIO_BRACE_TIME 1000
@@ -226,7 +227,6 @@ class CMario : public CGameObject
 	bool isSitting;
 	bool isAttackByTail;
 	bool isOnPlatform;
-	bool isOnCloud; // use to check if mario on high cloud and if mario fall down, this variable is condition to set cam
 	bool isEndScene;
 
 	bool isHolding;
@@ -237,6 +237,7 @@ class CMario : public CGameObject
 	bool isChanging;
 	bool isChangingTail;
 
+	bool isFallDown; // kiểm tra điểm rơi của mario => chỉnh camera
 	//bool isCreateHud;
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -276,6 +277,7 @@ class CMario : public CGameObject
 	int IsInMap;
 	//int IsInIntro;
 	CKoopas* Koopas = NULL;
+	CTail* Tail = NULL;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -286,7 +288,6 @@ public:
 		isAttackByTail = false;
 		isFlying = false;
 		isRealse = false;
-		isOnCloud = false;
 		isHolding = false;
 		isKicking = false;
 		isSwitch = false;
@@ -295,7 +296,7 @@ public:
 		isStart = false;
 		isEndScene = false;
 		isOnPlatform = false;
-
+		isFallDown = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -345,7 +346,6 @@ public:
 	void setMaxVx(float a) { maxVx = a; }
 	void setNx(int a) { nx = a; }
 	void setIsOnPlatForm(bool a) { isOnPlatform = a; }
-	void setIsOnClound(bool a) { isOnCloud = a; }
 	void setIsSwitch(bool a) { isSwitch = a; }
 	void setIsChanging(bool a) { isChanging = a; }
 	void setIsEndScene(bool a) { isEndScene = a; }
@@ -353,6 +353,7 @@ public:
 	void setYtmp(float a) { ytmp = a; }
 	void setXtmp(float a) { xtmp = a; }
 	void setDieStart() { die_start = GetTickCount64(); }
+	void setIsFallDown(bool a) { isFallDown = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -366,7 +367,6 @@ public:
 	bool getIsMoveRight() { return isMoveRight; }
 	bool getIsMoveLeft() { return isMoveLeft; }
 	bool getIsOnPlatForm() { return isOnPlatform; }
-	bool getIsOnCloud() { return isOnCloud; }
 	bool getIsSwitch() { return isSwitch; }
 	bool getIsChanging() { return isChanging; }
 	bool getIsEndScene() { return isEndScene; }
@@ -375,6 +375,7 @@ public:
 	float getXtmp() { return xtmp; }
 	int getCoin() { return coin; }
 	int getPoint() { return point; }
+	bool getIsFallDown() { return isFallDown; }
 	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getRunningStart() { return running_start; }
