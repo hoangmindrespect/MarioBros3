@@ -23,6 +23,8 @@
 #include "HUD.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	/*if (Koopas)
+		DebugOut(L"%d\n", Koopas->GetState());*/
 	if (IsInMap == 0)
 	{
 		if(!isFlying && !isRealse)
@@ -495,7 +497,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
 				koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
-			else
+			else if (koopas->GetState() == KOOPAS_STATE_DIE_UP)
 				koopas->SetState(KOOPAS_STATE_IS_HOLD_UP);
 			isHolding = true; Koopas = koopas;
 		}

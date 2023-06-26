@@ -32,12 +32,12 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	/*CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 	if (mario->getIsAttack())
 	{
 		goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-	}
+	}*/
 }
 
 void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)

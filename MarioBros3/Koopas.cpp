@@ -184,64 +184,77 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
 	{
-		float mx = mario->getx();
-		float my = mario->gety();
-		vx = vy = 0;
-		if (mario->getlevel() == MARIO_LEVEL_TAIL)
-		{
-			if (mario->getnx() > 0)
+		if (mario->getIsHolding()) {
+
+			float mx = mario->getx();
+			float my = mario->gety();
+			vx = vy = 0;
+			if (mario->getlevel() == MARIO_LEVEL_TAIL)
 			{
-				x = mx + 15.0f;
-				y = my + 2.0f;
+				if (mario->getnx() > 0)
+				{
+					x = mx + 15.0f;
+					y = my + 2.0f;
+				}
+				else
+				{
+					x = mx - 15.0f;
+					y = my + 2.0f;
+				}
+			}
+			else if (mario->getlevel() == MARIO_LEVEL_BIG)
+			{
+				if (mario->getnx() > 0)
+				{
+					x = mx + 10.0f;
+					y = my + 2.0f;
+				}
+				else
+				{
+					x = mx - 10.0f;
+					y = my + 2.0f;
+				}
 			}
 			else
 			{
-				x = mx - 15.0f;
-				y = my + 2.0f;
-			}
-		}
-		else if (mario->getlevel() == MARIO_LEVEL_BIG)
-		{
-			if (mario->getnx() > 0)
-			{
-				x = mx + 10.0f;
-				y = my + 2.0f;
-			}
-			else
-			{
-				x = mx - 10.0f;
-				y = my + 2.0f;
-			}
-		}
-		else
-		{
-			if (mario->getnx() > 0)
-			{
-				x = mx + 7.0f;
-				y = my - 3.0f;
-			}
-			else
-			{
-				x = mx - 7.0f;
-				y = my - 3.0f;
+				if (mario->getnx() > 0)
+				{
+					x = mx + 7.0f;
+					y = my - 3.0f;
+				}
+				else
+				{
+					x = mx - 7.0f;
+					y = my - 3.0f;
+				}
 			}
 		}
 	}
-
+	if (state != KOOPAS_STATE_RETURN_UP)
+	{
+		DebugOut(L"dm: %d\n", state);
+	}
 
 	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
 		if (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT)
 		{
-			if(state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-				SetState(KOOPAS_STATE_RETURN_DOWN);
-			else
+			if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
 			{
+				SetState(KOOPAS_STATE_RETURN_DOWN);
+			}
+			else if(state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
+			{
+				DebugOut(L"up\n");
 				SetState(KOOPAS_STATE_RETURN_UP);
 			}
 			return_start = GetTickCount64();
 		}
-		
+	}
+
+	if (state == KOOPAS_STATE_RETURN_UP)
+	{
+		DebugOut(L"cc: %d\n", state);
 	}
 
 	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)

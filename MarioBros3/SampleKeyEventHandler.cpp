@@ -213,10 +213,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_A: // key up => reset prepare to run
 	{
-		if (mario->GetState() == MARIO_STATE_HOLDING_KOOPAS)
-		{
-
-		}
+		
 		break;
 	}
 	case DIK_X:
