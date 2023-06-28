@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 	type = k;
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	if (k == 1) // phải thấp
 	{
 		vx = 0.12f;
@@ -10,7 +11,7 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 2) // phải cao
+	else if (k == 2 ) // phải cao
 	{
 		vx = 0.12f;
 		vy = -0.55f;
@@ -49,10 +50,25 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 	else if (type == 7) // + 1000 point
 	{
 		top = y - 50.0f;
-		vx = 0;
+		vx = 0.0f;
 		vy = -0.1f;
+		ax = 0.0f;
+		ay = 0.0f;
+	}
+	else if (type == 8) // attack by tail or defend koopas
+	{
+		time_start = GetTickCount64();
+		vx = vy = ax = ay = 0.0f;
+	}
+	else if (k == 9 || k == 10) // phải cao
+	{
+		if (mario->getnx() > 0)
+			vx = 0.12f;
+		else
+			vx = -0.12f;
+		vy = -0.65f;
 		ax = 0;
-		ay = 0;
+		ay = 0.003f;
 	}
 }
 
@@ -77,6 +93,18 @@ void CEffect::Render()
 	{
 		idAni = ID_ANI_POINT_PLUS_1000;
 	}
+	else if (type == 8)
+	{
+		idAni = ID_ANI_ATTACK;
+	}
+	else if (type == 9)
+	{
+		idAni = ID_YELLOW_GOOMBA_DIE_EFFECT;
+	}
+	else if (type == 10)
+	{
+		idAni = ID_RED_GOOMBA_DIE_EFFECT;
+	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(idAni)->Render(x, y);
 
@@ -96,6 +124,13 @@ void CEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (y < top)
 			this->Delete();
+	}
+	else if (type == 8)
+	{
+		if (GetTickCount64() - time_start > 100)
+		{
+			this->Delete();
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

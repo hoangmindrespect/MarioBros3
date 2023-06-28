@@ -17,10 +17,8 @@
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
-#define ID_ANI_GOOMBA_DIE_BY_KOOPAS 5002
 
 #define ID_ANI_RED_GOOMBA_DIE 5006
-#define ID_ANI_RED_GOOMBA_DIE_BY_KOOPAS 5007
 
 class CGoomba : public CGameObject
 {

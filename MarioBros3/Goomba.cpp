@@ -56,7 +56,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_BY_KOOPAS) && (GetTickCount64() - die_start > 500) )
+	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > 500) )
 	{
 		isDeleted = true;
 		return;
@@ -73,10 +73,6 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) 
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
-	}
-	else if (state == GOOMBA_STATE_DIE_BY_KOOPAS)
-	{
-		aniId = ID_ANI_GOOMBA_DIE_BY_KOOPAS;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);

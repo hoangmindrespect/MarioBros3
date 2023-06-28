@@ -141,8 +141,6 @@ void CRedGoomba::Render()
 		aniId = ID_RED_GOOMBA_WALKING;
 	else if (state == RED_GOOMBA_STATE_DIE)
 		aniId = ID_RED_GOOMBA_DIE;
-	else if (state == RED_GOOMBA_STATE_DIE_BY_KOOPAS)
-		aniId = ID_RED_GOOMBA_DIE_BY_KOOPAS;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }

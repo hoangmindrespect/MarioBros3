@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-#define TAIL_BBOX_WIDTH 32
+#define TAIL_BBOX_WIDTH 28
 #define TAIL_BBOX_HEIGHT 7
 
 class CTail : public CGameObject
@@ -18,14 +18,15 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
 
 public:
 	CTail(float x, float y);
 	virtual void SetState(int state);
 	void setVx(float a) { vx = a; }
 	void setVy(float a) { vy = a; }
-
 };
 
 

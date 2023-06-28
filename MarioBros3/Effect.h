@@ -9,6 +9,9 @@
 #define ID_ANI_SMALL_TO_BIG_RIGHT 35202
 #define ID_ANI_POINT_PLUS_100 166022
 #define ID_ANI_POINT_PLUS_1000 166023
+#define ID_ANI_ATTACK	35205
+#define ID_YELLOW_GOOMBA_DIE_EFFECT	35516
+#define ID_RED_GOOMBA_DIE_EFFECT	35517
 class CEffect : public CGameObject {
 	int type;
 	float ax;

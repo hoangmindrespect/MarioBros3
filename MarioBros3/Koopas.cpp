@@ -70,7 +70,11 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 			if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 			{
-				goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
+				CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
+				CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 9);
+				CPlayScene::objects.push_back(a);
+				CPlayScene::objects.push_back(b);
+				goomba->Delete();
 			}
 		}
 	}
@@ -350,7 +354,7 @@ void CKoopas::SetState(int state)
 		if (mario->getIsAttack())
 		{
 			die_start = GetTickCount64();
-			vx = 0;
+			vx = 0.0f;
 			vy = -0.3f;
 			ay = KOOPAS_GRAVITY;
 		}

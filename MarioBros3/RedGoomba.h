@@ -23,7 +23,6 @@
 #define ID_RED_GOOMBA_WALKING_JUMP	5004
 #define ID_RED_GOOMBA_WALKING 5025
 #define ID_RED_GOOMBA_DIE 5006
-#define ID_RED_GOOMBA_DIE_BY_KOOPAS 5007
 class CRedGoomba : public CGameObject
 {
 protected:

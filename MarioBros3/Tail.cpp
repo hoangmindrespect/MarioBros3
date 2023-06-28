@@ -4,6 +4,7 @@
 #include "RedGoomba.h"
 #include "Textures.h"
 #include "PlayScene.h"
+#include "PiranhaPlant.h"
 CTail::CTail(float x, float y) :CGameObject(x, y)
 {
 	ax = 0.0F;
@@ -30,6 +31,10 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
+	if (dynamic_cast<CRedGoomba*>(e->obj))
+		OnCollisionWithRedGoomba(e);
+	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+		OnCollisionWithPiranha(e);
 }
 
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -38,19 +43,50 @@ void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 	if (mario->getIsAttack())
 	{
+		CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
+		CEffect * b = new CEffect(goomba->getx(), goomba->gety(), 9);
+		CPlayScene::objects.push_back(a);
+		CPlayScene::objects.push_back(b);
+		goomba->Delete();
+	}
+}
+
+void CTail::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
+{
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CPiranhaPlant* pira = dynamic_cast<CPiranhaPlant*>(e->obj);
+	if (mario->getIsAttack())
+	{
+		CEffect* a = new CEffect(pira->getx(), pira->gety() + 3.0f, 8);
+		CPlayScene::objects.push_back(a);
+		pira->Delete();
+	}
+}
+
+void CTail::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
+{
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CRedGoomba* goomba = dynamic_cast<CRedGoomba*>(e->obj);
+	if (mario->getIsAttack())
+	{
+		CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
+		CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 10);
+		CPlayScene::objects.push_back(a);
+		CPlayScene::objects.push_back(b);
 		goomba->Delete();
 	}
 }
 
 void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
-	/*CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 	if (mario->getIsAttack())
 	{
-		goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-		goomba->Delete();
-	}*/
+		CEffect* a = new CEffect(koopas->getx(), koopas->gety(), 8);
+		CPlayScene::objects.push_back(a);
+		koopas->SetState(KOOPAS_STATE_DIE_UP);
+	}
 }
 
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

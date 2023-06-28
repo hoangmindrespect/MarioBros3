@@ -9,10 +9,6 @@
 #DIE
 32001	32	7	47	14	30
 
-#DIE_BY_KOOPAS
-32002	16	672	31	687	70
-
-
 #die
 31009	120	7	135	15	30
 
@@ -33,8 +29,6 @@
 #die
 31016	145	70	160	85	130
 
-#die by tail and koopas
-31017	206	36	221	51	130
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
