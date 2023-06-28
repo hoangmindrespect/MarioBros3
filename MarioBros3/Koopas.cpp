@@ -229,11 +229,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
-	}
-	if (state != KOOPAS_STATE_RETURN_UP)
-	{
-		DebugOut(L"dm: %d\n", state);
-	}
+	}	
 
 	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
@@ -245,16 +241,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if(state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
 			{
-				DebugOut(L"up\n");
 				SetState(KOOPAS_STATE_RETURN_UP);
 			}
 			return_start = GetTickCount64();
 		}
-	}
-
-	if (state == KOOPAS_STATE_RETURN_UP)
-	{
-		DebugOut(L"cc: %d\n", state);
 	}
 
 	if (state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
@@ -273,11 +263,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!shaking)
 			{
-				x -= 1; shaking = true;
+				x -= 0.8f; shaking = true;
 			}
 			else
 			{
-				x += 1; shaking = false;
+				x += 0.8f; shaking = false;
 			}
 		}
 	}	
@@ -375,12 +365,10 @@ void CKoopas::SetState(int state)
 	}
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED;
-		y -= 2.0f;
 		nx = 1;
 		break;
 	case KOOPAS_STATE_WALKING_LEFT:
 		vx = -KOOPAS_WALKING_SPEED;
-		y -= 2.0f;
 		nx = -1;
 		break;
 	case KOOPAS_STATE_DIE_DOWN_SPIN:

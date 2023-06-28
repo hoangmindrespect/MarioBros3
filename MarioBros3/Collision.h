@@ -82,7 +82,7 @@ public:
 		int filterY);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-
+	bool IsCollding(LPGAMEOBJECT obo, LPGAMEOBJECT obt);
 	static CCollision* GetInstance();
 };
 

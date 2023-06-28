@@ -15,6 +15,11 @@
 23106	224	0	239	15	30
 23107	240	0	255	15	30
 
+#boom - koopas defend kill goomba,..
+23108	160	0	175	15	30
+2319	160	0	175	15	30
+
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 #broke brick

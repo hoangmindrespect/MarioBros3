@@ -6,6 +6,11 @@
 #include <string>
 using namespace std;
 #define FULL_WEIGHT_1_1 2816
+#define ADJUST_CAM_MIN_Y 224
+#define ADJUST_CAM_MAX_Y 256
+#define ADJUST_CAM_HIDDEN_MAP 0
+#define HIDDEN_POSITION_X 3000
+#define ADJUST_CAMERA_X	264
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>

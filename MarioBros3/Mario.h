@@ -194,7 +194,7 @@
 #define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 26
 
-#define MARIO_TAIL_BBOX_WIDTH  24
+#define MARIO_TAIL_BBOX_WIDTH  16
 #define MARIO_TAIL_BBOX_HEIGHT 26
 
 #define MARIO_BIG_SITTING_BBOX_WIDTH  16
@@ -276,8 +276,9 @@ class CMario : public CGameObject
 
 	int IsInMap;
 	//int IsInIntro;
-	CKoopas* Koopas = NULL;
 	CTail* Tail = NULL;
+	CKoopas* Koopas = NULL;
+	
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{

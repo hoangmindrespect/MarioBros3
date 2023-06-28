@@ -1,4 +1,4 @@
-#include "Collision.h"
+﻿#include "Collision.h"
 #include "GameObject.h"
 
 int CCollisionEvent::WasCollided() {
@@ -129,11 +129,13 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 	float ml, mt, mr, mb;		// moving object bbox
 	float t, nx, ny;
 
+	// get velocity moving obj
 	float mvx, mvy;
 	objSrc->GetSpeed(mvx, mvy);
 	float mdx = mvx * dt;
 	float mdy = mvy * dt;
 
+	//get velocity static obj => its seem
 	float svx, svy;
 	objDest->GetSpeed(svx, svy);
 	float sdx = svx * dt;
@@ -167,10 +169,13 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 */
 void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDests, vector<LPCOLLISIONEVENT>& coEvents)
 {
+
+	// kiểm tra các cái source đó có collide với cái destination kh
 	for (UINT i = 0; i < objDests->size(); i++)
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
+		
 		if (e->WasCollided() == 1)
 		{
 			if (dynamic_cast<CLeaf*>(objSrc))
@@ -179,6 +184,11 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 					coEvents.push_back(e);
 			}
 			else
+				coEvents.push_back(e);
+		}
+		else if (dynamic_cast<CTail*>(objSrc))
+		{
+			if(IsCollding(objSrc, objDests->at(i)))
 				coEvents.push_back(e);
 		}
 		else
@@ -249,8 +259,6 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	if (coEvents.size() == 0)
 	{
 		objSrc->OnNoCollision(dt);
-		//DebugOut(L"into process");
-
 	}
 	else
 	{
@@ -368,4 +376,18 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+}
+bool CCollision::IsCollding(LPGAMEOBJECT obo, LPGAMEOBJECT obt)
+{
+	float sl, st, sr, sb;
+	float ml, mt, mr, mb;
+	obo->GetBoundingBox(ml, mt, mr, mb);
+	obt->GetBoundingBox(sl, st, sr, sb);
+
+	float left = obt->getx() - (obo->getx() + (mr - ml));
+	float top = (obt->gety() + (sb - st)) - obo->gety();
+	float right = (obt->getx() + (sr - sl)) - obo->getx();
+	float bottom = obt->gety() - (obo->gety() + (mb - mt));
+
+	return !(left > 0 || right < 0 || top < 0 || bottom > 0);
 }

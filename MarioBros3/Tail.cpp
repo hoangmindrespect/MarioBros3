@@ -6,6 +6,8 @@
 #include "PlayScene.h"
 CTail::CTail(float x, float y) :CGameObject(x, y)
 {
+	ax = 0.0F;
+	ay = 0.0F;
 }
 
 void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -32,12 +34,12 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	/*CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 	if (mario->getIsAttack())
 	{
-		goomba->SetState(GOOMBA_STATE_DIE_BY_KOOPAS);
-	}*/
+		goomba->Delete();
+	}
 }
 
 void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
@@ -53,22 +55,12 @@ void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-	if (mario->getnx() > 0)
-	{
-		x = mario->getx() + 10.0f;
-		y = mario->gety() + 6.0f;
-	}
-	else
-	{
-		x = mario->getx() - 10.0f;
-		y = mario->gety() + 6.0f;
-	}
-	
+	vx = ax * dt;
+	vy = ay * dt;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
-
 
 void CTail::Render()
 {

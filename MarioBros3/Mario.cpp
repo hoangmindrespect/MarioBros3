@@ -23,8 +23,6 @@
 #include "HUD.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	/*if (Koopas)
-		DebugOut(L"%d\n", Koopas->GetState());*/
 	if (IsInMap == 0)
 	{
 		if(!isFlying && !isRealse)
@@ -37,7 +35,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if ((vx > 0 && ax > 0) || (vx < 0 && ax < 0))
 			isSwitch = false;
 		
-
 		// reset untouchable timer if untouchable time has passed
 		if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 		{
@@ -222,6 +219,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (Tail)
+	{
+		Tail->setVx(vx);
+		Tail->setVy(vy);
+		if (nx > 0)
+		{
+			Tail->setx(x);
+			Tail->sety(y + 6.0f);
+		}
+		else
+		{
+			Tail->setx(x);
+			Tail->sety(y + 6.0f);
+		}
+	}
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -1145,16 +1157,16 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			if (nx > 0)
 			{
-				left = (x - (MARIO_TAIL_BBOX_WIDTH) / 2);
+				left = (x - (MARIO_TAIL_BBOX_WIDTH) / 2) + 2.0f;
 				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
-				right = left + (MARIO_TAIL_BBOX_WIDTH)- 6.0f;
+				right = left + (MARIO_TAIL_BBOX_WIDTH) - 3.0f;
 				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
 			}
 			else
 			{
-				left = x - (MARIO_TAIL_BBOX_WIDTH) / 2 + 6.0f;
+				left = x - (MARIO_TAIL_BBOX_WIDTH) / 2;
 				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
-				right = left + (MARIO_TAIL_BBOX_WIDTH);
+				right = left + (MARIO_TAIL_BBOX_WIDTH) - 2.0f;
 				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
 			}
 		}
@@ -1193,10 +1205,10 @@ void CMario::SetLevel(int l)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2 ;
 	}
-	if (l == 3)
+	if (l == 3 && level != 3)
 	{
-		//Tail = new CTail(x, y);
-		//CPlayScene::objects.push_back(Tail);
+		Tail = new CTail(x, y);
+		CPlayScene::objects.push_back(Tail);
 	}
 	level = l;
 }
@@ -1209,7 +1221,7 @@ void DeLevel(CMario* a)
 	{
 		a->level = MARIO_LEVEL_BIG;
 		a->StartUntouchable();
-		//a->Tail->Delete();
+		a->Tail->Delete();
 	}
 	else if (a->level == MARIO_LEVEL_BIG)
 	{

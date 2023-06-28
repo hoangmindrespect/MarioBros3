@@ -7,10 +7,10 @@
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
-	if (KeyCode == DIK_W)
+	/*if (KeyCode == DIK_W)
 	{
 		CGame::GetInstance()->InitiateSwitchScene(5);
-	}
+	}*/
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	if (!mario)
 		return;
@@ -140,7 +140,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 					}
 					break;
 				}
-
 			}
 		}
 		else
@@ -180,7 +179,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		}
 	}
 	case DIK_R: // reset
-		//Reload();
+		CGame::GetInstance()->InitiateSwitchScene(5);
 		break;
 	
 	case DIK_A:
