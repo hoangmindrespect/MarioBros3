@@ -21,7 +21,8 @@ protected:
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 public:
 	CTail(float x, float y);
 	virtual void SetState(int state);

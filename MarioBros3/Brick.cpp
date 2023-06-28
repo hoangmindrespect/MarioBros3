@@ -1,4 +1,5 @@
 #include "Brick.h"
+#include "debug.h"
 
 void CBrick::Render()
 {
@@ -10,13 +11,20 @@ void CBrick::Render()
 	else if(model == 3)
 		animations->Get(ID_ANI_BRICK2)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
-void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
+void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	l = x - BRICK_BBOX_WIDTH/2;
-	t = y - BRICK_BBOX_HEIGHT/2;
-	r = l + BRICK_BBOX_WIDTH;
-	b = t + BRICK_BBOX_HEIGHT;
+
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x - BRICK_BBOX_WIDTH / 2 - 1.0f;
+	top = y - BRICK_BBOX_HEIGHT / 2;
+	right = left + BRICK_BBOX_WIDTH + 1.0f;
+	bottom = top + BRICK_BBOX_HEIGHT;
 }

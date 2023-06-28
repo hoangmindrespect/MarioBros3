@@ -8,6 +8,7 @@ int CCollisionEvent::WasCollided() {
 #include "debug.h"
 #include "Leaf.h"
 #include "Mario.h"
+#include "QuestionBlock.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
@@ -188,8 +189,10 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 		}
 		else if (dynamic_cast<CTail*>(objSrc))
 		{
-			if(IsCollding(objSrc, objDests->at(i)))
+			if (IsCollding(objSrc, objDests->at(i)))
+			{
 				coEvents.push_back(e);
+			}
 		}
 		else
 			delete e;
@@ -368,6 +371,13 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
+
+		// hard code =)
+		if (dynamic_cast<CTail*>(e->src_obj))
+		{
+			if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CQuestionBlock*>(e->obj))
+				objSrc->OnCollisionWith(e);
+		}
 		if (e->isDeleted) continue;
 		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
 
@@ -377,17 +387,21 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
-bool CCollision::IsCollding(LPGAMEOBJECT obo, LPGAMEOBJECT obt)
+bool CCollision::IsCollding(LPGAMEOBJECT source, LPGAMEOBJECT target)
 {
 	float sl, st, sr, sb;
 	float ml, mt, mr, mb;
-	obo->GetBoundingBox(ml, mt, mr, mb);
-	obt->GetBoundingBox(sl, st, sr, sb);
+	source->GetBoundingBox(ml, mt, mr, mb);
+	target->GetBoundingBox(sl, st, sr, sb);
 
-	float left = obt->getx() - (obo->getx() + (mr - ml));
-	float top = (obt->gety() + (sb - st)) - obo->gety();
-	float right = (obt->getx() + (sr - sl)) - obo->getx();
-	float bottom = obt->gety() - (obo->gety() + (mb - mt));
+	float o_width = abs(mr - ml) - 8.0f;
+	float o_height = abs(mb - mt);
+	float t_width = abs(sr - sl) + 4.0f;
+	float t_height = abs(sb - st);
 
+	float left = target->getx() - (source->getx() + o_width);
+	float top = (target->gety() + t_height) - source->gety();
+	float right = (target->getx() + t_width) - source->getx();
+	float bottom = target->gety() - (source->gety() + o_height);
 	return !(left > 0 || right < 0 || top < 0 || bottom > 0);
 }

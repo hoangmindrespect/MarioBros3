@@ -5,6 +5,9 @@
 #include "Textures.h"
 #include "PlayScene.h"
 #include "PiranhaPlant.h"
+#include "QuestionBlock.h"
+#include "RedMushroom.h"
+#include "Leaf.h"
 CTail::CTail(float x, float y) :CGameObject(x, y)
 {
 	ax = 0.0F;
@@ -35,6 +38,10 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRedGoomba(e);
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 		OnCollisionWithPiranha(e);
+	else if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+		OnCollisionWithQuestionBlock(e);
 }
 
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -89,6 +96,62 @@ void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	}
 }
 
+void CTail::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (mario->getIsAttack())
+	{
+		if (brick->getModel() == 2)
+		{
+			CEffect* a = new CEffect(brick->getx() + 8, brick->gety() - 8, 1);
+			CEffect* b = new CEffect(brick->getx() + 8, brick->gety() - 8, 2);
+			CEffect* c = new CEffect(brick->getx() + 8, brick->gety() - 8, 3);
+			CEffect* d = new CEffect(brick->getx() + 8, brick->gety() - 8, 4);
+			scene->AddObject(a);
+			scene->AddObject(b);
+			scene->AddObject(c); scene->AddObject(d);
+			e->obj->Delete();
+		}
+	}
+}
+
+void CTail::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
+	if (mario->getIsAttack())
+	{
+		if (p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
+		{
+			//point += 100;
+			p->SetState(QUESTIONBLOCK_STATE_EMPTY);
+
+			if (p->getType() == 1)
+			{
+				CCoin* t = new CCoin(p->getx(), p->gety() - 15.0f, 1);
+				scene->AddObject(t);
+				//coin += 1;
+			}
+			else if (p->getType() == 2) // question block contains item
+			{
+				if (mario->getlevel() == MARIO_LEVEL_SMALL)
+				{
+					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+					scene->AddObject1(mushroom);
+				}
+				else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
+				{
+					CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 55.0f);
+					scene->AddObject(leaf);
+				}
+			}
+		}
+	}
+}
+
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vx = ax * dt;
@@ -115,7 +178,7 @@ void CTail::Render()
 
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
-	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, 0.4f);
+	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, BBOX_ALPHA);
 }
 
 void CTail::SetState(int state)
