@@ -58,83 +58,14 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	else if (dynamic_cast<CGoomba*>(e->obj))
-	{
-		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
-			return;
-		else
-		{
-			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-			if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
-			{
-				CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
-				CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 9);
-				CPlayScene::objects.push_back(a);
-				CPlayScene::objects.push_back(b);
-				goomba->Delete();
-			}
-		}
-	}
+		OnCollisionWithGoomBa(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
-	{
-		CBrick* b = dynamic_cast<CBrick*>(e->obj);
-		if (e->nx != 0)
-		{
-			if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
-			{
-
-				if (b->getModel() == 2)
-				{
-					CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
-					CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
-					CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
-					CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
-					scene->AddObject(a);
-					scene->AddObject(b);
-					scene->AddObject(c); scene->AddObject(d);
-					e->obj->Delete();
-				}
-			}
-		}
-	}
+		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
-	{
-		if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
-			return;
-		else
-		{
-			CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-			CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
-			if (e->nx != 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
-			{
-				p->SetState(QUESTIONBLOCK_STATE_EMPTY);
-
-				if (p->getType() == 1)
-				{
-					CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f, 1);
-					scene->AddObject(t);
-				}
-				else if (p->getType() == 2)
-				{
-					CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-					if (mario->getlevel() == MARIO_LEVEL_SMALL)
-					{
-						CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
-						scene->AddObject1(mushroom);
-					}
-					else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
-					{
-						CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 45.0f);
-						scene->AddObject(leaf);
-					}
-				}
-
-			}
-		}
-	}
+		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
@@ -169,6 +100,85 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(KOOPAS_STATE_WALKING_LEFT);
 		if (nx > 0 && state == KOOPAS_STATE_WALKING_LEFT)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
+	}
+}
+
+void CKoopas::OnCollisionWithGoomBa(LPCOLLISIONEVENT e)
+{
+	if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
+		return;
+	else
+	{
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
+		{
+			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
+			CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 9);
+			CPlayScene::objects.push_back(a);
+			CPlayScene::objects.push_back(b);
+			goomba->Delete();
+		}
+	}
+}
+
+void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CBrick* b = dynamic_cast<CBrick*>(e->obj);
+	if (e->nx != 0)
+	{
+		if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+		{
+
+			if (b->getModel() == 2)
+			{
+				CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
+				CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
+				CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
+				CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
+				scene->AddObject(a);
+				scene->AddObject(b);
+				scene->AddObject(c); scene->AddObject(d);
+				e->obj->Delete();
+			}
+		}
+	}
+}
+
+void CKoopas::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	if (state != KOOPAS_STATE_DIE_DOWN_SPIN && state != KOOPAS_STATE_DIE_UP_SPIN)
+		return;
+	else
+	{
+		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+		CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
+		if (e->nx != 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
+		{
+			p->SetState(QUESTIONBLOCK_STATE_EMPTY);
+
+			if (p->getType() == 1)
+			{
+				CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f, 1);
+				scene->AddObject(t);
+			}
+			else if (p->getType() == 2)
+			{
+				CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
+				if (mario->getlevel() == MARIO_LEVEL_SMALL)
+				{
+					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+					scene->AddObject1(mushroom);
+				}
+				else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
+				{
+					CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 45.0f);
+					scene->AddObject(leaf);
+				}
+			}
+
+		}
 	}
 }
 

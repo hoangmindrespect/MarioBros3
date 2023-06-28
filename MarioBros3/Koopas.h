@@ -69,6 +69,10 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
+	void OnCollisionWithGoomBa(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+
 public:
 	CKoopas(float x, float y, int color);
 	virtual void SetState(int state);

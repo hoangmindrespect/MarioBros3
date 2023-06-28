@@ -30,7 +30,7 @@ void CTimer::RenderBoundingBox()
 void CTimer::Render()
 {
 	CSprites* s = CSprites::GetInstance();
-	ULONGLONG time_tmp = time;
+	ULONGLONG time_tmp = (ULONGLONG)time;
 	float distance = 0.0f;
 	while (distance != 24.0f)
 	{

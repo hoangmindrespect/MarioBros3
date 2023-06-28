@@ -47,6 +47,7 @@ public:
 		IsStart_Fire = false;
 		IsStart_Up = true; // at the first time meet mario it up immediately!
 		state = PIRANHA_STATE_UP_LEFT;
+		timeStart_Fire = timeStart_Up = timeStart_Down = -1;
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
