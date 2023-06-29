@@ -21,6 +21,7 @@
 #include "RedGoomba.h"
 #include "RedGoomba.h"
 #include "HUD.h"
+#include "Funnel.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (IsInMap == 0)
@@ -294,6 +295,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoal(e);
 	else if (dynamic_cast<CRedGoomba*>(e->obj))
 		OnCollisionWithRedGoomba(e);
+	else if (dynamic_cast<CFunnel*>(e->obj))
+		OnCollisionWithFunnel(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -548,6 +551,29 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 
 }
 
+void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
+{
+	LPGAME game = CGame::GetInstance();
+	CFunnel* funnel = dynamic_cast<CFunnel*>(e->obj);
+	if (game->IsKeyDown(DIK_UP))
+	{
+		isGetInOutPipe = true;
+		CPlayScene::isGetInUp = true;
+		CPlayScene::tempoPosition = y - 18.0f;
+		CPlayScene::time_start = GetTickCount64();
+		CPlayScene::X_target = funnel->getXTarget();
+		CPlayScene::Y_target = funnel->getYTarget();
+	}
+	if (game->IsKeyDown(DIK_DOWN))
+	{
+		isGetInOutPipe = true;
+		CPlayScene::isGetInDown = true;
+		CPlayScene::tempoPosition = y + 18.0f;
+		CPlayScene::time_start = GetTickCount64();
+		CPlayScene::X_target = funnel->getXTarget();
+		CPlayScene::Y_target = funnel->getYTarget();
+	}
+}
 
 //
 // Get animation ID for small Mario
@@ -667,6 +693,8 @@ int CMario::GetAniIdSmall()
 		}
 	}
 
+	if (isGetInOutPipe)
+		aniId = ID_ANI_SMALL_MARIO_GET_INOUT_PIPE;
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
 
 	return aniId;
@@ -825,6 +853,9 @@ int CMario::GetAniIdBig()
 		else
 			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
 	}
+	if (isGetInOutPipe)
+		aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
+
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
 	return aniId;
@@ -970,6 +1001,8 @@ int CMario::GetAniIdTail()
 
 	if (isChanging)
 		return aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
+	if (isGetInOutPipe)
+		aniId = ID_ANI_TAIL_MARIO_GET_INOUT_PIPE;
 
 	if (aniId == -1)
 	{

@@ -66,7 +66,8 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		x = cx + POWERFLYINGHUD_X_DEFAULT;
 	if (cy > 200.0f)
-		y = POWERFLYINGHUD_Y_DEFAULT;
+		y = POWERFLYINGHUD_Y_HIDDEN;
+	else y = POWERFLYINGHUD_Y_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

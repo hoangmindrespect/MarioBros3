@@ -28,13 +28,25 @@
 #include "PowerFlyingHUD.h"
 #include "TurnInHUD.h"
 #include "CoinInHUD.h"
+#include "Funnel.h"
 
 #define DEAD_ZONE 500.0f
 
 using namespace std;
+
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
 int::CPlayScene::turn = 4;
+bool::CPlayScene::isGetInDown = false;
+bool::CPlayScene::isGetInUp = false;
+bool::CPlayScene::isGetOutDown = false;
+bool::CPlayScene::isGetOutUp = false;
+float::CPlayScene::tempoPosition = 0.0f;
+float::CPlayScene::X_target = 0.0f;
+float::CPlayScene::Y_target = 0.0f;
+
+ULONGLONG CPlayScene::time_start;
+ULONGLONG CPlayScene::time_end;
 LPGAMEOBJECT CPlayScene::player;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -287,6 +299,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
 	case OBJECT_TYPE_TURN_IN_HUD: obj = new CTurnInHUD(x, y); break;
 	case OBJECT_TYPE_COIN_IN_HUD: obj = new CCoinInHUD(x, y); break;
+	case OBJECT_TYPE_FUNNEL: {
+		float xt = (float)atof(tokens[3].c_str());
+		float yt = (float)atof(tokens[4].c_str());
+
+		obj = new CFunnel(x, y, xt, yt); break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -391,22 +409,90 @@ void CPlayScene::Update(DWORD dt)
 		if (mario->getlevel() == MARIO_LEVEL_BIG)
 		{
 			if (GetTickCount64() - mario->getTimeSwitch() > 1000)
-			{
 				mario->setIsChanging(false);
-			}
-			else
+			else // return not update
 				return;
 		}
 		else if (mario->getlevel() == MARIO_LEVEL_TAIL)
 		{
 			if (GetTickCount64() - mario->getTimeSwitch() > 500)
-			{
 				mario->setIsChanging(false);
-			}
-			else
+			else // return not update
 				return;
 		}
 	}
+
+	if (isGetInDown)
+	{
+		if (GetTickCount64() - time_start > 1000)
+		{
+			isGetInDown = false;
+			time_end = GetTickCount64();
+			isGetOutDown = true; // not neccessarry
+			mario->setIsGetInOutPipe(false);
+		}
+		else // return not update
+		{
+			if(player->gety() < tempoPosition)
+				player->sety(mario->gety() + dt * 0.03f);
+			else
+				mario->SetPosition(X_target, Y_target);
+			return;
+		}
+	}
+	if (isGetInUp)
+	{
+		if (GetTickCount64() - time_start > 600)
+		{
+			isGetInUp = false;
+			time_end = GetTickCount64();
+			isGetOutUp = true;
+		}
+		else // return not update
+		{
+			if (player->gety() > tempoPosition)
+				player->sety(mario->gety() - dt * 0.03f);
+			else
+			{
+				mario->SetPosition(X_target, Y_target);			
+				goto THERE;
+			}
+			return;
+		}
+	}
+	if (isGetOutUp)
+	{
+		if (mario->getlevel() == MARIO_LEVEL_SMALL)
+		{
+			if (GetTickCount64() - time_end > 600)
+			{
+				isGetOutUp = false;
+				mario->setIsGetInOutPipe(false);
+			}
+			else // return not update
+			{
+				if (player->gety() > Y_target - MARIO_SMALL_BBOX_HEIGHT - 4.0f)
+					player->sety(mario->gety() - dt * 0.03f);
+				return;
+			}
+		}
+		else
+		{
+			if (GetTickCount64() - time_end > 850)
+			{
+				isGetOutUp = false;
+				mario->setIsGetInOutPipe(false);
+			}
+			else // return not update
+			{
+				if (player->gety() > Y_target - MARIO_BIG_BBOX_HEIGHT + 2.0f)
+					player->sety(mario->gety() - dt * 0.03f);
+				return;
+			}
+		}
+	}
+
+THERE:
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
@@ -429,8 +515,9 @@ void CPlayScene::Update(DWORD dt)
 	if (mario->gety() > DEAD_ZONE)
 		mario->SetState(MARIO_STATE_DIE);
 
+	
 	if (player == NULL) return;
-	if (player->getx() > 689)
+	/*if (player->getx() > 689)
 	{
 		if (isCreateGoomba == false)
 		{
@@ -442,7 +529,7 @@ void CPlayScene::Update(DWORD dt)
 			objects.push_back(g3);
 			isCreateGoomba = true;
 		}
-	}
+	}*/
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload
 	// Update camera to follow mario

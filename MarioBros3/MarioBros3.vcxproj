@@ -147,6 +147,7 @@
     <ClInclude Include="Curtains.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Funnel.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goal.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="Curtains.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Funnel.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goal.cpp" />

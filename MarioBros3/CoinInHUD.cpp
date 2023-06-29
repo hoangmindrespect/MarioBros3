@@ -85,7 +85,9 @@ void CCoinInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		x = cx + COININHUD_X_DEFAULT;
 	if (cy > 200.0f)
-		y = COININHUD_Y_DEFAULT;
+		y = COININHUD_Y_HIDDEN;
+	else y = COININHUD_Y_DEFAULT;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

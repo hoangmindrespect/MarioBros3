@@ -80,6 +80,7 @@ void CPointInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (cy > 200.0f)
 		y = POINTINHUD_Y_HIDDEN;
+	else y = POINTINHUD_Y_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

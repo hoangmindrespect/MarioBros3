@@ -96,6 +96,8 @@
 #define ID_ANI_MARIO_KICK_RIGHT 1002
 #define ID_ANI_MARIO_KICK_LEFT 1003
 
+#define ID_ANI_MARIO_GET_INOUT_PIPE 1010
+
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
@@ -128,6 +130,8 @@
 
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT 1604
 #define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT 1605
+
+#define ID_ANI_SMALL_MARIO_GET_INOUT_PIPE 1610
 
 // TAIL MARIO
 #define ID_ANI_MARIO_TAIL_IDLE_RIGHT 1700
@@ -181,6 +185,9 @@
 #define ID_ANI_MARIO_UP_LEVEL_TAIL 35204
 #define ID_ANI_MARIO_UP_LEVEL_BIG_LEFT 35203
 #define ID_ANI_MARIO_UP_LEVEL_RIGHT 35202
+
+#define ID_ANI_TAIL_MARIO_GET_INOUT_PIPE 1729
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -233,15 +240,16 @@ class CMario : public CGameObject
 	bool isKicking;
 	// handle flying
 	bool isChangeDirection;
-	bool isStart; // biến bool để tính thời gian bay
+	bool isStart;				// biến bool để tính thời gian bay
 	bool isChanging;
 	bool isChangingTail;
 
-	bool isFallDown; // kiểm tra điểm rơi của mario => chỉnh camera
+	bool isGetInOutPipe;		//trạng thái đi ra đi vào ống nước.
+	bool isFallDown;			// kiểm tra điểm rơi của mario => chỉnh camera
 	//bool isCreateHud;
 	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
+	float ax;					// acceleration on x 
+	float ay;					// acceleration on y 
 	float xtmp, ytmp;
 	int level; 
 	int untouchable;
@@ -268,14 +276,13 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
-	
+	void OnCollisionWithFunnel(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdTail();
 	int GetAniIdSmall();
 
 	int IsInMap;
-	//int IsInIntro;
 	CTail* Tail = NULL;
 	CKoopas* Koopas = NULL;
 	
@@ -298,6 +305,7 @@ public:
 		isEndScene = false;
 		isOnPlatform = false;
 		isFallDown = false;
+		isGetInOutPipe = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -355,6 +363,7 @@ public:
 	void setXtmp(float a) { xtmp = a; }
 	void setDieStart() { die_start = GetTickCount64(); }
 	void setIsFallDown(bool a) { isFallDown = a; }
+	void setIsGetInOutPipe(bool a) { isGetInOutPipe = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

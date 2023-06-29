@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Game.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -19,6 +19,15 @@ public:
 	static vector<LPGAMEOBJECT> objects;
 	static vector<LPGAMEOBJECT> stop;
 	bool isCreateGoomba = false;
+	static bool isGetInDown;				//di chuyển vào pipe theo hướng từ trên xuống
+	static bool isGetInUp;					// di chuyển vào pipe theo chiều từ dưới lên
+	static bool isGetOutDown;					// di chuyển ra pipe theo chiều từ tren xuống
+	static bool isGetOutUp;					// di chuyển ra pipe theo chiều từ dưới lên
+	static float tempoPosition;				// vi trí tạm thời của mario khi đi vào ống nước.
+	static float Y_target;
+	static float X_target;
+	static ULONGLONG time_start;
+	static ULONGLONG time_end;
 	void AddObject(LPGAMEOBJECT e);
 	void AddObject1(LPGAMEOBJECT e);
 	void _ParseSection_SPRITES(string line);

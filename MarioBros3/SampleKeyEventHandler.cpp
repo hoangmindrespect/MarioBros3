@@ -186,10 +186,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 		if (mario->getlevel() == MARIO_LEVEL_TAIL)
 		{
-			if(mario->getnx() > 0)
-				mario->SetState(MARIO_STATE_ATTACK_RIGHT);
-			else
-				mario->SetState(MARIO_STATE_ATTACK_LEFT);
+			if (mario->GetState() != MARIO_STATE_SIT)
+			{
+				if (mario->getnx() > 0)
+					mario->SetState(MARIO_STATE_ATTACK_RIGHT);
+				else
+					mario->SetState(MARIO_STATE_ATTACK_LEFT);
+			}
 		}
 		break;
 	}

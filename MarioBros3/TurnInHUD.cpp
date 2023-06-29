@@ -74,6 +74,7 @@ void CTurnInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = cx + TURNINHUD_X_DEFAULT;
 	if (cy > 200.0f)
 		y = TURNINHUD_Y_HIDDEN;
+	else y = TURNINHUD_Y_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

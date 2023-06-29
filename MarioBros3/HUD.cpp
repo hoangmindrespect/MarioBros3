@@ -52,6 +52,7 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = cx + HUD_WIDTH / 2;
 	if (cy > 200.0f)
 		y = HUD_Y_HIDDEN;
+	else y = HUD_Y_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

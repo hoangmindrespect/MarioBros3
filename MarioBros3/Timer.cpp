@@ -84,6 +84,7 @@ void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = cx + TIMER_X_DEFAULT;
 	if (cy > 200.0f)
 		y = TIMER_Y_HIDDEN;
+	else y = TIMER_Y_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
