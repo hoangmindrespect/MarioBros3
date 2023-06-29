@@ -29,7 +29,7 @@
 #include "TurnInHUD.h"
 #include "CoinInHUD.h"
 
-#define DEAD_ZONE 400.0f
+#define DEAD_ZONE 500.0f
 
 using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
@@ -516,6 +516,9 @@ void CPlayScene::Update(DWORD dt)
 			}
 			
 		}
+
+		if (mario->gety() > 170.0f)
+			cy = 187.5f;
 		//mario đến đích
 		if (mario->getx() > 2715.71f)
 		{

@@ -154,6 +154,7 @@
     <ClInclude Include="GrassInMap.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopas.h" />
+    <ClInclude Include="KoopasNavigation.h" />
     <ClInclude Include="Leaf.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MarioStop.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="GrassInMap.cpp" />
     <ClCompile Include="Koopas.cpp" />
+    <ClCompile Include="KoopasNavigation.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
