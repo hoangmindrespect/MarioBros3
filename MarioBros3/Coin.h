@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #define ID_ANI_COIN 11900
+#define ID_ANI_COIN_NOT_ROTATE 11901
 
 #define	COIN_WIDTH 16
 #define COIN_BBOX_WIDTH 16
@@ -15,13 +16,13 @@ class CCoin : public CGameObject {
 	float miny;
 	bool IsUp;
 	bool IsDown;
-	int isInQuestionBlock;
+	int type; // 1. coin in questionblock, 2. coin rotate ,3. coin not rotate
 public:
 	CCoin(float x, float y, int k) : CGameObject(x, y) {
 		maxy = y - 55;
 		miny = y - 25;
 		IsUp = IsDown = false;
-		isInQuestionBlock = k;
+		type = k;
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

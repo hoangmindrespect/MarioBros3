@@ -597,7 +597,11 @@ void  CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 			{
 				CBrick* a = dynamic_cast<CBrick*>(CPlayScene::objects[i]);
 				if (a->getModel() == 2)
+				{
+					CCoin* coin = new CCoin(a->getx(), a->gety(), 3);
+					CPlayScene::objects.push_back(coin);
 					a->Delete();
+				}
 			}
 		}
 	}

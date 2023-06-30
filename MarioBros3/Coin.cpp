@@ -5,13 +5,21 @@
 
 void CCoin::Render()
 {
-	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
-
-	RenderBoundingBox();
+	if (type == 3)
+	{
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(ID_ANI_COIN_NOT_ROTATE)->Render(x, y);
+		RenderBoundingBox();
+	}
+	else
+	{
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(ID_ANI_COIN)->Render(x, y);
+		RenderBoundingBox();
+	}
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
-	if (isInQuestionBlock == 1)
+	if (type == 1)
 	{
 		if (IsUp == false && y > maxy)
 			y -= 0.3f * dt;
