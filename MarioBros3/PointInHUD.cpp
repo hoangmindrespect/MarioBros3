@@ -31,7 +31,7 @@ void CPointInHUD::Render()
 {
 	CSprites* s = CSprites::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	int point = mario->getPoint();
+	int point = CPlayScene::point;
 	float distance = 0.0f;
 	while (distance != 56.0f)
 	{

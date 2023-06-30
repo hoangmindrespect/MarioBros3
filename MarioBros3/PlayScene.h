@@ -15,7 +15,10 @@ protected:
 public:
 	// A play scene has to have player, right? 
 	static LPGAMEOBJECT player;
+	//player data
 	static int turn;
+	static int point;
+	static int coin;
 	static vector<LPGAMEOBJECT> objects;
 	static vector<LPGAMEOBJECT> stop;
 	bool isCreateGoomba = false;

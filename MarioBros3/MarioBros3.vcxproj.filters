@@ -166,6 +166,9 @@
     <ClInclude Include="Funnel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PSwitch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -300,6 +303,9 @@
     <ClCompile Include="Funnel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PSwitch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AssetFile\brick.txt">
@@ -360,6 +366,9 @@
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
     <Text Include="AssetFile\effect.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\Pswitch.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
   </ItemGroup>

@@ -2,14 +2,27 @@
 #include "debug.h"
 void CQuestionBlock::Render()
 {
-	int aniId = ID_ANI_QUESTIONBLOCK;
-	if (state == QUESTIONBLOCK_STATE_EMPTY)
+	if (type == 1 || type == 2)
 	{
-		aniId = ID_ANI_QUESTIONBLOCK_EMPTY;
+		int aniId = ID_ANI_QUESTIONBLOCK;
+		if (state == QUESTIONBLOCK_STATE_EMPTY)
+		{
+			aniId = ID_ANI_QUESTIONBLOCK_EMPTY;
+		}
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+		RenderBoundingBox();
 	}
+	else
+	{
+		int aniId = ID_ANI_BRICK1;
+		if (state == QUESTIONBLOCK_STATE_EMPTY)
+		{
+			aniId = ID_ANI_QUESTIONBLOCK_EMPTY;
+		}
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+		RenderBoundingBox();
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	}
 }
 
 void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)

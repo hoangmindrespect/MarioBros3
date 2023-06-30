@@ -31,7 +31,7 @@ void CCoinInHUD::Render()
 {
 	CSprites* s = CSprites::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	int coin = mario->getCoin();
+	int coin = CPlayScene::coin;
 	if (coin == 0)
 	{
 		s->Get(ID_FONT_NUMBER_ZERO)->Draw(x + 8.0f, y);

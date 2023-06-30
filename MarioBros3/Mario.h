@@ -246,7 +246,7 @@ class CMario : public CGameObject
 
 	bool isGetInOutPipe;		//trạng thái đi ra đi vào ống nước.
 	bool isFallDown;			// kiểm tra điểm rơi của mario => chỉnh camera
-	//bool isCreateHud;
+	bool isDelevel;
 	float maxVx;
 	float ax;					// acceleration on x 
 	float ay;					// acceleration on y 
@@ -263,8 +263,6 @@ class CMario : public CGameObject
 	ULONGLONG kicking_start;
 	ULONGLONG time_switching;
 
-	int coin; 
-	int point;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -277,6 +275,7 @@ class CMario : public CGameObject
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 	void OnCollisionWithFunnel(LPCOLLISIONEVENT e);
+	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdTail();
@@ -306,6 +305,7 @@ public:
 		isOnPlatform = false;
 		isFallDown = false;
 		isGetInOutPipe = false;
+		isDelevel = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -322,7 +322,6 @@ public:
 		count_time_prepare_running = 0;
 		pre_count_time_prepare_running = 0;
 		xtmp = ytmp = 0.0f;
-		coin = point = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -350,7 +349,6 @@ public:
 	void SetIsMoveRight(bool a) { isMoveRight = a; }
 	void SetIsMoveLeft(bool a) { isMoveLeft = a; }
 	void SetIsRelease(bool a) { isRealse = a; }
-	void SetIsSwitch(bool a) {isSwitch = a;}
 	void SetIsFlying(bool a) { isFlying = a; }
 	void setMaxVx(float a) { maxVx = a; }
 	void setNx(int a) { nx = a; }
@@ -364,6 +362,8 @@ public:
 	void setDieStart() { die_start = GetTickCount64(); }
 	void setIsFallDown(bool a) { isFallDown = a; }
 	void setIsGetInOutPipe(bool a) { isGetInOutPipe = a; }
+	void setIsDelevel(bool a) { isDelevel = a; }
+	void setTimeSwitching(ULONGLONG a) { time_switching = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -383,10 +383,9 @@ public:
 	bool getIsEndTurn() { return isEndTurn; }
 	float getYtmp() { return ytmp; }
 	float getXtmp() { return xtmp; }
-	int getCoin() { return coin; }
-	int getPoint() { return point; }
 	bool getIsFallDown() { return isFallDown; }
 	bool getIsHolding() { return isHolding; }
+	bool getIsDelevel() { return isDelevel; }
 	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getRunningStart() { return running_start; }

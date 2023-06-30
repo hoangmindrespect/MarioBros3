@@ -166,6 +166,7 @@
     <ClInclude Include="PointInHUD.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="PowerFlyingHUD.h" />
+    <ClInclude Include="PSwitch.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedGoomba.h" />
     <ClInclude Include="RedMushroom.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="PointInHUD.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="PowerFlyingHUD.cpp" />
+    <ClCompile Include="PSwitch.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedGoomba.cpp" />
     <ClCompile Include="RedMushroom.cpp" />
@@ -240,6 +242,7 @@
     <Text Include="AssetFile\mario.txt" />
     <Text Include="AssetFile\Pipe.txt" />
     <Text Include="AssetFile\piranha.txt" />
+    <Text Include="AssetFile\Pswitch.txt" />
     <Text Include="AssetFile\questionblock.txt" />
     <Text Include="AssetFile\redmushroom.txt" />
     <Text Include="AssetFile\Road.txt" />

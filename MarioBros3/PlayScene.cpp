@@ -37,6 +37,8 @@ using namespace std;
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
 int::CPlayScene::turn = 4;
+int::CPlayScene::point = 0;
+int::CPlayScene::coin = 0;
 bool::CPlayScene::isGetInDown = false;
 bool::CPlayScene::isGetInUp = false;
 bool::CPlayScene::isGetOutDown = false;
@@ -422,6 +424,13 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 
+	if (mario->getIsDelevel())
+	{
+		if (GetTickCount64() - mario->getTimeSwitch() > 500)
+			mario->setIsDelevel(false);
+		else // return not update
+			return;
+	}
 	if (isGetInDown)
 	{
 		if (GetTickCount64() - time_start > 1000)
@@ -512,7 +521,7 @@ THERE:
 			objects[i]->Update(dt, &coObjects);
 	}
 
-	if (mario->gety() > DEAD_ZONE)
+	if (mario->gety() >	DEAD_ZONE)
 		mario->SetState(MARIO_STATE_DIE);
 
 	

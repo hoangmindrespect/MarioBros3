@@ -112,10 +112,14 @@ void CKoopas::OnCollisionWithGoomBa(LPCOLLISIONEVENT e)
 		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 		if (goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 		{
+			CPlayScene::point += 100;
 			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
 			CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 9);
+			CEffect* c = new CEffect(goomba->getx(), goomba->gety(), 6);
 			CPlayScene::objects.push_back(a);
 			CPlayScene::objects.push_back(b);
+			CPlayScene::objects.push_back(c);
+
 			goomba->Delete();
 		}
 	}
@@ -160,6 +164,7 @@ void CKoopas::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 
 			if (p->getType() == 1)
 			{
+				CPlayScene::coin += 1;
 				CCoin* t = new CCoin(p->getx(), p->gety() - 25.0f, 1);
 				scene->AddObject(t);
 			}

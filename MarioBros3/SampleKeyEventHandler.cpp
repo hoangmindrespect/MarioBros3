@@ -256,7 +256,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						if (mario->GetState() != MARIO_STATE_FLYING)
 						{
 							if (mario->GetState() == MARIO_STATE_RUNNING_LEFT)
-								mario->SetIsSwitch(true);
+								mario->setIsSwitch(true);
 							if (mario->GetState() != MARIO_STATE_JUMP)
 								mario->SetState(MARIO_STATE_PREPARE_RUNNING_RIGHT);
 						}
@@ -350,7 +350,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						if (mario->GetState() != MARIO_STATE_FLYING)
 						{
 							if (mario->GetState() == MARIO_STATE_RUNNING_RIGHT)
-								mario->SetIsSwitch(true);
+								mario->setIsSwitch(true);
 							if (mario->GetState() != MARIO_STATE_JUMP)
 								mario->SetState(MARIO_STATE_PREPARE_RUNNING_LEFT);
 						}

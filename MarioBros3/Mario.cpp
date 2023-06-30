@@ -22,6 +22,7 @@
 #include "RedGoomba.h"
 #include "HUD.h"
 #include "Funnel.h"
+#include "PSwitch.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (IsInMap == 0)
@@ -297,6 +298,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRedGoomba(e);
 	else if (dynamic_cast<CFunnel*>(e->obj))
 		OnCollisionWithFunnel(e);
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+		OnCollisionWithPSwitch(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -309,7 +312,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
-			point += 100;
+			CPlayScene::point += 100;
 			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 6);
 			CPlayScene::objects.push_back(a);
 		}
@@ -337,7 +340,7 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 			{
 				goomba->SetState(RED_GOOMBA_STATE_DIE);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
-				point += 100;
+				CPlayScene::point += 100;
 				CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 6);
 				CPlayScene::objects.push_back(a);
 			}
@@ -345,7 +348,7 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 			{
 				goomba->SetState(RED_GOOMBA_STATE_WALKING_NONE_WINGS);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
-				point += 100;
+				CPlayScene::point += 100;
 				CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 6);
 				CPlayScene::objects.push_back(a);
 			}
@@ -365,7 +368,7 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	coin++;
+	CPlayScene::coin += 1;
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -382,7 +385,7 @@ void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 	isChanging = true;
 	time_switching = GetTickCount64();
 	e->obj->Delete();
-	point += 1000;
+	CPlayScene::point += 1000;
 	CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
 	CPlayScene::objects.push_back(a);
 
@@ -395,14 +398,14 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	CQuestionBlock* p = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0 && p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 	{
-		point += 100;
+		CPlayScene::point += 100;
 		p->SetState(QUESTIONBLOCK_STATE_EMPTY);
 		
 		if (p->getType() == 1)
 		{
 			CCoin* t = new CCoin(p->getx(), p->gety() - 15.0f, 1);
 			scene->AddObject(t);
-			coin += 1;
+			CPlayScene::coin += 1;
 		}
 		else if (p->getType() == 2) // question block contains item
 		{
@@ -416,6 +419,11 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 				CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 55.0f);
 				scene->AddObject(leaf);
 			}
+		}
+		else if (p->getType() == 3)
+		{
+			CPSwitch* pswitch =new CPSwitch(p->getx(), p->gety() - 16.0f);
+			scene->AddObject(pswitch);
 		}
 	}
 }
@@ -458,7 +466,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			}
 			else
 				koopas->SetState(KOOPAS_STATE_WALKING_LEFT);
-			point += 100;
+			CPlayScene::point += 100;
 			CEffect* a = new CEffect(koopas->getx(), koopas->gety(), 6);
 			CPlayScene::objects.push_back(a);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -477,7 +485,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			{
 				koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
-				point += 100;
+				CPlayScene::point += 100;
 				CEffect* a = new CEffect(koopas->getx(), koopas->gety(), 6);
 				CPlayScene::objects.push_back(a);
 			}
@@ -545,10 +553,12 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 	isChanging = true;
 	time_switching = GetTickCount64();
 	e->obj->Delete();
-	point += 1000;
-	CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-	CPlayScene::objects.push_back(a);
-
+	CPlayScene::point += 1000;
+	if (level != MARIO_LEVEL_TAIL)
+	{
+		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+		CPlayScene::objects.push_back(a);
+	}
 }
 
 void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
@@ -575,6 +585,23 @@ void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
 	}
 }
 
+void  CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* ps = dynamic_cast<CPSwitch*>(e->obj);
+	if (e->ny < 0 && ps->GetState() != PSWITCH_STATE_CLICKED)
+	{
+		ps->SetState(PSWITCH_STATE_CLICKED);
+		for (int i = 0; i < CPlayScene::objects.size(); i++)
+		{
+			if (dynamic_cast<CBrick*>(CPlayScene::objects[i]))
+			{
+				CBrick* a = dynamic_cast<CBrick*>(CPlayScene::objects[i]);
+				if (a->getModel() == 2)
+					a->Delete();
+			}
+		}
+	}
+}
 //
 // Get animation ID for small Mario
 //
@@ -1188,19 +1215,29 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else
 		{
-			if (nx > 0)
+			if (state == MARIO_STATE_FLYING)
 			{
-				left = (x - (MARIO_TAIL_BBOX_WIDTH) / 2) + 2.0f;
+				left = (x - (MARIO_TAIL_BBOX_WIDTH + 10.0f) / 2) + 2.0f;
 				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
-				right = left + (MARIO_TAIL_BBOX_WIDTH) - 3.0f;
+				right = left + (MARIO_TAIL_BBOX_WIDTH + 10.0f)-3.0f;
 				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
 			}
 			else
 			{
-				left = x - (MARIO_TAIL_BBOX_WIDTH) / 2;
-				top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
-				right = left + (MARIO_TAIL_BBOX_WIDTH) - 2.0f;
-				bottom = top + MARIO_TAIL_BBOX_HEIGHT;
+				if (nx > 0)
+				{
+					left = (x - (MARIO_TAIL_BBOX_WIDTH) / 2) + 2.0f;
+					top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
+					right = left + (MARIO_TAIL_BBOX_WIDTH)-3.0f;
+					bottom = top + MARIO_TAIL_BBOX_HEIGHT;
+				}
+				else
+				{
+					left = x - (MARIO_TAIL_BBOX_WIDTH) / 2;
+					top = y - MARIO_TAIL_BBOX_HEIGHT / 2;
+					right = left + (MARIO_TAIL_BBOX_WIDTH)-2.0f;
+					bottom = top + MARIO_TAIL_BBOX_HEIGHT;
+				}
 			}
 		}
 	}
@@ -1267,6 +1304,8 @@ void DeLevel(CMario* a)
 		CPlayScene::turn -= 1;
 		a->die_start = GetTickCount64();
 	}
+	a->setIsDelevel(true);
+	a->setTimeSwitching(GetTickCount64());
 }
 void KickKoopas(CKoopas* Koopas, CMario* mario)
 {

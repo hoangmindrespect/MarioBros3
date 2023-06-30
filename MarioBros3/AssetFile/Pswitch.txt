@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#PSWITCH
+15451	1174	69	1189	84	60
+15452	1191	69	1206	84	60
+
+#PSWITCH_CLICKED
+15453	1225	69	1240	84	60
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+15440	15451	100	15452	100
+15450	15453	100

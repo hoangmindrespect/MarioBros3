@@ -16,6 +16,7 @@ AssetFile/bullet.txt
 AssetFile/piranha.txt
 AssetFile/GrassInMap.txt
 AssetFile/effect.txt
+AssetFile/Pswitch.txt
 
 #
 [OBJECTS]
@@ -529,7 +530,7 @@ AssetFile/effect.txt
 1	1992	131	2
 1	2008	131	2
 1	2024	131	2
-1	2040	131	2
+9	2040	131	3
 
 1	2104	163	2
 1	2120	163	2
@@ -905,7 +906,7 @@ AssetFile/effect.txt
 8 	6	-240	8	8	52	1	1
 
 # MARIO
-0	50	120	0
+0	2220	120	0
 
 #TWO PIPE AT THE HIDDEN SCENE
 8 	2112	195	30	16	2	13400	13300

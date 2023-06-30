@@ -67,6 +67,7 @@ void CTail::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 		CEffect* a = new CEffect(pira->getx(), pira->gety() + 3.0f, 8);
 		CPlayScene::objects.push_back(a);
 		pira->Delete();
+		CPlayScene::point += 100;
 	}
 }
 
@@ -76,6 +77,7 @@ void CTail::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	CRedGoomba* goomba = dynamic_cast<CRedGoomba*>(e->obj);
 	if (mario->getIsAttack())
 	{
+		CPlayScene::point += 100;
 		CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
 		CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 10);
 		CPlayScene::objects.push_back(a);
@@ -126,14 +128,14 @@ void CTail::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	{
 		if (p->GetState() == QUESTIONBLOCK_STATE_NONE_EMPTY)
 		{
-			//point += 100;
 			p->SetState(QUESTIONBLOCK_STATE_EMPTY);
 
 			if (p->getType() == 1)
 			{
 				CCoin* t = new CCoin(p->getx(), p->gety() - 15.0f, 1);
 				scene->AddObject(t);
-				//coin += 1;
+				CPlayScene::coin += 1;
+				CPlayScene::point += 100;
 			}
 			else if (p->getType() == 2) // question block contains item
 			{
