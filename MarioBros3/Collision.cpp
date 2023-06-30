@@ -170,7 +170,7 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 */
 void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDests, vector<LPCOLLISIONEVENT>& coEvents)
 {
-
+	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	// kiểm tra các cái source đó có collide với cái destination kh
 	for (UINT i = 0; i < objDests->size(); i++)
 	{
@@ -187,12 +187,11 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			else
 				coEvents.push_back(e);
 		}
-		else if (dynamic_cast<CTail*>(objSrc))
+		else if (mario->getIsAttack())
 		{
-			if (IsCollding(objSrc, objDests->at(i)))
-			{
-				coEvents.push_back(e);
-			}
+			if (dynamic_cast<CTail*>(objSrc))
+				if (IsCollding(objSrc, objDests->at(i)))
+					coEvents.push_back(e);
 		}
 		else
 			delete e;
