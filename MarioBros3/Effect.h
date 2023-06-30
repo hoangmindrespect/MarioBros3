@@ -12,6 +12,7 @@
 #define ID_ANI_ATTACK	35205
 #define ID_YELLOW_GOOMBA_DIE_EFFECT	35516
 #define ID_RED_GOOMBA_DIE_EFFECT	35517
+#define ID_RED_ONE_UP	166025
 class CEffect : public CGameObject {
 	int type;
 	float ax;

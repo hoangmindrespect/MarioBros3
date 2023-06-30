@@ -1,21 +1,24 @@
 #pragma once
 #include "GameObject.h"
 
-#define REDMUSHROOM_GRAVITY 0.002f
-#define REDMUSHROOM_WALKING_SPEED 0.1f
+#define MUSHROOM_GRAVITY 0.002f
+#define MUSHROOM_WALKING_SPEED 0.1f
 
+#define ID_RED_MUSHROOOM	16000
+#define ID_GREEEN_MUSHROOOM	16001
 
-#define REDMUSHROOM_BBOX_WIDTH 16
-#define REDMUSHROOM_BBOX_HEIGHT 15
+#define MUSHROOM_BBOX_WIDTH 16
+#define MUSHROOM_BBOX_HEIGHT 15
 
 class CRedMushroom : public CGameObject
 {
 protected:
+	int type; // 1 is red mush, 2 is green mush
 	float ax;
 	float ay;
 	float ymax;
 	BOOLEAN isOut;
-	float miny = y - 10;
+	float miny = y - 10.0f;
 	float maxy = y;
 	bool IsUp = false; 
 	bool IsDown = false;
@@ -30,7 +33,8 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CRedMushroom(float x, float y);
+	CRedMushroom(float x, float y, int k);
+	int getType() { return type; }
 };
 
 

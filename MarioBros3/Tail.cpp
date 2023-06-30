@@ -6,8 +6,9 @@
 #include "PlayScene.h"
 #include "PiranhaPlant.h"
 #include "QuestionBlock.h"
-#include "RedMushroom.h"
+#include "Mushroom.h"
 #include "Leaf.h"
+#include "PSwitch.h"
 CTail::CTail(float x, float y) :CGameObject(x, y)
 {
 	ax = 0.0F;
@@ -141,7 +142,7 @@ void CTail::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 			{
 				if (mario->getlevel() == MARIO_LEVEL_SMALL)
 				{
-					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 1);
 					scene->AddObject1(mushroom);
 				}
 				else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
@@ -149,6 +150,16 @@ void CTail::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 					CLeaf* leaf = new CLeaf(p->getx(), p->gety() - 55.0f);
 					scene->AddObject(leaf);
 				}
+			}
+			else if (p->getType() == 3)
+			{
+				CPSwitch* pswitch = new CPSwitch(p->getx(), p->gety() - 16.0f);
+				scene->AddObject(pswitch);
+			}
+			else if (p->getType() == 4)
+			{
+				CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 2);
+				scene->AddObject1(mushroom);
 			}
 		}
 	}

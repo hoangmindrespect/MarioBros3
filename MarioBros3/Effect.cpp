@@ -39,21 +39,13 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		ax = 0;
 		ay = 0;
 	}
-	else if (type == 6) // + 100 point
+	else if (type == 6 || type == 7 || type == 11) // + 100 point, + 1000 point, + 1 turn
 	{
-		top = y - 50.0f;
+		top = y - 40.0f;
 		vx = 0;
 		vy = -0.1f;
 		ax = 0;
 		ay = 0;
-	}
-	else if (type == 7) // + 1000 point
-	{
-		top = y - 50.0f;
-		vx = 0.0f;
-		vy = -0.1f;
-		ax = 0.0f;
-		ay = 0.0f;
 	}
 	else if (type == 8) // attack by tail or defend koopas
 	{
@@ -105,6 +97,10 @@ void CEffect::Render()
 	{
 		idAni = ID_RED_GOOMBA_DIE_EFFECT;
 	}
+	else if (type == 11)
+	{
+		idAni = ID_RED_ONE_UP;
+	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(idAni)->Render(x, y);
 
@@ -120,7 +116,7 @@ void CEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	
 	vx += ax * dt;
 	vy += ay * dt;
-	if (type == 6 || type == 7)
+	if (type == 6 || type == 7 || type == 11)
 	{
 		if (y < top)
 			this->Delete();

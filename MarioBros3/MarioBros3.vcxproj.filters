@@ -100,7 +100,7 @@
     <ClInclude Include="Pipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RedMushroom.h">
+    <ClInclude Include="Mushroom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PiranhaPlant.h">
@@ -237,7 +237,7 @@
     <ClCompile Include="Pipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RedMushroom.cpp">
+    <ClCompile Include="Mushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PiranhaPlant.cpp">

@@ -12,7 +12,7 @@
 #include "SampleKeyEventHandler.h"
 #include "Pipe.h"
 #include "QuestionBlock.h"
-#include "RedMushroom.h"
+#include "Mushroom.h"
 #include "Bullet.h"
 #include "PiranhaPlant.h"
 #include "Koopas.h"
@@ -34,11 +34,17 @@
 
 using namespace std;
 
+//
 std::vector<CGameObject*> CPlayScene::objects;
 std::vector<CGameObject*> CPlayScene::stop;
+LPGAMEOBJECT CPlayScene::player;
+
+//initial player data
 int::CPlayScene::turn = 4;
 int::CPlayScene::point = 0;
 int::CPlayScene::coin = 0;
+
+//initial logic pipe
 bool::CPlayScene::isGetInDown = false;
 bool::CPlayScene::isGetInUp = false;
 bool::CPlayScene::isGetOutDown = false;
@@ -46,10 +52,8 @@ bool::CPlayScene::isGetOutUp = false;
 float::CPlayScene::tempoPosition = 0.0f;
 float::CPlayScene::X_target = 0.0f;
 float::CPlayScene::Y_target = 0.0f;
-
 ULONGLONG CPlayScene::time_start;
 ULONGLONG CPlayScene::time_end;
-LPGAMEOBJECT CPlayScene::player;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
@@ -293,7 +297,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = NULL;
 		break;
 	}
-	case OBJECT_TYPE_REDMUSHROOM: obj = new CRedMushroom(x, y); break;
 	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
 	case 20: obj = new CCurtains(x, y); break;
 	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
@@ -406,6 +409,8 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way
 	CMario* mario = dynamic_cast<CMario*>(player);
 	vector<LPGAMEOBJECT> coObjects;
+
+	//Check for not update when Mario level up
 	if (mario->getIsChanging())
 	{
 		if (mario->getlevel() == MARIO_LEVEL_BIG)
@@ -424,6 +429,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 
+	//Check for not update when Mario delevel
 	if (mario->getIsDelevel())
 	{
 		if (GetTickCount64() - mario->getTimeSwitch() > 500)
@@ -431,6 +437,9 @@ void CPlayScene::Update(DWORD dt)
 		else // return not update
 			return;
 	}
+
+	//Handle logic when mario getin or getout the pipe [collide with Funnel]
+
 	if (isGetInDown)
 	{
 		if (GetTickCount64() - time_start > 1000)

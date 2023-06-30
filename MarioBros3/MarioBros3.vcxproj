@@ -169,7 +169,7 @@
     <ClInclude Include="PSwitch.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedGoomba.h" />
-    <ClInclude Include="RedMushroom.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="HUD.h" />
@@ -217,7 +217,7 @@
     <ClCompile Include="PSwitch.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedGoomba.cpp" />
-    <ClCompile Include="RedMushroom.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Sprite.cpp" />

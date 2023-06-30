@@ -1,11 +1,12 @@
-#include "RedMushroom.h"
+#include "Mushroom.h"
 #include "debug.h"
 #include "ColorBox.h"
 #include "Mario.h"
 #include "Platform.h"
 #include "QuestionBlock.h"
-CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
+CRedMushroom::CRedMushroom(float x, float y ,int k) :CGameObject(x, y)
 {
+	type = k;
 	this->ax = 0;
 	this->ay = 0;
 	ymax = y - 16.0f;
@@ -16,15 +17,14 @@ CRedMushroom::CRedMushroom(float x, float y) :CGameObject(x, y)
 
 void CRedMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - REDMUSHROOM_BBOX_WIDTH / 2;
-	top = y - REDMUSHROOM_BBOX_HEIGHT / 2;
-	right = left + REDMUSHROOM_BBOX_WIDTH;
-	bottom = top + REDMUSHROOM_BBOX_HEIGHT;
+	left = x - MUSHROOM_BBOX_WIDTH / 2;
+	top = y - MUSHROOM_BBOX_HEIGHT / 2;
+	right = left + MUSHROOM_BBOX_WIDTH;
+	bottom = top + MUSHROOM_BBOX_HEIGHT;
 }
 
 void CRedMushroom::OnNoCollision(DWORD dt)
 {
-	//DebugOut(L"hihih");
 	x += vx * dt;
 	y += vy * dt;
 };
@@ -74,7 +74,7 @@ void CRedMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (y < ymax)
 			{
 				this->ax = 0;
-				this->ay = REDMUSHROOM_GRAVITY;
+				this->ay = MUSHROOM_GRAVITY;
 				vx = GOOMBA_WALKING_SPEED;
 				isOut = true;
 			}
@@ -93,7 +93,10 @@ void CRedMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CRedMushroom::Render()
 {
 	CSprites* s = CSprites::GetInstance();
-	s->Get(16000)->Draw(x, y);
+	if(type == 1)
+		s->Get(ID_RED_MUSHROOOM)->Draw(x, y);
+	else
+		s->Get(ID_GREEEN_MUSHROOOM)->Draw(x, y);
 
 	RenderBoundingBox();
 

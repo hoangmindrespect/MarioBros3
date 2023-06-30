@@ -5,10 +5,11 @@
 #include "Platform.h"
 #include "QuestionBlock.h"
 #include "PlayScene.h"
-#include "RedMushroom.h"
+#include "Mushroom.h"
 #include "Leaf.h"
 #include "Brick.h"
 #include "Effect.h"
+#include "PSwitch.h"
 CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 {
 	this->type = type;
@@ -173,7 +174,7 @@ void CKoopas::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 				CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 				if (mario->getlevel() == MARIO_LEVEL_SMALL)
 				{
-					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+					CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 1);
 					scene->AddObject1(mushroom);
 				}
 				else  if (mario->getlevel() == MARIO_LEVEL_BIG || mario->getlevel() == MARIO_LEVEL_TAIL)
@@ -182,7 +183,16 @@ void CKoopas::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 					scene->AddObject(leaf);
 				}
 			}
-
+			else if (p->getType() == 3)
+			{
+				CPSwitch* pswitch = new CPSwitch(p->getx(), p->gety() - 16.0f);
+				scene->AddObject(pswitch);
+			}
+			else if (p->getType() == 4)
+			{
+				CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 2);
+				scene->AddObject1(mushroom);
+			}
 		}
 	}
 }

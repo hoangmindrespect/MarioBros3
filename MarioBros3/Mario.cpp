@@ -1,6 +1,6 @@
 ﻿#include <algorithm>
 #include "debug.h"
-#include "RedMushroom.h"
+#include "Mushroom.h"
 #include "Mario.h"
 #include "Game.h"
 #include"GameObject.h"
@@ -369,6 +369,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	CPlayScene::coin += 1;
+	CPlayScene::point += 50;
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -380,15 +381,23 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 {
-
-	this->SetLevel(MARIO_LEVEL_BIG);
-	isChanging = true;
-	time_switching = GetTickCount64();
+	CRedMushroom* mus = dynamic_cast<CRedMushroom*>(e->obj);
+	if (mus->getType() == 1)
+	{
+		this->SetLevel(MARIO_LEVEL_BIG);
+		isChanging = true;
+		time_switching = GetTickCount64();
+		CPlayScene::point += 1000;
+		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+		CPlayScene::objects.push_back(a);
+	}
+	else
+	{
+		CPlayScene::turn += 1;
+		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 11);
+		CPlayScene::objects.push_back(a);
+	}
 	e->obj->Delete();
-	CPlayScene::point += 1000;
-	CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-	CPlayScene::objects.push_back(a);
-
 }
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
@@ -411,7 +420,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		{
 			if (level == MARIO_LEVEL_SMALL)
 			{
-				CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety());
+				CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 1);
 				scene->AddObject1(mushroom);
 			}
 			else  if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL)
@@ -424,6 +433,11 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 		{
 			CPSwitch* pswitch =new CPSwitch(p->getx(), p->gety() - 16.0f);
 			scene->AddObject(pswitch);
+		}
+		else if (p->getType() == 4)
+		{
+			CRedMushroom* mushroom = new CRedMushroom(p->getx(), p->gety(), 2);
+			scene->AddObject1(mushroom);
 		}
 	}
 }
@@ -549,16 +563,16 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
-	SetLevel(MARIO_LEVEL_TAIL);
-	isChanging = true;
-	time_switching = GetTickCount64();
-	e->obj->Delete();
-	CPlayScene::point += 1000;
 	if (level != MARIO_LEVEL_TAIL)
 	{
-		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-		CPlayScene::objects.push_back(a);
+		SetLevel(MARIO_LEVEL_TAIL);
+		isChanging = true;
+		time_switching = GetTickCount64();
 	}
+	e->obj->Delete();
+	CPlayScene::point += 1000;
+	CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+	CPlayScene::objects.push_back(a);
 }
 
 void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
@@ -605,6 +619,7 @@ void  CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+	
 }
 //
 // Get animation ID for small Mario
