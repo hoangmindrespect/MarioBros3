@@ -400,11 +400,14 @@ void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 	if (mus->getType() == 1)
 	{
 		this->SetLevel(MARIO_LEVEL_BIG);
-		isChanging = true;
-		time_switching = GetTickCount64();
-		CPlayScene::point += 1000;
-		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-		CPlayScene::objects.push_back(a);
+		if (CPlayScene::player != NULL)
+		{
+			isChanging = true;
+			time_switching = GetTickCount64();
+			CPlayScene::point += 1000;
+			CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+			CPlayScene::objects.push_back(a);
+		}
 	}
 	else
 	{

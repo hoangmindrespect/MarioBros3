@@ -42,6 +42,7 @@ void CRedMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
+		nx = -nx;
 	}
 }
 

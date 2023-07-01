@@ -35,6 +35,13 @@ protected:
 public:
 	CRedMushroom(float x, float y, int k);
 	int getType() { return type; }
+	void setnx(int a) { nx = a; }
+	void setIsUp(bool a) { IsUp = a; }
+	void setIsDown(bool a) { IsDown = a; }
+	void setIsOut( bool a) {isOut = a; }
+	void setVx(float a) { vx = a; }
+	void setAy(float a) { ay = a; }
+
 };
 
 

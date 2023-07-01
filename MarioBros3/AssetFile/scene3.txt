@@ -16,6 +16,7 @@ AssetFile/bullet.txt
 AssetFile/piranha.txt
 AssetFile/WorldMap.txt
 AssetFile/intro.txt
+AssetFile/effect.txt
 
 #
 [OBJECTS]

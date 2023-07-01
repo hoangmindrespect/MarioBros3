@@ -1,5 +1,7 @@
-#include "Intro.h"
+﻿#include "Intro.h"
 #include "debug.h"
+#include "Leaf.h"
+#include "Mushroom.h"
 
 bool::CIntro::isHitRed = false;
 void CIntro::Render()
@@ -81,7 +83,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				}
 				else
 				{
-					if (!isFallDown)
+					if (!isFallDown) // cần xử lý lại chỗ này nha bạn ơi 
 					{
 						red->setIsSitting(false);
 						red->SetVy(0.0f);
@@ -120,13 +122,23 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		}
 		else // main menu with objects: mushroom, goomba,green defend koopas, star, black defend koopas fall down
 		{
-			/*if (!isCreateObject)
+			if (!isCreateObject)
 			{
-				CMario* ma = new CMario(50, 80);
-				CGoomba* go = new CGoomba(60, 120);
-				CPlayScene::objects.push_back(ma);
-				CPlayScene::objects.push_back(go);
-			}*/
+				CKoopas* koo = new CKoopas(red->getx(), 10.0f, 2);
+				koo->SetState(KOOPAS_STATE_DIE_DOWN);
+				
+				CLeaf* leaf = new CLeaf(red->getx() + 20.0f, 10.0f);
+				CRedMushroom* mus = new CRedMushroom(red->getx() - 50.0f, 10.0f, 1);
+				mus->setnx(-1);
+				mus->setIsUp(true);
+				mus->setIsDown(true);
+				mus->setIsOut(true);
+				mus->setAy(MUSHROOM_GRAVITY);
+				mus->setVx(-MUSHROOM_WALKING_SPEED);
+				CPlayScene::objects.push_back(leaf);
+				CPlayScene::objects.push_back(mus);
+				CPlayScene::objects.push_back(koo);
+			}
 			isCreateObject = true;
 		}
 	}
