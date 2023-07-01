@@ -130,7 +130,7 @@
     <ClInclude Include="ColorBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Curtains.h">
+    <ClInclude Include="Intro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
@@ -267,7 +267,7 @@
     <ClCompile Include="ColorBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Curtains.cpp">
+    <ClCompile Include="Intro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
@@ -359,7 +359,7 @@
     <Text Include="AssetFile\scene2.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
-    <Text Include="AssetFile\GrassInMap.txt">
+    <Text Include="AssetFile\WorldMap.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
     <Text Include="AssetFile\scene3.txt">
@@ -369,6 +369,9 @@
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
     <Text Include="AssetFile\Pswitch.txt">
+      <Filter>Resource Files\AssetFile</Filter>
+    </Text>
+    <Text Include="AssetFile\intro.txt">
       <Filter>Resource Files\AssetFile</Filter>
     </Text>
   </ItemGroup>

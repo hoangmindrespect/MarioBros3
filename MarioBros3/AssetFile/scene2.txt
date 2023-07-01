@@ -14,7 +14,7 @@ AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
 AssetFile/bullet.txt
 AssetFile/piranha.txt
-AssetFile/GrassInMap.txt
+AssetFile/WorldMap.txt
 
 #
 [OBJECTS]

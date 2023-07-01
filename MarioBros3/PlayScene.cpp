@@ -20,7 +20,7 @@
 #include "GrassInMap.h"
 #include "MarioStop.h"
 #include "ColorBox.h"
-#include "Curtains.h"
+#include "Intro.h"
 #include "Goal.h"
 #include "RedGoomba.h"
 #include "Timer.h"
@@ -164,7 +164,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 		}
 		int type = (int)atof(tokens[3].c_str());
-		obj = new CMario(x, y);
+		obj = new CMario(x, y, 1);
 		player = (CMario*)obj;
 		CMario* mario = dynamic_cast<CMario*>(player);
 		if (type == 1)
@@ -298,7 +298,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
-	case 20: obj = new CCurtains(x, y); break;
+	case 20: obj = new CIntro(x, y); break;
 	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
 	case OBJECT_TYPE_POINT: obj = new CPointInHUD(x, y); break;
 	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
@@ -410,102 +410,109 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = dynamic_cast<CMario*>(player);
 	vector<LPGAMEOBJECT> coObjects;
 
-	//Check for not update when Mario level up
-	if (mario->getIsChanging())
+	if (player != NULL) // player will be nullptr if play intro scene
 	{
-		if (mario->getlevel() == MARIO_LEVEL_BIG)
+		//if mario is under the DEAD_ZONE -> mario die
+		if (mario->gety() > DEAD_ZONE)
+			mario->SetState(MARIO_STATE_DIE);
+
+		//Check for not update when Mario level up
+		if (mario->getIsChanging())
 		{
-			if (GetTickCount64() - mario->getTimeSwitch() > 1000)
-				mario->setIsChanging(false);
-			else // return not update
-				return;
+			if (mario->getlevel() == MARIO_LEVEL_BIG)
+			{
+				if (GetTickCount64() - mario->getTimeSwitch() > 1000)
+					mario->setIsChanging(false);
+				else // return not update
+					return;
+			}
+			else if (mario->getlevel() == MARIO_LEVEL_TAIL)
+			{
+				if (GetTickCount64() - mario->getTimeSwitch() > 500)
+					mario->setIsChanging(false);
+				else // return not update
+					return;
+			}
 		}
-		else if (mario->getlevel() == MARIO_LEVEL_TAIL)
+
+		//Check for not update when Mario delevel
+		if (mario->getIsDelevel())
 		{
 			if (GetTickCount64() - mario->getTimeSwitch() > 500)
-				mario->setIsChanging(false);
+				mario->setIsDelevel(false);
 			else // return not update
 				return;
 		}
-	}
 
-	//Check for not update when Mario delevel
-	if (mario->getIsDelevel())
-	{
-		if (GetTickCount64() - mario->getTimeSwitch() > 500)
-			mario->setIsDelevel(false);
-		else // return not update
-			return;
-	}
+		//Handle logic when mario getin or getout the pipe [collide with Funnel]
 
-	//Handle logic when mario getin or getout the pipe [collide with Funnel]
-
-	if (isGetInDown)
-	{
-		if (GetTickCount64() - time_start > 1000)
+		if (isGetInDown)
 		{
-			isGetInDown = false;
-			time_end = GetTickCount64();
-			isGetOutDown = true; // not neccessarry
-			mario->setIsGetInOutPipe(false);
-		}
-		else // return not update
-		{
-			if(player->gety() < tempoPosition)
-				player->sety(mario->gety() + dt * 0.03f);
-			else
-				mario->SetPosition(X_target, Y_target);
-			return;
-		}
-	}
-	if (isGetInUp)
-	{
-		if (GetTickCount64() - time_start > 600)
-		{
-			isGetInUp = false;
-			time_end = GetTickCount64();
-			isGetOutUp = true;
-		}
-		else // return not update
-		{
-			if (player->gety() > tempoPosition)
-				player->sety(mario->gety() - dt * 0.03f);
-			else
+			if (GetTickCount64() - time_start > 1000)
 			{
-				mario->SetPosition(X_target, Y_target);			
-				goto THERE;
-			}
-			return;
-		}
-	}
-	if (isGetOutUp)
-	{
-		if (mario->getlevel() == MARIO_LEVEL_SMALL)
-		{
-			if (GetTickCount64() - time_end > 600)
-			{
-				isGetOutUp = false;
+				isGetInDown = false;
+				time_end = GetTickCount64();
+				isGetOutDown = true; // not neccessarry
 				mario->setIsGetInOutPipe(false);
 			}
 			else // return not update
 			{
-				if (player->gety() > Y_target - MARIO_SMALL_BBOX_HEIGHT - 4.0f)
-					player->sety(mario->gety() - dt * 0.03f);
+				if (player->gety() < tempoPosition)
+					player->sety(mario->gety() + dt * 0.03f);
+				else
+					mario->SetPosition(X_target, Y_target);
 				return;
 			}
 		}
-		else
+		if (isGetInUp)
 		{
-			if (GetTickCount64() - time_end > 850)
+			if (GetTickCount64() - time_start > 600)
 			{
-				isGetOutUp = false;
-				mario->setIsGetInOutPipe(false);
+				isGetInUp = false;
+				time_end = GetTickCount64();
+				isGetOutUp = true;
 			}
 			else // return not update
 			{
-				if (player->gety() > Y_target - MARIO_BIG_BBOX_HEIGHT + 2.0f)
+				if (player->gety() > tempoPosition)
 					player->sety(mario->gety() - dt * 0.03f);
+				else
+				{
+					mario->SetPosition(X_target, Y_target);
+					goto THERE;
+				}
 				return;
+			}
+		}
+		if (isGetOutUp)
+		{
+			if (mario->getlevel() == MARIO_LEVEL_SMALL)
+			{
+				if (GetTickCount64() - time_end > 600)
+				{
+					isGetOutUp = false;
+					mario->setIsGetInOutPipe(false);
+				}
+				else // return not update
+				{
+					if (player->gety() > Y_target - MARIO_SMALL_BBOX_HEIGHT - 4.0f)
+						player->sety(mario->gety() - dt * 0.03f);
+					return;
+				}
+			}
+			else
+			{
+				if (GetTickCount64() - time_end > 850)
+				{
+					isGetOutUp = false;
+					mario->setIsGetInOutPipe(false);
+				}
+				else // return not update
+				{
+					if (player->gety() > Y_target - MARIO_BIG_BBOX_HEIGHT + 2.0f)
+						player->sety(mario->gety() - dt * 0.03f);
+					return;
+				}
 			}
 		}
 	}
@@ -515,25 +522,30 @@ THERE:
 	{
 		coObjects.push_back(objects[i]);
 	}
-	mario->Update(dt, &coObjects);
-	// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
-	for (size_t i = 0; i < objects.size(); i++)
+	if (player != NULL)
 	{
-		if (objects[i]->gety() > DEAD_ZONE)
+		mario->Update(dt, &coObjects);
+		// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
+		for (size_t i = 0; i < objects.size(); i++)
 		{
-			if (!dynamic_cast<CMario*>(objects[i]))
+			if (objects[i]->gety() > DEAD_ZONE)
 			{
-				objects[i]->Delete();
-			} 
+				if (!dynamic_cast<CMario*>(objects[i]))
+				{
+					objects[i]->Delete();
+				}
+			}
+			if (!dynamic_cast<CMario*>(objects[i]))
+				objects[i]->Update(dt, &coObjects);
 		}
-		if(!dynamic_cast<CMario*>(objects[i]))
-			objects[i]->Update(dt, &coObjects);
 	}
-
-	if (mario->gety() >	DEAD_ZONE)
-		mario->SetState(MARIO_STATE_DIE);
-
-	
+	else
+	{
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
+	}
 	if (player == NULL) return;
 	/*if (player->getx() > 689)
 	{

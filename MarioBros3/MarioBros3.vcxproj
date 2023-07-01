@@ -144,7 +144,7 @@
     <ClInclude Include="CoinInHUD.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
-    <ClInclude Include="Curtains.h" />
+    <ClInclude Include="Intro.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Funnel.h" />
@@ -192,7 +192,7 @@
     <ClCompile Include="CoinInHUD.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
-    <ClCompile Include="Curtains.cpp" />
+    <ClCompile Include="Intro.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Funnel.cpp" />
@@ -237,7 +237,8 @@
     <Text Include="AssetFile\effect.txt" />
     <Text Include="AssetFile\game_start.txt" />
     <Text Include="AssetFile\goomba.txt" />
-    <Text Include="AssetFile\GrassInMap.txt" />
+    <Text Include="AssetFile\intro.txt" />
+    <Text Include="AssetFile\WorldMap.txt" />
     <Text Include="AssetFile\koopas.txt" />
     <Text Include="AssetFile\mario.txt" />
     <Text Include="AssetFile\Pipe.txt" />

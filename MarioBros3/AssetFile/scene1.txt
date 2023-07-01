@@ -14,7 +14,7 @@ AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
 AssetFile/bullet.txt
 AssetFile/piranha.txt
-AssetFile/GrassInMap.txt
+AssetFile/WorldMap.txt
 AssetFile/effect.txt
 AssetFile/Pswitch.txt
 
@@ -56,7 +56,7 @@ AssetFile/Pswitch.txt
 #BIG GRASS 1
 6 	24	163	16	16	1	127004
 6 	24	147	16	16	1	127004
-6 	25	131	16	16	1	127007
+6 	24	131	16	16	1	127007
 
 6 	40	163	16	16	1	127006
 6 	40	147	16	16	1	127002

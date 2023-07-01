@@ -59,6 +59,7 @@
 
 
 #pragma region ANIMATION_ID
+//BIG - RED
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -99,6 +100,25 @@
 #define ID_ANI_MARIO_GET_INOUT_PIPE 1010
 
 #define ID_ANI_MARIO_DIE 999
+
+//BIG - GREEN
+#define ID_ANI_GREEN_MARIO_IDLE_RIGHT 1011
+#define ID_ANI_GREEN_MARIO_IDLE_LEFT 1012
+
+#define ID_ANI_GREEN_MARIO_WALKING_RIGHT 1013
+#define ID_ANI_GREEN_MARIO_WALKING_LEFT 1014
+
+#define ID_ANI_GREEN_MARIO_JUMP_WALK_RIGHT 1015
+#define ID_ANI_GREEN_MARIO_JUMP_WALK_LEFT 1016
+
+#define ID_ANI_GREEN_MARIO_HOLD_WALK_RIGHT 1021
+#define ID_ANI_GREEN_MARIO_HOLD_WALK_LEFT 1022
+
+#define ID_ANI_GREEN_MARIO_HOLD_IDLE_RIGHT 1019
+#define ID_ANI_GREEN_MARIO_HOLD_IDLE_LEFT 1010
+
+#define ID_ANI_GREEN_MARIO_KICK_RIGHT 1017
+#define ID_ANI_GREEN_MARIO_KICK_LEFT 1018
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
@@ -222,7 +242,9 @@
 
 class CMario : public CGameObject
 {
-	bool isEndTurn; // user for moving in map
+	int color;				//1. red, 2. green [just mario- not lugigi]
+
+	bool isEndTurn;			// user for moving in map
 	bool isMoveLeft;
 	bool isMoveRight;
 	bool isMoveUp;
@@ -238,6 +260,7 @@ class CMario : public CGameObject
 
 	bool isHolding;
 	bool isKicking;
+
 	// handle flying
 	bool isChangeDirection;
 	bool isStart;				// biến bool để tính thời gian bay
@@ -286,8 +309,10 @@ class CMario : public CGameObject
 	CKoopas* Koopas = NULL;
 	
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(){}
+	CMario(float x, float y, int col) : CGameObject(x, y)
 	{
+		color = col;
 		IsInMap = 0;
 		isEndTurn = isMoveDown = isMoveLeft = isMoveRight = isMoveUp = isSwitch = false;;
 		isChangeDirection = false;
@@ -364,6 +389,7 @@ public:
 	void setIsGetInOutPipe(bool a) { isGetInOutPipe = a; }
 	void setIsDelevel(bool a) { isDelevel = a; }
 	void setTimeSwitching(ULONGLONG a) { time_switching = a; }
+	void setIsSitting(bool a) { isSitting = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -386,6 +412,7 @@ public:
 	bool getIsFallDown() { return isFallDown; }
 	bool getIsHolding() { return isHolding; }
 	bool getIsDelevel() { return isDelevel; }
+	int getColor() { return color; }
 	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getRunningStart() { return running_start; }

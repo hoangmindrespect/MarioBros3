@@ -14,7 +14,8 @@ AssetFile/questionblock.txt
 AssetFile/redmushroom.txt
 AssetFile/bullet.txt
 AssetFile/piranha.txt
-AssetFile/GrassInMap.txt
+AssetFile/WorldMap.txt
+AssetFile/intro.txt
 
 #
 [OBJECTS]
@@ -22,8 +23,12 @@ AssetFile/GrassInMap.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+#BACK GROUND - BLACK
 6	128	94	1000	1000	1	166037
 6	128	214	1000	1000	1	166037
 
+#INTRO
 20	128	94
+
+#MAIN ROAD
 5 	16	204	32	36	8	96012	96012	96012	1	0
