@@ -253,6 +253,7 @@
     <Text Include="AssetFile\ScoreGame.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Downloads\Mario Untitled-1.png" />
     <Image Include="textures\bbox.png" />
     <Image Include="textures\bbox2.jpg" />
     <Image Include="textures\black.png" />

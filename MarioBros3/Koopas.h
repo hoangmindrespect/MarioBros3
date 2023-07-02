@@ -48,12 +48,14 @@
 
 #define ID_ANI_GREEN_KOOPAS_RETURN_DOWN 5064
 #define ID_ANI_GREEN_KOOPAS_RETURN_UP 5065	
+
+#define ID_ANI_BLACK_KOOPAS_DIE_DOWN 5068
 class CKoopas : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
-	int type; // 1 red 2 green 3 jump
+	int type; // 1 red 2 green 3 jump 4 black just for intro
 	ULONGLONG die_start;
 	ULONGLONG return_start;
 	ULONGLONG jumping_start;

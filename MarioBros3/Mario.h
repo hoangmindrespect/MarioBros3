@@ -98,6 +98,8 @@
 #define ID_ANI_MARIO_KICK_LEFT 1003
 
 #define ID_ANI_MARIO_GET_INOUT_PIPE 1010
+#define ID_ANI_MARIO_FELL_ON_THE_HEAD	1313
+#define ID_ANI_MARIO_LOOKUP	1314
 
 #define ID_ANI_MARIO_DIE 999
 
@@ -270,6 +272,10 @@ class CMario : public CGameObject
 	bool isGetInOutPipe;		//trạng thái đi ra đi vào ống nước.
 	bool isFallDown;			// kiểm tra điểm rơi của mario => chỉnh camera
 	bool isDelevel;
+
+	bool isFellOnTheHead;
+	bool isLookUp;
+
 	float maxVx;
 	float ax;					// acceleration on x 
 	float ay;					// acceleration on y 
@@ -331,6 +337,8 @@ public:
 		isFallDown = false;
 		isGetInOutPipe = false;
 		isDelevel = false;
+		isFellOnTheHead = false;
+		isLookUp = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -390,6 +398,7 @@ public:
 	void setIsDelevel(bool a) { isDelevel = a; }
 	void setTimeSwitching(ULONGLONG a) { time_switching = a; }
 	void setIsSitting(bool a) { isSitting = a; }
+	void setIsFellOnTheHead(bool a) { isFellOnTheHead = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

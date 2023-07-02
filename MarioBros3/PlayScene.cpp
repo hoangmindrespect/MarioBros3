@@ -410,7 +410,7 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = dynamic_cast<CMario*>(player);
 	vector<LPGAMEOBJECT> coObjects;
 
-	if (player != NULL) // player will be nullptr if play intro scene
+	if (!IsIntroScene()) // player will be nullptr if play intro scene
 	{
 		//if mario is under the DEAD_ZONE -> mario die
 		if (mario->gety() > DEAD_ZONE)
@@ -546,7 +546,10 @@ THERE:
 			objects[i]->Update(dt, &coObjects);
 		}
 	}
-	if (player == NULL) return;
+	if (player == NULL) {
+		PurgeDeletedObjects();
+		return;
+	}
 	/*if (player->getx() > 689)
 	{
 		if (isCreateGoomba == false)

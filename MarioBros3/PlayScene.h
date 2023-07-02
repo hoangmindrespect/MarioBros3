@@ -54,7 +54,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
-
+	static bool IsIntroScene() { return (!player) ? true : false; }
 	void Clear();
 	void PurgeDeletedObjects();
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);

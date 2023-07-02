@@ -60,7 +60,15 @@ void CKoopas::OnNoCollision(DWORD dt)
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 
-	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (dynamic_cast<CKoopas*>(e->obj)) {
+		CKoopas* des = dynamic_cast<CKoopas*>(e->obj);
+		if (des->GetState() == KOOPAS_STATE_DIE_DOWN || des->GetState() == KOOPAS_STATE_DIE_UP)
+		{
+			CEffect* a = new CEffect(des->getx(), des->gety(), 12);
+			CPlayScene::objects.push_back(a);
+			e->obj->Delete();
+		}
+	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomBa(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
@@ -201,6 +209,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (type == 4)
+	{
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		return;
+	}
+
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	if (state == JUMP_KOOPAS_STATE_JUMPING)
 	{
@@ -213,7 +228,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
 	{
-		if (mario->getIsHolding()) {
+		if (mario != NULL && mario->getIsHolding()) {
 
 			float mx = mario->getx();
 			float my = mario->gety();
@@ -329,7 +344,7 @@ void CKoopas::Render()
 			aniId = ID_ANI_KOOPAS_RETURN_UP;
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	}
-	else if (type == 2 || type == 3)
+	else if (type == 2 || type == 3 || type == 4)
 	{
 		int aniId = ID_ANI_GREEN_KOOPAS_WALKING_RIGHT;
 		if (state == JUMP_KOOPAS_STATE_JUMPING)
@@ -344,7 +359,12 @@ void CKoopas::Render()
 		else if (state == KOOPAS_STATE_WALKING_LEFT)
 			aniId = ID_ANI_GREEN_KOOPAS_WALKING_LEFT;
 		else if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN)
-			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
+		{
+			if(type == 4)
+				aniId = ID_ANI_BLACK_KOOPAS_DIE_DOWN;
+			else
+				aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
+		}
 		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
 			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN;
 		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)

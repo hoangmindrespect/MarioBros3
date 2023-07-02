@@ -52,12 +52,17 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		time_start = GetTickCount64();
 		vx = vy = ax = ay = 0.0f;
 	}
-	else if (k == 9 || k == 10) // phải cao
+	else if (k == 9 || k == 10 || k == 12) // phải cao
 	{
-		if (mario->getnx() > 0)
-			vx = 0.12f;
+		if (mario != NULL)
+		{
+			if(mario->getnx() > 0)
+				vx = 0.12f;
+			else
+				vx = -0.12f;
+		}
 		else
-			vx = -0.12f;
+			vx = 0.12f;
 		vy = -0.65f;
 		ax = 0;
 		ay = 0.003f;
@@ -100,6 +105,10 @@ void CEffect::Render()
 	else if (type == 11)
 	{
 		idAni = ID_RED_ONE_UP;
+	}
+	else if (type == 12)
+	{
+		idAni = ID_ANI_BLACK_KOOPAS_DIE_UP;
 	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(idAni)->Render(x, y);

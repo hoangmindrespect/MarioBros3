@@ -45,6 +45,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			untouchable = 0;
 		}
 		
+		if (CPlayScene::IsIntroScene())
+		{
+			//DebugOut(L"hi");
+			if (isFellOnTheHead)
+			{
+				if (GetTickCount64() - time_switching > 300)
+				{
+					isFellOnTheHead = false;
+					time_switching = GetTickCount64();
+					isLookUp = true;
+				}
+			}
+
+			if (isLookUp)
+			{
+				if (GetTickCount64() - time_switching > 500)
+				{
+					isLookUp = false;
+				}
+			}
+		}
+
 		if (state == MARIO_STATE_DIE)
 		{
 			if (GetTickCount64() - die_start > 2000)
@@ -327,6 +349,12 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (CPlayScene::IsIntroScene())
+			{
+				vy = -0.02f;
+				ay = MARIO_GRAVITY * 4;
+				vx = -0.02f;
+			}
 			CPlayScene::point += 100;
 			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 6);
 			CPlayScene::objects.push_back(a);
@@ -400,14 +428,11 @@ void CMario::OnCollisionWithRedMushRoom(LPCOLLISIONEVENT e)
 	if (mus->getType() == 1)
 	{
 		this->SetLevel(MARIO_LEVEL_BIG);
-		if (CPlayScene::player != NULL)
-		{
-			isChanging = true;
-			time_switching = GetTickCount64();
-			CPlayScene::point += 1000;
-			CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-			CPlayScene::objects.push_back(a);
-		}
+		isChanging = true;
+		time_switching = GetTickCount64();
+		CPlayScene::point += 1000;
+		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+		CPlayScene::objects.push_back(a);
 	}
 	else
 	{
@@ -531,7 +556,14 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_UP)
 	{
 		LPGAME game = CGame::GetInstance();
-
+		if (e->ny >= 0)
+		{
+			if (e->obj->GetState() == KOOPAS_STATE_DIE_DOWN)
+			{
+				time_switching = GetTickCount64();
+				isFellOnTheHead = true;
+			}
+		}		
 		//kick: die + collide + not pressA => kick
 		if (!game->IsKeyDown(DIK_A))
 		{
@@ -581,16 +613,23 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
-	if (level != MARIO_LEVEL_TAIL)
+	if (CPlayScene::IsIntroScene())
 	{
 		SetLevel(MARIO_LEVEL_TAIL);
-		isChanging = true;
-		time_switching = GetTickCount64();
+	}
+	else
+	{
+		if (level != MARIO_LEVEL_TAIL)
+		{
+			SetLevel(MARIO_LEVEL_TAIL);
+			isChanging = true;
+			time_switching = GetTickCount64();
+		}
+		CPlayScene::point += 1000;
+		CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
+		CPlayScene::objects.push_back(a);
 	}
 	e->obj->Delete();
-	CPlayScene::point += 1000;
-	CEffect* a = new CEffect(x, y - MARIO_BIG_BBOX_HEIGHT / 2, 7);
-	CPlayScene::objects.push_back(a);
 }
 
 void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
@@ -999,6 +1038,11 @@ int CMario::GetAniIdBig()
 	if (isGetInOutPipe)
 		aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
 
+	if (isFellOnTheHead)
+		aniId = ID_ANI_MARIO_FELL_ON_THE_HEAD;
+	if (isLookUp)
+		aniId = ID_ANI_MARIO_LOOKUP;
+
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
 	return aniId;
@@ -1149,7 +1193,7 @@ int CMario::GetAniIdTail()
 
 	if (aniId == -1)
 	{
-		aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
+		aniId = ID_ANI_MARIO_TAIL_IDLE_LEFT;
 	}
 	return aniId;
 }

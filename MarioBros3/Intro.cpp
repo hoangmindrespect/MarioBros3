@@ -1,6 +1,5 @@
 ﻿#include "Intro.h"
 #include "debug.h"
-#include "Leaf.h"
 #include "Mushroom.h"
 
 bool::CIntro::isHitRed = false;
@@ -124,22 +123,64 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		{
 			if (!isCreateObject)
 			{
-				CKoopas* koo = new CKoopas(red->getx(), 10.0f, 2);
-				koo->SetState(KOOPAS_STATE_DIE_DOWN);
-				
-				CLeaf* leaf = new CLeaf(red->getx() + 20.0f, 10.0f);
+				CKoopas* koo4 = new CKoopas(red->getx() + 50.0f, 10.0f, 4);
+				koo4->SetState(KOOPAS_STATE_DIE_DOWN);
+				CKoopas* koo2 = new CKoopas(red->getx() + 5.0f, 10.0f, 2);
+				koo2->SetState(KOOPAS_STATE_DIE_DOWN);
+
+				goo = new CGoomba(red->getx() - 50.0f, 1);
+				goo->SetSpeed(0.0f, KOOPAS_GRAVITY);
+				leaf = new CLeaf(red->getx(), 10.0f);
 				CRedMushroom* mus = new CRedMushroom(red->getx() - 50.0f, 10.0f, 1);
 				mus->setnx(-1);
 				mus->setIsUp(true);
 				mus->setIsDown(true);
 				mus->setIsOut(true);
-				mus->setAy(MUSHROOM_GRAVITY);
-				mus->setVx(-MUSHROOM_WALKING_SPEED);
+				mus->setAy(0.0005f);
+				mus->setVx(-0.03f);
+				CPlayScene::objects.push_back(goo);
 				CPlayScene::objects.push_back(leaf);
 				CPlayScene::objects.push_back(mus);
-				CPlayScene::objects.push_back(koo);
+				CPlayScene::objects.push_back(koo4);	
+				CPlayScene::objects.push_back(koo2);
+
 			}
 			isCreateObject = true;
+			if (!leaf->IsDeleted())
+			{
+				if (leaf->gety() > 70.0f)
+				{
+					if (red->getlevel() != MARIO_LEVEL_TAIL) {
+						red->SetState(MARIO_STATE_JUMP);
+					}
+				}
+			}
+			else
+			{
+				if (goo->GetState() != GOOMBA_STATE_DIE)
+				{
+					red->SetIsRelease(true);
+					red->SetSpeed(-0.06f, 0.07f);
+					goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
+				}
+
+				if (isChangeDirection)
+				{
+					red->SetVx(MARIO_WALKING_SPEED);
+					red->SetState(MARIO_STATE_WALKING_RIGHT);
+				}
+
+				if (red->getIsOnPlatForm() && !isChangeDirection && goo->IsDeleted())
+				{
+					red->SetVx(-MARIO_WALKING_SPEED);
+					red->Setax(MARIO_ACCEL_WALK_X);
+					red->setNx(1);
+					isChangeDirection = true;
+				}
+				
+
+			}
+
 		}
 	}
 	CGameObject::Update(dt, coObjects);

@@ -2,7 +2,8 @@
 
 #include "GameObject.h"
 #include "Mario.h"
-
+#include "Leaf.h"
+#include "Goomba.h"
 #define TOP_EDGE_LIMIT	-88.0f
 #define BOTTOM_EDGE_LIMIT	94.0f
 #define VELOCITY_OPEN_CURTAIN	0.07f
@@ -27,17 +28,20 @@ class CIntro : public CGameObject {
 	bool flag;
 	bool isFallDown;
 	bool isCreateObject; // start stage 2
+	bool isChangeDirection;
 	ULONGLONG time_start;
 
 	//object in intro
 	CMario* red = new CMario();
 	CMario* green = new CMario();
+	CLeaf* leaf = new CLeaf();
+	CGoomba* goo = NULL;
 public:
 	static bool isHitRed;
 
 	CIntro(float x, float y) : CGameObject(x, y) {
 		isUp = isDown = flag = isCreateMario = isHitRed = isFallDown = false;
-		isCreateObject = false;
+		isCreateObject = isChangeDirection = false;
 		time_start = GetTickCount64();
 	}
 	void Render();

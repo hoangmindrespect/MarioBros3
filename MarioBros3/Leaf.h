@@ -23,6 +23,7 @@ class CLeaf : public CGameObject {
 	float rightmax = x + 32.0f;
 	float rightmin = x;
 public:
+	CLeaf(){}
 	CLeaf(float x, float y) : CGameObject(x, y) {
 		maxy = y - 45;
 		idsprite = ID_ANI_LEAF_RIGHT;
