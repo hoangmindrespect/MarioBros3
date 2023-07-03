@@ -43,7 +43,7 @@ class CIntro : public CGameObject {
 	bool isKoopasChangedDirection;
 	bool isSmallChangedDirectFirst;
 	bool isSmallChangedDirectSecond;
-
+	bool isCreateFastKoopas = false;
 	ULONGLONG time_start;
 	ULONGLONG bracing_start;
 	//object in intro
@@ -53,6 +53,8 @@ class CIntro : public CGameObject {
 	CGoomba* goo = NULL;
 	CKoopas* second_koopas = NULL;
 	CKoopas* first_koopas = NULL;
+	CKoopas* koopas_number_one = NULL;
+
 public:
 	static bool isHitMario;
 	static bool isChooseOptionOne;

@@ -388,13 +388,37 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (mario_x > 288.0f)
 		{
+			//red->setx(288.0f);
 			if (!isChooseOptionOne && !isChooseOptionTwo)
 			{
 				isChooseOptionOne = true;
 				game->MakeKeyUp(DIK_A);
+
+				koopas_number_one = new CKoopas(8.0f, 173.0f, 2);
+				koopas_number_one->setVx(KOOPAS_WALKING_SPEED);
+
+				CKoopas* koopas_number_two = new CKoopas(-48.0f, 173.0f, 2);
+				koopas_number_two->setVx(KOOPAS_WALKING_SPEED);
+
+				CKoopas* koopas_number_three = new CKoopas(-104.0f, 173.0f, 2);
+				koopas_number_three->setVx(KOOPAS_WALKING_SPEED);
+
+				CPlayScene::objects.push_back(koopas_number_one);
+				CPlayScene::objects.push_back(koopas_number_two);
+				CPlayScene::objects.push_back(koopas_number_three);
 			}
 		}
-		//CKoopas * koopas_number_one = new CKoopas()
+		if (!isCreateFastKoopas)
+		{
+			if (koopas_number_one != NULL && koopas_number_one->getx() > 268.0f)
+			{
+				CKoopas* koopas_number_four = new CKoopas(-104.0f, 173.0f, 2);
+				koopas_number_four->setVx(KOOPAS_WALKING_SPEED * 3);
+				isCreateFastKoopas = true;
+				CPlayScene::objects.push_back(koopas_number_four);
+
+			}
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 }

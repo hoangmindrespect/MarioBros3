@@ -592,7 +592,6 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		{
 			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
 			{
-				DebugOut(L"hoyyyyy");
 				koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
 			}
 			else if (koopas->GetState() == KOOPAS_STATE_DIE_UP)
