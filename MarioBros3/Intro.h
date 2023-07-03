@@ -30,6 +30,7 @@ class CIntro : public CGameObject {
 	bool isCreateObject; // start stage 2
 	bool isChangeDirection;
 	ULONGLONG time_start;
+	ULONGLONG bracing_start;
 
 	//object in intro
 	CMario* red = new CMario();

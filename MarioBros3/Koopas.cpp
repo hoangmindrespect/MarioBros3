@@ -62,11 +62,14 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CKoopas*>(e->obj)) {
 		CKoopas* des = dynamic_cast<CKoopas*>(e->obj);
-		if (des->GetState() == KOOPAS_STATE_DIE_DOWN || des->GetState() == KOOPAS_STATE_DIE_UP)
+		if (CPlayScene::IsIntroScene())
 		{
-			CEffect* a = new CEffect(des->getx(), des->gety(), 12);
-			CPlayScene::objects.push_back(a);
-			e->obj->Delete();
+			if (des->GetState() == KOOPAS_STATE_DIE_DOWN || des->GetState() == KOOPAS_STATE_DIE_UP)
+			{
+				CEffect* a = new CEffect(des->getx(), des->gety(), 12);
+				CPlayScene::objects.push_back(a);
+				e->obj->Delete();
+			}
 		}
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
@@ -90,7 +93,14 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 					SetState(KOOPAS_STATE_WALKING_RIGHT);
 			}
 		}
-		
+		else
+		{
+			if (state == KOOPAS_STATE_FALL_INTO_MARIO)
+			{
+				vx = vy = 0;
+				SetState(KOOPAS_STATE_DIE_DOWN);
+			}
+		}
 	}
 	
 
@@ -209,7 +219,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-	if (type == 4)
+
+	if (CPlayScene::IsIntroScene())
 	{
 		CGameObject::Update(dt, coObjects);
 		CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -365,7 +376,7 @@ void CKoopas::Render()
 			else
 				aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN;
 		}
-		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN)
+		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_FALL_INTO_MARIO) // INTRO SCENE
 			aniId = ID_ANI_GREEN_KOOPAS_DIE_DOWN_SPIN;
 		else if (state == KOOPAS_STATE_DIE_UP || state == KOOPAS_STATE_IS_HOLD_UP)
 			aniId = ID_ANI_GREEN_KOOPAS_DIE_UP;
@@ -444,6 +455,10 @@ void CKoopas::SetState(int state)
 	case JUMP_KOOPAS_STATE_JUMPING:
 		ay = KOOPAS_GRAVITY;
 		vy = -0.26f;
+		break;
+	case KOOPAS_STATE_FALL_INTO_MARIO:
+		ay = KOOPAS_GRAVITY;
+		vx = -0.03f;
 		break;
 	}
 	

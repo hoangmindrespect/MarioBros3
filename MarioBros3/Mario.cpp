@@ -348,13 +348,15 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_KOOPAS)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			// in this time: MARIO in state release flying so vy is const -> 
 			if (CPlayScene::IsIntroScene())
 			{
-				vy = -0.02f;
-				ay = MARIO_GRAVITY * 4;
-				vx = -0.02f;
+				SetIsRelease(false);
+				SetState(MARIO_STATE_JUMP);
+				vy = -0.1f;
+				return;
 			}
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
 			CPlayScene::point += 100;
 			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 6);
 			CPlayScene::objects.push_back(a);
@@ -553,17 +555,23 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				DeLevel(this);
 		}
 	}
-	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_UP)
+	else if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_DIE_UP || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_UP || state == KOOPAS_STATE_FALL_INTO_MARIO)
 	{
 		LPGAME game = CGame::GetInstance();
-		if (e->ny >= 0)
+		if (e->ny > 0)
 		{
-			if (e->obj->GetState() == KOOPAS_STATE_DIE_DOWN)
+			if (CPlayScene::IsIntroScene())
 			{
-				time_switching = GetTickCount64();
-				isFellOnTheHead = true;
+				if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+				{
+					time_switching = GetTickCount64();
+					koopas->SetState(KOOPAS_STATE_FALL_INTO_MARIO);
+					isFellOnTheHead = true;
+					return;
+				}
 			}
-		}		
+		}	
+
 		//kick: die + collide + not pressA => kick
 		if (!game->IsKeyDown(DIK_A))
 		{
@@ -575,7 +583,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			
 			isKicking = true;
 			kicking_start = GetTickCount64();
-			if(koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN)
+			if(koopas->GetState() == KOOPAS_STATE_DIE_DOWN || koopas->GetState() == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_FALL_INTO_MARIO)
 				koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
 			else
 				koopas->SetState(KOOPAS_STATE_DIE_UP_SPIN);
@@ -1035,11 +1043,14 @@ int CMario::GetAniIdBig()
 		else
 			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
 	}
-	if (isGetInOutPipe)
-		aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
+	if (CPlayScene::IsIntroScene())
+	{
+		if (isGetInOutPipe)
+			aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
 
-	if (isFellOnTheHead)
-		aniId = ID_ANI_MARIO_FELL_ON_THE_HEAD;
+		if (isFellOnTheHead)
+			aniId = ID_ANI_MARIO_FELL_ON_THE_HEAD;
+	}
 	if (isLookUp)
 		aniId = ID_ANI_MARIO_LOOKUP;
 

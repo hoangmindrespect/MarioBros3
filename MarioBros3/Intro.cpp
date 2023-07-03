@@ -123,9 +123,9 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		{
 			if (!isCreateObject)
 			{
-				CKoopas* koo4 = new CKoopas(red->getx() + 50.0f, 10.0f, 4);
+				CKoopas* koo4 = new CKoopas(red->getx() + 80.0f, 10.0f, 4);
 				koo4->SetState(KOOPAS_STATE_DIE_DOWN);
-				CKoopas* koo2 = new CKoopas(red->getx() + 5.0f, 10.0f, 2);
+				CKoopas* koo2 = new CKoopas(red->getx(), 10.0f, 2);
 				koo2->SetState(KOOPAS_STATE_DIE_DOWN);
 
 				goo = new CGoomba(red->getx() - 50.0f, 1);
@@ -160,21 +160,23 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				if (goo->GetState() != GOOMBA_STATE_DIE)
 				{
 					red->SetIsRelease(true);
-					red->SetSpeed(-0.06f, 0.07f);
+					red->SetSpeed(-0.07f, 0.07f);
 					goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
 				}
 
-				if (isChangeDirection)
+				if (isChangeDirection && GetTickCount64() - bracing_start > 300)
 				{
 					red->SetVx(MARIO_WALKING_SPEED);
 					red->SetState(MARIO_STATE_WALKING_RIGHT);
 				}
 
+				// brace
 				if (red->getIsOnPlatForm() && !isChangeDirection && goo->IsDeleted())
 				{
 					red->SetVx(-MARIO_WALKING_SPEED);
 					red->Setax(MARIO_ACCEL_WALK_X);
 					red->setNx(1);
+					bracing_start = GetTickCount64();
 					isChangeDirection = true;
 				}
 				
