@@ -3,7 +3,11 @@
 #include "Mushroom.h"
 #include "Background.h"
 
-bool::CIntro::isHitRed = false;
+bool::CIntro::isHitMario = false;
+bool::CIntro::isChooseOptionOne = false;
+bool::CIntro::isChooseOptionTwo = false;
+bool::CIntro::isDoneStageTwo = false;
+
 void CIntro::Render()
 {
 	if (!isUp)
@@ -20,7 +24,7 @@ void CIntro::Render()
 	if (isCreateObject)
 	{
 		CSprites* s = CSprites::GetInstance();
-		s->Get(166039)->Draw(x, y);
+		s->Get(ID_MAIN_SCREEN_INTRO)->Draw(x, y);
 		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(ID_NUMBER_THREE)->Render(x + 5.0F, y + 25.0F);
 	}
@@ -31,34 +35,48 @@ void CIntro::Render()
 			CAnimations* animations = CAnimations::GetInstance();
 			animations->Get(ID_ANI_GREEN_MARIO_WALKING_RIGHT)->Render(8.0f, 173.0f);
 			animations->Get(ID_ANI_MARIO_WALKING_LEFT)->Render(248.0f, 173.0f);
-
 		}
 	}
-	if (isDisplayOption)
+	if (isChooseOptionOne || isChooseOptionTwo)
 	{
 		CSprites* s = CSprites::GetInstance();
+		if(isChooseOptionOne)
+			s->Get(ID_OPTION_ONE_PLAYER)->Draw(x, y + 72.0f);
+		else if(isChooseOptionTwo)
+			s->Get(ID_OPTION_TWO_PLAYER)->Draw(x, y + 72.0f);
 
-		s->Get(ID_OPTION_ONE_PLAYER)->Draw(x, y + 72.0f);
 	}
 	RenderBoundingBox();
 }
 void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	LPGAME game = CGame::GetInstance();
 
-	//control open the curtain and drop title MARIO BROS 3
+	////////////////		STAGE 1: OPEN THE CURTAIN AND DROP DOWN THE TITLE [MARIO BROS 3]		//////////////////////
+	float mario_x = 0.0f, mario_y = 0.0f, lugigi_x = 0.0f, lugigi_y = 0.0f;
+	if (red != NULL)
+		red->GetPosition(mario_x, mario_y);
+	if (green != NULL)
+		green->GetPosition(lugigi_x, lugigi_y);
+
+	/*STEP 1*/
 	if(y > TOP_EDGE_LIMIT && !isUp)
 	{
 		y -= VELOCITY_OPEN_CURTAIN * dt;
-		if (y < 50.0F)
+
+		//curtain open a half -> mario and lugigi appear
+		if (y < COORDINATE_TO_CREATE_LU_MA)
 		{
 			if (!isCreateMario)
 			{
+				//delay before lugigi and mario moving
 				if (GetTickCount64() - time_start > 2000)
 				{
+					//1.1: CREATE LUGIGI AT THE LEFT BACK AND MOVE
 					green = new CMario(8.0f, 173.0f, 2);
 					green->setLevel(MARIO_LEVEL_BIG);
 					green->SetState(MARIO_STATE_WALKING_RIGHT);
 
+					//1.2: CREATE MARIO AT THE RIGHT BACK AND MOVE
 					red = new CMario(248.0f, 173.0f, 1);
 					red->setLevel(MARIO_LEVEL_BIG);
 					red->SetState(MARIO_STATE_WALKING_LEFT);
@@ -67,35 +85,36 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					CPlayScene::objects.push_back(green);
 					isCreateMario = true;
 				}
-		}
+			}
 
 		}
 	}
+	/*STEP 2*/
 	else if(y < BOTTOM_EDGE_LIMIT && !isDown)
 	{
 		isUp = true;
-		if (green->getx() > 5.0f)
+		if (lugigi_x > COORDINATE_X_LUGIGI_JUMP)
 		{
-			if (!isHitRed)
+			//2.1: LUGIGI JUMPING TO HIT MARIO
+			if (!isHitMario)
 			{
 				green->SetState(MARIO_STATE_JUMP);
 			}
-			else
+			else //2.2: LUGIGI FALL ONTO MARIO AND DROP TITLE
 			{
-				if (green->gety() > 10.0f && !isFallDown)
+				if (green->gety() > TOP_EDGE_LIMIT_LUGIGI && !isFallOntoMario)
 				{
-					green->SetVy(-0.2f);
-					green->SetVx(0.03f);
+					green->SetSpeed(MARIO_WALKING_SPEED - 0.03f, -0.2f);
 				}
 				else
 				{
-					if (!isFallDown) // cần xử lý lại chỗ này nha bạn ơi 
+					if (!isFallOntoMario)
 					{
 						red->setIsSitting(false);
-						red->SetVy(0.0f);
-						red->sety(red->gety() - 10.0f);
-						isFallDown = true;
+						red->sety(red->gety() - (MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_SITTING_BBOX_HEIGHT) / 2);
+						isFallOntoMario = true;
 					}
+					//ensure lugigi collide with bottom edge and change direction
 					green->SetVy(VELOCITY_DROP_TITLE_GAME);
 					green->setx(green->getx() + 0.05f * dt);
 					y += VELOCITY_DROP_TITLE_GAME * dt;
@@ -108,147 +127,175 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		if(!isDown)
 			time_start = GetTickCount64();
 		isDown = true;
+		//ensure main screen has true position
 		y = BOTTOM_EDGE_LIMIT;
 	}
 
 	// shaking the title when drop it down
-	if (isUp && isDown )
+	if (isUp && isDown && !isShaked)
+	{
+		if (GetTickCount64() - time_start <= 1000)
+		{
+			if (!flag)
+			{
+				y -= 1.0f; flag = true;
+			}
+			else
+			{
+				y += 1.0f; flag = false;
+			}
+
+		}
+		else
+			isShaked = true;
+	}
+
+	////////////////		STAGE 2: CREATE AND HANDLE OBJECT		//////////////////////
+	if (isShaked && !isDoneStageTwo)
 	{
 		if (!isLugigiThrowShell)
 		{
-			if (GetTickCount64() - time_start <= 1000)
+			/*STEP 1: CREATE OBJECT*/
+			if (!isCreateObject)
 			{
-				if (!flag)
-				{
-					y -= 1; flag = true;
-				}
-				else
-				{
-					y += 1; flag = false;
-				}
+				//black shell
+				CKoopas* black_shell = new CKoopas(mario_x + 60.0f, TOP_EDGE_LIMIT_LUGIGI, 4);
+				black_shell->SetState(KOOPAS_STATE_DIE_DOWN);
+
+				// koopas - which fall onto mario
+				first_koopas = new CKoopas(mario_x, TOP_EDGE_LIMIT_LUGIGI, 2);
+				first_koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+
+				//goomba
+				goo = new CGoomba(mario_x - 50.0f, 1);
+				goo->SetSpeed(0.0f, KOOPAS_GRAVITY);
+
+				//leaf
+				leaf = new CLeaf(mario_x, 10.0f);
+
+				//Mushroom -> lazy to redefine -> I set it from here
+				CRedMushroom* mus = new CRedMushroom(mario_x - 50.0f, TOP_EDGE_LIMIT_LUGIGI, 1);
+				mus->setnx(-1);
+				mus->setIsUp(true);
+				mus->setIsDown(true);
+				mus->setIsOut(true);
+				mus->setAy(0.0005f);
+				mus->setVx(-0.03f);
+
+				CPlayScene::objects.push_back(goo);
+				CPlayScene::objects.push_back(leaf);
+				CPlayScene::objects.push_back(mus);
+				CPlayScene::objects.push_back(black_shell);
+				CPlayScene::objects.push_back(first_koopas);
 
 			}
-			else // main menu with objects: mushroom, goomba,green defend koopas, star, black defend koopas fall down
+			isCreateObject = true;
+
+			/*STEP 2: MARIO GET LEAF AND UP LEVEL = TAIL*/
+			if (!leaf->IsDeleted())
 			{
-				if (!isCreateObject)
+				if (leaf->gety() > 70.0f)
 				{
-					CKoopas* koo4 = new CKoopas(red->getx() + 80.0f, 10.0f, 4);
-					koo4->SetState(KOOPAS_STATE_DIE_DOWN);
-					koo_0 = new CKoopas(red->getx(), 10.0f, 2);
-					koo_0->SetState(KOOPAS_STATE_DIE_DOWN);
-
-					goo = new CGoomba(red->getx() - 50.0f, 1);
-					goo->SetSpeed(0.0f, KOOPAS_GRAVITY);
-					leaf = new CLeaf(red->getx(), 10.0f);
-					CRedMushroom* mus = new CRedMushroom(red->getx() - 50.0f, 10.0f, 1);
-					mus->setnx(-1);
-					mus->setIsUp(true);
-					mus->setIsDown(true);
-					mus->setIsOut(true);
-					mus->setAy(0.0005f);
-					mus->setVx(-0.03f);
-					CPlayScene::objects.push_back(goo);
-					CPlayScene::objects.push_back(leaf);
-					CPlayScene::objects.push_back(mus);
-					CPlayScene::objects.push_back(koo4);
-					CPlayScene::objects.push_back(koo_0);
-
-				}
-				isCreateObject = true;
-				if (!leaf->IsDeleted())
-				{
-					if (leaf->gety() > 70.0f)
-					{
-						if (red->getlevel() != MARIO_LEVEL_TAIL) {
-							red->SetState(MARIO_STATE_JUMP);
-						}
+					if (red->getlevel() != MARIO_LEVEL_TAIL) {
+						red->SetState(MARIO_STATE_JUMP);
 					}
 				}
-				else
+			}
+			/*STEP 3: MARIO IS FLYING*/
+			else
+			{
+				//3.1: MAKE GOOMBA MOVING AND HIT GOOMBA
+				if (goo->GetState() != GOOMBA_STATE_DIE)
 				{
-					if (goo->GetState() != GOOMBA_STATE_DIE)
-					{
-						red->SetIsRelease(true);
-						red->SetSpeed(-0.07f, 0.07f);
-						goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
-					}
-
-					if (isChangeDirection && GetTickCount64() - bracing_start > 300)
-					{
-						if (!test)
-						{
-							red->SetVx(MARIO_WALKING_SPEED);
-							red->SetState(MARIO_STATE_WALKING_RIGHT);
-						}
-						if (!koo_0->IsDeleted() && koo_0->getx() > 268.0f)
-							koo_0->Delete();
-						// next -> lugigi will hold shell_koopas and kick on to the left
-						if (red->getx() > 185.0f)
-						{
-							test = true;
-							red->SetState(MARIO_STATE_IDLE);
-							if (!isWaitedLugigi)
-							{
-								game->MakeKeyPressed(DIK_A);
-								green = new CMario(278.0f, 173.0f, 2);
-								green->setLevel(MARIO_LEVEL_BIG);
-								green->SetState(MARIO_STATE_WALKING_LEFT);
-								green->setIsHolding(true);
-								koo = new CKoopas(green->getx() - 10.0f, 171.0f, 2);
-								koo->SetState(KOOPAS_STATE_DIE_DOWN);
-								koo->SetAy(0.0f);
-								green->setKoopas(koo);
-								CPlayScene::objects.insert(CPlayScene::objects.begin() + 3, koo);
-								CPlayScene::objects.push_back(green);
-								isWaitedLugigi = true;
-							}
-						}
-
-						if (koo != NULL && green->getIsHolding())
-						{
-							koo->setx(green->getx() - 10.0f);
-							koo->sety(171.0f);
-						}
-
-						if (green->getx() < 228.0f)
-						{
-							red->SetState(MARIO_STATE_WALKING_LEFT);
-							if (red->getx() < 160.0f)
-							{
-								//red->SetState(MARIO_STATE_IDLE);
-								green->setIsHolding(false);
-								koo->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
-								koo->SetSpeed(-0.15f, 0.1f);
-								isLugigiThrowShell = true;
-								green->SetState(MARIO_STATE_WALKING_RIGHT);
-							}
-							else
-							{
-								green->SetState(MARIO_STATE_IDLE);
-							}
-						}
-					}
-
-					// brace
-					if (red->getIsOnPlatForm() && !isChangeDirection && goo->IsDeleted())
-					{
-						red->SetVx(-MARIO_WALKING_SPEED);
-						red->Setax(MARIO_ACCEL_WALK_X);
-						red->setNx(1);
-						bracing_start = GetTickCount64();
-						isChangeDirection = true;
-					}
-
-
+					red->SetIsRelease(true);
+					red->SetSpeed(-0.07f, 0.07f);
+					goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
 				}
 
+				//3.3 BRACING TO CHANGE DIRECTION
+				if (isChangeDirection && GetTickCount64() - bracing_start > 300)
+				{
+					//3.3.1 Mario will moving and kick first koopas -> first koopas hit black shell
+					if (!isFaceToFaceLugigi)
+					{
+						red->SetVx(MARIO_WALKING_SPEED);
+						red->SetState(MARIO_STATE_WALKING_RIGHT);
+					}
+
+					if (!first_koopas->IsDeleted() && first_koopas->getx() > 268.0f)
+						first_koopas->Delete();
+
+					// 3.3.2 Mario stop and waiting Lugigi hodling shell come out
+					if (mario_x > 185.0f)
+					{
+						isFaceToFaceLugigi = true;
+						red->SetState(MARIO_STATE_IDLE);
+						if (!isWaitedLugigi)
+						{
+							game->MakeKeyPressed(DIK_A);
+
+							//reset coordinate and state of lugigi
+							green = new CMario(278.0f, 173.0f, 2);
+							green->setLevel(MARIO_LEVEL_BIG);
+							green->SetState(MARIO_STATE_WALKING_LEFT);
+							green->setIsHolding(true);
+
+							//define second koopas is hold by lugigi
+							second_koopas = new CKoopas(lugigi_x - 10.0f, 171.0f, 2);
+							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN);
+							second_koopas->SetAy(0.0f);
+
+							//ensure second koopas is drawn before Mario
+							CPlayScene::objects.insert(CPlayScene::objects.begin() + 3, second_koopas);
+							CPlayScene::objects.push_back(green);
+							isWaitedLugigi = true;
+						}
+					}
+
+					//update position second koopas arcoding Lugigi
+					if (second_koopas != NULL && green->getIsHolding())
+						second_koopas->SetPosition(lugigi_x - 10.0f, 171.0f);
+
+					//3.3.3 Lugigi stop at this position and Kick second koopas
+					if (green->getx() < 228.0f)
+					{
+						red->SetState(MARIO_STATE_WALKING_LEFT);
+						//when red get right positon -> lugigi kick 
+						if (red->getx() < 160.0f)
+						{
+							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+							second_koopas->SetSpeed(-0.15f, 0.1f);
+							
+							green->setIsHolding(false);
+							green->SetState(MARIO_STATE_WALKING_RIGHT);
+
+							isLugigiThrowShell = true;
+						}
+						else
+						{
+							green->SetState(MARIO_STATE_IDLE);
+						}
+					}
+				}
+
+				//3.2: MAKE MARIO BRACING AFTER HIT GOOMBA
+				if (red->getIsOnPlatForm() && !isChangeDirection && goo->IsDeleted())
+				{
+					red->SetVx(-MARIO_WALKING_SPEED);
+					red->Setax(MARIO_ACCEL_WALK_X);
+					red->setNx(1);
+					bracing_start = GetTickCount64();
+					isChangeDirection = true;
+				}
 			}
 		}
-		else if(!isDoneStageTwo)
+		/*STEP 3: MARIO HIT SECOND KOOPAS AND HOLD IT TO ATTACK LUGIGI*/
+		else if(!isMarioHitKoopas)
 		{
-			if (koo->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)
+			//3.1: JUMP TO HIT
+			if (second_koopas->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)
 			{
-				if (koo->getx() < red->getx() + 50.0f)
+				if (second_koopas->getx() < red->getx() + 50.0f)
 				{
 					if (red->GetState() != MARIO_STATE_JUMP)
 					{
@@ -257,6 +304,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					}
 				}
 			}
+			//3.2: HOLDING AND KICK SHELL TO ATTACK LUGIGI
 			else
 			{
 				if (red->getIsOnPlatForm())
@@ -264,53 +312,56 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					red->SetState(MARIO_STATE_WALKING_RIGHT);
 					if (red->getIsHolding())
 					{
-						koo->setx(red->getx() + 15.0f);
-						koo->sety(171.0f);
-						koo->SetAy(0.0f);
+						second_koopas->SetPosition(red->getx() + 15.0f, 171.0f);
+						second_koopas->SetAy(0.0f);
 					}
 					if (red->getx() > 130.0f)
 					{
-						isDoneStageTwo = true;
+						isMarioHitKoopas = true;
 						red->SetState(MARIO_STATE_IDLE);
 						red->setIsHolding(false);
-						koo->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
-						koo->setVx(0.15f);
+						second_koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
+						second_koopas->setVx(0.15f);
 					}
 
 				}
 			}
 
 		}
+		/*STEP 4: THE REST ACTION*/
 		else
 		{
-			if (koo->getx() > 268.0f && !koochange)
+			//4.1: MAKE SHELL START FROM LEFT EDGE WHEN IT OUT OF RIGHT EDGE
+			if (second_koopas->getx() > 268.0f && !isKoopasChangedDirection)
 			{
-				koo->setx(-8.0f); 
-				koochange = true;
-			}
-			if (red->getlevel() == MARIO_LEVEL_BIG)
-			{
-				red->SetLevel(MARIO_LEVEL_SMALL);
+				second_koopas->setx(-8.0f);
+				isKoopasChangedDirection = true;
 			}
 
-			if (koo->getx() > 288.0f && !redchange)
+			if (red->getlevel() == MARIO_LEVEL_BIG)
+				red->SetLevel(MARIO_LEVEL_SMALL);
+
+			//4.2: CHANGE DIRECTION
+			if (second_koopas->getx() > 288.0f && !isSmallChangedDirectFirst)
 			{
 				red->SetState(MARIO_STATE_WALKING_RIGHT);
-				redchange = true;
+				isSmallChangedDirectFirst = true;
 			}
 
-			if (redchange && !redchange2)
+			//4.3: CHANGE DIRECTION
+			if (isSmallChangedDirectFirst && !isSmallChangedDirectSecond)
 			{
-				if (red->getx() > 210.0f)
+				if (red->getx() > 215.0f)
 				{
 					red->SetState(MARIO_STATE_WALKING_LEFT);
-					redchange2 = true;
+					isSmallChangedDirectSecond = true;
 				}
 			}
 
-			if (redchange2)
+			//4.4: CHANGE DIRECTION AND DONE STAGE 2
+			if (isSmallChangedDirectSecond)
 			{
-				if (red->getx() < 185.0f)
+				if (mario_x < 185.0f)
 				{
 					if (red->GetState() != MARIO_STATE_IDLE)
 					{
@@ -321,23 +372,30 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					}
 					else
 					{
-						if (GetTickCount64() - time_start > 1000)
+						if (GetTickCount64() - time_start > 500)
 						{
 							red->SetState(MARIO_STATE_WALKING_RIGHT);
-							done = true;
+							isDoneStageTwo = true;
 						}
 					}
-
-					if (done)
-						goto STAGE3;
 				}
 			}
 		}
 	}
-STAGE3:
-	if (red->getx() > 288.0f)
-		isDisplayOption = true;
-	DebugOut(L"%d\n", game->IsKeyDown(DIK_A));
+	////////////////		STAGE 3: HANDLE 3 KOOPAS MOVING	AND DISPLAY OPTION	//////////////////////
+
+	if (isDoneStageTwo)
+	{
+		if (mario_x > 288.0f)
+		{
+			if (!isChooseOptionOne && !isChooseOptionTwo)
+			{
+				isChooseOptionOne = true;
+				game->MakeKeyUp(DIK_A);
+			}
+		}
+		//CKoopas * koopas_number_one = new CKoopas()
+	}
 	CGameObject::Update(dt, coObjects);
 }
 void CIntro::GetBoundingBox(float& l, float& t, float& r, float& b)

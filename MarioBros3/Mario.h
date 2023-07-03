@@ -315,7 +315,6 @@ class CMario : public CGameObject
 	CKoopas* Koopas = NULL;
 	
 public:
-	CMario(){}
 	CMario(float x, float y, int col) : CGameObject(x, y)
 	{
 		color = col;

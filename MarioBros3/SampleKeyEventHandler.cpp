@@ -4,13 +4,33 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "MarioStop.h"
+#include "Intro.h"
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
-	/*if (KeyCode == DIK_W)
+	if (CPlayScene::IsIntroScene)
 	{
-		CGame::GetInstance()->InitiateSwitchScene(5);
-	}*/
+		if (CIntro::isDoneStageTwo)
+		{
+			if (KeyCode == DIK_S)
+			{
+				if (CIntro::isChooseOptionOne)
+				{
+					CIntro::isChooseOptionOne = false;
+					CIntro::isChooseOptionTwo = true;
+				}
+				else
+				{
+					CIntro::isChooseOptionOne = true;
+					CIntro::isChooseOptionTwo = false;
+				}
+			}
+			else if (KeyCode == DIK_W)
+			{
+				CGame::GetInstance()->InitiateSwitchScene(1);
+			}
+		}
+	}
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	if (!mario)
 		return;

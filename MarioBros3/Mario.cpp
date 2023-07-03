@@ -308,7 +308,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			mario->SetVx(0.0f);
 			mario->Setax(0.0f);
 			mario->sety(mario->gety() - 1.0f);
-			CIntro::isHitRed = true;
+			CIntro::isHitMario = true;
 		}
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))

@@ -9,9 +9,13 @@
 #define BOTTOM_EDGE_LIMIT	94.0f
 #define VELOCITY_OPEN_CURTAIN	0.07f
 #define VELOCITY_DROP_TITLE_GAME	0.3f
+#define COORDINATE_TO_CREATE_LU_MA	50.0f
+#define COORDINATE_X_LUGIGI_JUMP	5.0f
+#define TOP_EDGE_LIMIT_LUGIGI	10.0f
 
 #define ID_OPEN_CURTAIN	166036
 #define ID_DROP_TITLE_GAME	166038
+#define ID_MAIN_SCREEN_INTRO	166039
 #define ID_OPTION_ONE_PLAYER	166044
 #define ID_OPTION_TWO_PLAYER	166045
 #define ID_NUMBER_THREE	45431
@@ -27,43 +31,55 @@ class CIntro : public CGameObject {
 	bool isCreateMario;
 	bool isUp, isDown;
 	bool flag;
-	bool isFallDown;
-	bool isCreateObject; // start stage 2
+	bool isFallOntoMario;
+	bool isCreateObject; 
+	bool isShaked;
+	// start stage 2
 	bool isChangeDirection;
 	bool isWaitedLugigi;
 	bool isLugigiThrowShell;
-	bool test = false;;
-	bool isDoneStageTwo;
-	bool koochange;
-	bool redchange;
-	bool redchange2;
-	bool done = false;
+	bool isFaceToFaceLugigi;
+	bool isMarioHitKoopas;
+	bool isKoopasChangedDirection;
+	bool isSmallChangedDirectFirst;
+	bool isSmallChangedDirectSecond;
 
-	bool isDisplayOption;
 	ULONGLONG time_start;
 	ULONGLONG bracing_start;
-	ULONGLONG waiting_start;
 	//object in intro
-	CMario* red = new CMario();
-	CMario* green = new CMario();
-	CLeaf* leaf = new CLeaf();
+	CMario* red = NULL;
+	CMario* green = NULL;
+	CLeaf* leaf = NULL;
 	CGoomba* goo = NULL;
-	CKoopas* koo = NULL;
-	CKoopas* koo_0 = NULL;
+	CKoopas* second_koopas = NULL;
+	CKoopas* first_koopas = NULL;
 public:
-	static bool isHitRed;
+	static bool isHitMario;
+	static bool isChooseOptionOne;
+	static bool isChooseOptionTwo;
+	static bool isDoneStageTwo;
 
 	CIntro(float x, float y) : CGameObject(x, y) {
-		isUp = isDown = flag = isCreateMario = isHitRed = isFallDown = false;
-		isCreateObject = isChangeDirection = isWaitedLugigi = isLugigiThrowShell = isDoneStageTwo = koochange = redchange = redchange2 = false;
-		isDisplayOption = false;
+		isUp = isDown = flag = isCreateMario = isFallOntoMario = isShaked =  false;
+		isCreateObject = isChangeDirection = isWaitedLugigi = isFaceToFaceLugigi = isLugigiThrowShell = false;
+		isMarioHitKoopas = isKoopasChangedDirection = isSmallChangedDirectFirst = isSmallChangedDirectSecond = isDoneStageTwo= false;
+
+		isChooseOptionOne = false;
+		isChooseOptionTwo = false;
 		time_start = GetTickCount64();
+		bracing_start = 0;
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	bool getIntoAni() { return isCreateObject; }
 	int IsBlocking() { return 0; }
+
+	bool getOptionOne() { return isChooseOptionOne; }
+	bool getOptionTwo() { return isChooseOptionTwo; }
+
+	void getOptionOne(bool a) { isChooseOptionOne = a; }
+	void getOptionTwo(bool a) { isChooseOptionTwo = a; }
 };
 
 
