@@ -4,6 +4,7 @@
 #include "Mario.h"
 #include "Leaf.h"
 #include "Goomba.h"
+#include "Koopas.h"
 #define TOP_EDGE_LIMIT	-88.0f
 #define BOTTOM_EDGE_LIMIT	94.0f
 #define VELOCITY_OPEN_CURTAIN	0.07f
@@ -29,20 +30,33 @@ class CIntro : public CGameObject {
 	bool isFallDown;
 	bool isCreateObject; // start stage 2
 	bool isChangeDirection;
+	bool isWaitedLugigi;
+	bool isLugigiThrowShell;
+	bool test = false;;
+	bool isDoneStageTwo;
+	bool koochange;
+	bool redchange;
+	bool redchange2;
+	bool done = false;
+
+	bool isDisplayOption;
 	ULONGLONG time_start;
 	ULONGLONG bracing_start;
-
+	ULONGLONG waiting_start;
 	//object in intro
 	CMario* red = new CMario();
 	CMario* green = new CMario();
 	CLeaf* leaf = new CLeaf();
 	CGoomba* goo = NULL;
+	CKoopas* koo = NULL;
+	CKoopas* koo_0 = NULL;
 public:
 	static bool isHitRed;
 
 	CIntro(float x, float y) : CGameObject(x, y) {
 		isUp = isDown = flag = isCreateMario = isHitRed = isFallDown = false;
-		isCreateObject = isChangeDirection = false;
+		isCreateObject = isChangeDirection = isWaitedLugigi = isLugigiThrowShell = isDoneStageTwo = koochange = redchange = redchange2 = false;
+		isDisplayOption = false;
 		time_start = GetTickCount64();
 	}
 	void Render();

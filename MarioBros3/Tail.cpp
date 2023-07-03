@@ -91,7 +91,7 @@ void CTail::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-	if (mario->getIsAttack())
+	if (!CPlayScene::IsIntroScene() && mario->getIsAttack())
 	{
 		CEffect* a = new CEffect(koopas->getx(), koopas->gety(), 8);
 		CPlayScene::objects.push_back(a);

@@ -591,7 +591,10 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		else
 		{
 			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+			{
+				DebugOut(L"hoyyyyy");
 				koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
+			}
 			else if (koopas->GetState() == KOOPAS_STATE_DIE_UP)
 				koopas->SetState(KOOPAS_STATE_IS_HOLD_UP);
 			isHolding = true; Koopas = koopas;
@@ -1054,7 +1057,7 @@ int CMario::GetAniIdBig()
 	if (isLookUp)
 		aniId = ID_ANI_MARIO_LOOKUP;
 
-	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
+	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_LEFT;
 
 	return aniId;
 }

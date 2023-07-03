@@ -35,7 +35,7 @@ CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	|| state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP)
+	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN || state == KOOPAS_STATE_DIE_UP	|| state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_RETURN_DOWN || state == KOOPAS_STATE_RETURN_UP || state == KOOPAS_STATE_FALL_INTO_MARIO)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_DIE / 2;
@@ -220,13 +220,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (CPlayScene::IsIntroScene())
-	{
-		CGameObject::Update(dt, coObjects);
-		CCollision::GetInstance()->Process(this, dt, coObjects);
-		return;
-	}
-
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	if (state == JUMP_KOOPAS_STATE_JUMPING)
 	{
@@ -285,6 +278,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}	
+
+	if (CPlayScene::IsIntroScene())
+	{
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		return;
+	}
 
 	if (state == KOOPAS_STATE_DIE_DOWN || state == KOOPAS_STATE_IS_HOLD_DOWN || state == KOOPAS_STATE_IS_HOLD_UP || state == KOOPAS_STATE_DIE_UP)
 	{
@@ -458,7 +458,8 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_FALL_INTO_MARIO:
 		ay = KOOPAS_GRAVITY;
-		vx = -0.03f;
+		vy = 0.03f;
+		vx = -0.05f;
 		break;
 	}
 	

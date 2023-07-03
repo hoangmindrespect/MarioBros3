@@ -90,6 +90,7 @@ public:
 	void setY(float x) {
 		this->y = x;
 	}
+	void SetAy(float a) { ay = a; }
 	ULONGLONG getDieStart() { return die_start; }
 	ULONGLONG getReturnStart() { return return_start; }
 	int getnx() { return nx; }

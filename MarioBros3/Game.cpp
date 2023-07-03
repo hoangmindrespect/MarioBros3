@@ -320,7 +320,17 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 
 int CGame::IsKeyDown(int KeyCode)
 {
+	if (heldKeys.count(KeyCode) > 0)
+		return 1;
 	return (keyStates[KeyCode] & 0x80) > 0;
+}
+
+void CGame::MakeKeyPressed(int keyCode) {
+	heldKeys.insert(keyCode);
+}
+
+void CGame::MakeKeyUp(int keyCode) {
+	heldKeys.erase(keyCode);
 }
 
 void CGame::InitKeyboard()

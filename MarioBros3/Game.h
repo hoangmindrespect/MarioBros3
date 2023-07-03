@@ -18,6 +18,7 @@ using namespace std;
 #include "Texture.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
+#include <unordered_set>
 
 #define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -61,7 +62,7 @@ class CGame
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
 	int next_scene = -1;
-
+	unordered_set<int> heldKeys;
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 	int screen_height;
@@ -91,6 +92,8 @@ public:
 	// Keyboard related functions 
 	void InitKeyboard();
 	int IsKeyDown(int KeyCode);
+	void MakeKeyPressed(int KeyCode);
+	void MakeKeyUp(int KeyCode);
 	void ProcessKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 

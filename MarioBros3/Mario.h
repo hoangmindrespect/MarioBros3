@@ -117,7 +117,7 @@
 #define ID_ANI_GREEN_MARIO_HOLD_WALK_LEFT 1022
 
 #define ID_ANI_GREEN_MARIO_HOLD_IDLE_RIGHT 1019
-#define ID_ANI_GREEN_MARIO_HOLD_IDLE_LEFT 1010
+#define ID_ANI_GREEN_MARIO_HOLD_IDLE_LEFT 1020
 
 #define ID_ANI_GREEN_MARIO_KICK_RIGHT 1017
 #define ID_ANI_GREEN_MARIO_KICK_LEFT 1018
@@ -399,6 +399,8 @@ public:
 	void setTimeSwitching(ULONGLONG a) { time_switching = a; }
 	void setIsSitting(bool a) { isSitting = a; }
 	void setIsFellOnTheHead(bool a) { isFellOnTheHead = a; }
+	void setKoopas(CKoopas* a) { Koopas = a; }
+	void setIsHolding(bool a) { isHolding = a; }
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
