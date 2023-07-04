@@ -68,6 +68,8 @@ void CTurnInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+
+	//in normal scene
 	if (cx < 0)
 		x = TURNINHUD_X_DEFAULT;
 	else
@@ -75,6 +77,11 @@ void CTurnInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (cy > 200.0f)
 		y = TURNINHUD_Y_HIDDEN;
 	else y = TURNINHUD_Y_DEFAULT;
+
+	//in worldmap
+	if (mario->getIsInMap())
+		x = TURNINHUD_X_DEFAULT;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

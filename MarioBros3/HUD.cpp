@@ -53,6 +53,11 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (cy > 200.0f)
 		y = HUD_Y_HIDDEN;
 	else y = HUD_Y_DEFAULT;
+
+	//in worldmap
+	if (mario->getIsInMap())
+		x = HUD_WIDTH / 2;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

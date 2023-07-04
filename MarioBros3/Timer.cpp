@@ -68,23 +68,35 @@ void CTimer::Render()
 void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (time <= 0)
+	if (!mario->getIsInMap())
 	{
-		//mario->setDieStart();
-		mario->SetState(MARIO_STATE_DIE);
+		if (time <= 0)
+		{
+			//mario->setDieStart();
+			mario->SetState(MARIO_STATE_DIE);
+		}
+		time = 300.0f - (GetTickCount64() / 1000.0f - start);
 	}
-	time = 300.0f - (GetTickCount64() / 1000.0f - start);
+	else
+		time = 0.0f;
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+
+	//in normal scene
 	if (cx < 0)
 		x = TIMER_X_DEFAULT;
 	else
 		x = cx + TIMER_X_DEFAULT;
+
 	if (cy > 200.0f)
 		y = TIMER_Y_HIDDEN;
 	else y = TIMER_Y_DEFAULT;
+
+	//in world map
+	if(mario->getIsInMap())
+		x = TIMER_X_DEFAULT;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

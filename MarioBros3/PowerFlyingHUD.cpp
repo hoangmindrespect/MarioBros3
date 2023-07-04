@@ -61,6 +61,8 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+
+	//in scene
 	if (cx < 0)
 		x = POWERFLYINGHUD_X_DEFAULT;
 	else
@@ -68,6 +70,11 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (cy > 200.0f)
 		y = POWERFLYINGHUD_Y_HIDDEN;
 	else y = POWERFLYINGHUD_Y_DEFAULT;
+
+	//in worldmap
+	if (mario->getIsInMap())
+		x = POWERFLYINGHUD_X_DEFAULT;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

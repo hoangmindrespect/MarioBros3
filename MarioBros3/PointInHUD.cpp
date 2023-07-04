@@ -73,6 +73,7 @@ void CPointInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+	//in scene
 	if (cx < 0)
 		x = POINTINHUD_X_DEFAULT;
 	else
@@ -81,6 +82,11 @@ void CPointInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (cy > 200.0f)
 		y = POINTINHUD_Y_HIDDEN;
 	else y = POINTINHUD_Y_DEFAULT;
+
+	//in worldmap
+	if (mario->getIsInMap())
+		x = POINTINHUD_X_DEFAULT;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

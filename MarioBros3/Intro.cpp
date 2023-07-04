@@ -194,10 +194,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 			/*STEP 2: MARIO GET LEAF AND UP LEVEL = TAIL*/
 			if (red->getlevel() == MARIO_LEVEL_TAIL)
-			{
 				isGotLeaf = true;
-				red->setIsChanging(true);
-			}
 
 			if (!isGotLeaf)
 			{
@@ -214,7 +211,6 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				//3.1: MAKE GOOMBA MOVING AND HIT GOOMBA
 				if (goo->GetState() != GOOMBA_STATE_DIE)
 				{
-					red->setIsChanging(false);
 					red->SetIsRelease(true);
 					red->SetSpeed(-0.07f, 0.07f);
 					goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
@@ -398,6 +394,8 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 	if (isDoneStageTwo)
 	{
+		game->MakeKeyUp(DIK_A);
+
 		if (mario_x > 288.0f)
 		{
 			red->Delete();
@@ -405,8 +403,6 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			if (!isChooseOptionOne && !isChooseOptionTwo)
 			{
 				isChooseOptionOne = true;
-				game->MakeKeyUp(DIK_A);
-
 				koopas_number_one = new CKoopas(8.0f, GROUND_Y_INTRO, 2);
 				koopas_number_one->setVx(KOOPAS_WALKING_SPEED);
 

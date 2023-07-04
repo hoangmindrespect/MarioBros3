@@ -33,11 +33,13 @@ void CPiranhaPlant::Render()
 	RenderBoundingBox();
 }
 void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
+	float mario_x = (CPlayScene::player)->getx();
+	float mario_y = (CPlayScene::player)->gety();
 	if (model == 1 || model == 2)
 	{
-		if (abs((CPlayScene::player)->getx() - x) <= 131.0f)
+		if (abs(mario_x - x) <= 131.0f)
 		{
-			if ((CPlayScene::player)->getx() <= x + 24.0f && (CPlayScene::player)->getx() >= x - 26.0f)
+			if (mario_x <= x + 24.0f && mario_x >= x - 26.0f)
 			{
 				if (y != ymax + 41.0f)
 				{
@@ -74,13 +76,13 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						{
 							CGameObject* bul = nullptr;
 							if (state == PIRANHA_STATE_DOWN_LEFT)
-								bul = new CBullet(x - 4, y - 8, -0.05f, 0.02f);
+								bul = new CBullet(x - 4.0f, y - 8.0f, -0.05f, 0.02f);
 							else if (state == PIRANHA_STATE_UP_LEFT)
-								bul = new CBullet(x - 4, y - 8, -0.05f, -0.02f);
+								bul = new CBullet(x - 4.0f, y - 8.0f, -0.05f, -0.02f);
 							else if (state == PIRANHA_STATE_DOWN_RIGHT)
-								bul = new CBullet(x + 4, y - 8, 0.05f, 0.02f);
+								bul = new CBullet(x + 4.0f, y - 8.0f, 0.05f, 0.02f);
 							else
-								bul = new CBullet(x + 4, y - 8, 0.05f, -0.02f);
+								bul = new CBullet(x + 4.0f, y - 8.0f, 0.05f, -0.02f);
 							CPlayScene::objects.push_back(bul);
 							IsStart_Fire = false;
 							IsStart_Up = false;

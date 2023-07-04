@@ -88,6 +88,10 @@ void CCoinInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y = COININHUD_Y_HIDDEN;
 	else y = COININHUD_Y_DEFAULT;
 
+	//in worldmap
+	if (mario->getIsInMap())
+		x = COININHUD_X_DEFAULT;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
