@@ -835,9 +835,6 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 
-	if (isGetInOutPipe)
-		return aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
-
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -927,16 +924,10 @@ int CMario::GetAniIdBig()
 			if (vx == 0)
 			{
 				if (nx > 0) {
-					if(color == 1)
-						aniId = ID_ANI_MARIO_IDLE_RIGHT;
-					else
-						aniId = ID_ANI_GREEN_MARIO_IDLE_RIGHT;
+					aniId = ID_ANI_MARIO_IDLE_RIGHT;
 				}
 				else {
-					if(color == 1)
-						aniId = ID_ANI_MARIO_IDLE_LEFT;
-					else
-						aniId = ID_ANI_GREEN_MARIO_IDLE_LEFT;
+					aniId = ID_ANI_MARIO_IDLE_LEFT;
 				}
 			}
 			else if (vx > 0)
@@ -1063,6 +1054,10 @@ int CMario::GetAniIdBig()
 		else
 			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
 	}
+
+
+	if (isGetInOutPipe)
+		aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
 
 	if (isDelevel && !CPlayScene::IsIntroScene())
 		aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
