@@ -806,8 +806,22 @@ int CMario::GetAniIdSmall()
 		}
 	}
 
+	if (isDelevel && !CPlayScene::IsIntroScene())
+	{
+		if (nx > 0)
+			return aniId = ID_ANI_MARIO_UP_LEVEL_RIGHT;
+		else
+			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
+	}
+
 	if (isGetInOutPipe)
 		aniId = ID_ANI_SMALL_MARIO_GET_INOUT_PIPE;
+
+	if (FlagForUntouching % 2 == 0 && untouchable != 0 && !CPlayScene::IsIntroScene())
+		aniId = ID_ANI_TRANSPARENT;
+
+	FlagForUntouching += 1;
+
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
 
 	return aniId;
@@ -1038,6 +1052,7 @@ int CMario::GetAniIdBig()
 			}
 		}
 	}
+
 	if (isChanging)
 	{
 		if (nx > 0)
@@ -1045,6 +1060,9 @@ int CMario::GetAniIdBig()
 		else
 			return aniId = ID_ANI_MARIO_UP_LEVEL_BIG_LEFT;
 	}
+
+	if (isDelevel && !CPlayScene::IsIntroScene())
+		return aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
 	if (CPlayScene::IsIntroScene())
 	{
 		if (isGetInOutPipe)
@@ -1055,6 +1073,11 @@ int CMario::GetAniIdBig()
 	}
 	if (isLookUp)
 		aniId = ID_ANI_MARIO_LOOKUP;
+
+	if (FlagForUntouching % 2 == 0 && untouchable != 0 && !CPlayScene::IsIntroScene())
+		aniId = ID_ANI_TRANSPARENT;
+
+	FlagForUntouching += 1;
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_LEFT;
 
@@ -1201,6 +1224,7 @@ int CMario::GetAniIdTail()
 
 	if (isChanging)
 		return aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
+
 	if (isGetInOutPipe)
 		aniId = ID_ANI_TAIL_MARIO_GET_INOUT_PIPE;
 

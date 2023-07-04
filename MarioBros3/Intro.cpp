@@ -194,7 +194,10 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 			/*STEP 2: MARIO GET LEAF AND UP LEVEL = TAIL*/
 			if (red->getlevel() == MARIO_LEVEL_TAIL)
+			{
 				isGotLeaf = true;
+				red->setIsChanging(true);
+			}
 
 			if (!isGotLeaf)
 			{
@@ -211,6 +214,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				//3.1: MAKE GOOMBA MOVING AND HIT GOOMBA
 				if (goo->GetState() != GOOMBA_STATE_DIE)
 				{
+					red->setIsChanging(false);
 					red->SetIsRelease(true);
 					red->SetSpeed(-0.07f, 0.07f);
 					goo->SetSpeed(-0.02f, GOOMBA_GRAVITY);
@@ -287,7 +291,6 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					}
 				}
 
-				DebugOut(L"Into Here: %d\n", goo->IsDeleted());
 				//3.2: MAKE MARIO BRACING AFTER HIT GOOMBA
 				if (!isChangeDirection && isGoombaDie)
 				{

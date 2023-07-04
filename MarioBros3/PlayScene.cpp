@@ -438,10 +438,20 @@ void CPlayScene::Update(DWORD dt)
 		//Check for not update when Mario delevel
 		if (mario->getIsDelevel())
 		{
-			if (GetTickCount64() - mario->getTimeSwitch() > 500)
-				mario->setIsDelevel(false);
-			else // return not update
-				return;
+			if (mario->getlevel() == MARIO_LEVEL_SMALL)
+			{
+				if (GetTickCount64() - mario->getTimeSwitch() > 1000)
+					mario->setIsDelevel(false);
+				else // return not update
+					return;
+			}
+			else if (mario->getlevel() == MARIO_LEVEL_BIG)
+			{
+				if (GetTickCount64() - mario->getTimeSwitch() > 500)
+					mario->setIsDelevel(false);
+				else // return not update
+					return;
+			}
 		}
 
 		//Handle logic when mario getin or getout the pipe [collide with Funnel]

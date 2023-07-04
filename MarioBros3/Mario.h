@@ -122,6 +122,7 @@
 #define ID_ANI_GREEN_MARIO_KICK_RIGHT 1017
 #define ID_ANI_GREEN_MARIO_KICK_LEFT 1018
 
+#define ID_ANI_TRANSPARENT	5
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
@@ -273,9 +274,11 @@ class CMario : public CGameObject
 	bool isFallDown;			// kiểm tra điểm rơi của mario => chỉnh camera
 	bool isDelevel;
 
+	//intro scene
 	bool isFellOnTheHead;
 	bool isLookUp;
 
+	int FlagForUntouching;
 	float maxVx;
 	float ax;					// acceleration on x 
 	float ay;					// acceleration on y 
@@ -343,6 +346,7 @@ public:
 		ay = MARIO_GRAVITY; 
 		level = MARIO_LEVEL_SMALL;
 
+		FlagForUntouching = 0;
 		untouchable = 0;
 		untouchable_start = -1;
 		attack_start = -1;
