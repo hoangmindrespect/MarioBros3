@@ -2,6 +2,8 @@
 #include "Platform.h"
 #include "debug.h"
 #include "RedGoomba.h"
+#include "PlayScene.h"
+#include "Intro.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
@@ -58,6 +60,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > 500) )
 	{
+		if (CPlayScene::IsIntroScene())
+			CIntro::isGoombaDie = true;
 		isDeleted = true;
 		return;
 	}

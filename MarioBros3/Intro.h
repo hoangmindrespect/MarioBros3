@@ -35,6 +35,7 @@ class CIntro : public CGameObject {
 	bool isCreateObject; 
 	bool isShaked;
 	// start stage 2
+	bool isGotLeaf;
 	bool isChangeDirection;
 	bool isWaitedLugigi;
 	bool isLugigiThrowShell;
@@ -60,9 +61,10 @@ public:
 	static bool isChooseOptionOne;
 	static bool isChooseOptionTwo;
 	static bool isDoneStageTwo;
+	static bool isGoombaDie;
 
 	CIntro(float x, float y) : CGameObject(x, y) {
-		isUp = isDown = flag = isCreateMario = isFallOntoMario = isShaked =  false;
+		isUp = isDown = flag = isCreateMario = isFallOntoMario = isShaked = isGotLeaf = false;
 		isCreateObject = isChangeDirection = isWaitedLugigi = isFaceToFaceLugigi = isLugigiThrowShell = false;
 		isMarioHitKoopas = isKoopasChangedDirection = isSmallChangedDirectFirst = isSmallChangedDirectSecond = isDoneStageTwo= false;
 

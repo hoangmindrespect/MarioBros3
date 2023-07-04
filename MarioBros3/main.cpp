@@ -110,7 +110,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			WINDOW_CLASS_NAME,
 			MAIN_WINDOW_TITLE,
 			WS_OVERLAPPEDWINDOW, // WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP,
-			SCREEN_WIDTH / screenWidth + 400,
+			SCREEN_WIDTH / screenWidth,
 			SCREEN_HEIGHT / screenHeight ,
 			ScreenWidth,
 			ScreenHeight,

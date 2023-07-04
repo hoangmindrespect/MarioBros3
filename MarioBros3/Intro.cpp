@@ -7,6 +7,7 @@ bool::CIntro::isHitMario = false;
 bool::CIntro::isChooseOptionOne = false;
 bool::CIntro::isChooseOptionTwo = false;
 bool::CIntro::isDoneStageTwo = false;
+bool::CIntro::isGoombaDie = false;
 
 void CIntro::Render()
 {
@@ -192,7 +193,10 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			isCreateObject = true;
 
 			/*STEP 2: MARIO GET LEAF AND UP LEVEL = TAIL*/
-			if (!leaf->IsDeleted())
+			if (red->getlevel() == MARIO_LEVEL_TAIL)
+				isGotLeaf = true;
+
+			if (!isGotLeaf)
 			{
 				if (leaf->gety() > 70.0f)
 				{
@@ -213,13 +217,16 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				}
 
 				//3.3 BRACING TO CHANGE DIRECTION
-				if (isChangeDirection && GetTickCount64() - bracing_start > 300)
+				if (isChangeDirection)
 				{
 					//3.3.1 Mario will moving and kick first koopas -> first koopas hit black shell
-					if (!isFaceToFaceLugigi)
+					if (GetTickCount64() - bracing_start > 300)
 					{
-						red->SetVx(MARIO_WALKING_SPEED);
-						red->SetState(MARIO_STATE_WALKING_RIGHT);
+						if (!isFaceToFaceLugigi)
+						{
+							red->SetVx(MARIO_WALKING_SPEED);
+							red->SetState(MARIO_STATE_WALKING_RIGHT);
+						}
 					}
 
 					if (!first_koopas->IsDeleted() && first_koopas->getx() > 268.0f)
@@ -230,6 +237,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					{
 						isFaceToFaceLugigi = true;
 						red->SetState(MARIO_STATE_IDLE);
+						red->SetVx(0.0f);
 						if (!isWaitedLugigi)
 						{
 							game->MakeKeyPressed(DIK_A);
@@ -259,13 +267,14 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					//3.3.3 Lugigi stop at this position and Kick second koopas
 					if (green->getx() < 228.0f)
 					{
+
 						red->SetState(MARIO_STATE_WALKING_LEFT);
 						//when red get right positon -> lugigi kick 
 						if (red->getx() < 160.0f)
 						{
 							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN_SPIN);
 							second_koopas->SetSpeed(-0.15f, 0.1f);
-							
+
 							green->setIsHolding(false);
 							green->SetState(MARIO_STATE_WALKING_RIGHT);
 
@@ -278,12 +287,12 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					}
 				}
 
+				DebugOut(L"Into Here: %d\n", goo->IsDeleted());
 				//3.2: MAKE MARIO BRACING AFTER HIT GOOMBA
-				if (red->getIsOnPlatForm() && !isChangeDirection && goo->IsDeleted())
+				if (!isChangeDirection && isGoombaDie)
 				{
-					red->SetVx(-MARIO_WALKING_SPEED);
-					red->Setax(MARIO_ACCEL_WALK_X);
-					red->setNx(1);
+					red->SetState(MARIO_STATE_WALKING_RIGHT);
+					red->SetIsRelease(false);
 					bracing_start = GetTickCount64();
 					isChangeDirection = true;
 				}
@@ -328,7 +337,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			}
 
 		}
-		/*STEP 4: THE REST ACTION*/
+		/*STEP 4:*/
 		else
 		{
 			//4.1: MAKE SHELL START FROM LEFT EDGE WHEN IT OUT OF RIGHT EDGE
@@ -388,7 +397,8 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	{
 		if (mario_x > 288.0f)
 		{
-			//red->setx(288.0f);
+			red->Delete();
+			green->Delete();
 			if (!isChooseOptionOne && !isChooseOptionTwo)
 			{
 				isChooseOptionOne = true;

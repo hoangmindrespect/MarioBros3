@@ -8,7 +8,7 @@
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
-	if (CPlayScene::IsIntroScene)
+	if (CPlayScene::IsIntroScene())
 	{
 		if (CIntro::isDoneStageTwo)
 		{
