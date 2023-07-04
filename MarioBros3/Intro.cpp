@@ -34,8 +34,8 @@ void CIntro::Render()
 		if (y < 50.0f)
 		{
 			CAnimations* animations = CAnimations::GetInstance();
-			animations->Get(ID_ANI_GREEN_MARIO_WALKING_RIGHT)->Render(8.0f, 173.0f);
-			animations->Get(ID_ANI_MARIO_WALKING_LEFT)->Render(248.0f, 173.0f);
+			animations->Get(ID_ANI_GREEN_MARIO_WALKING_RIGHT)->Render(8.0f, GROUND_Y_INTRO);
+			animations->Get(ID_ANI_MARIO_WALKING_LEFT)->Render(248.0f, GROUND_Y_INTRO);
 		}
 	}
 	if (isChooseOptionOne || isChooseOptionTwo)
@@ -73,12 +73,12 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				if (GetTickCount64() - time_start > 2000)
 				{
 					//1.1: CREATE LUGIGI AT THE LEFT BACK AND MOVE
-					green = new CMario(8.0f, 173.0f, 2);
+					green = new CMario(8.0f, GROUND_Y_INTRO, 2);
 					green->setLevel(MARIO_LEVEL_BIG);
 					green->SetState(MARIO_STATE_WALKING_RIGHT);
 
 					//1.2: CREATE MARIO AT THE RIGHT BACK AND MOVE
-					red = new CMario(248.0f, 173.0f, 1);
+					red = new CMario(248.0f, GROUND_Y_INTRO, 1);
 					red->setLevel(MARIO_LEVEL_BIG);
 					red->SetState(MARIO_STATE_WALKING_LEFT);
 
@@ -243,13 +243,13 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 							game->MakeKeyPressed(DIK_A);
 
 							//reset coordinate and state of lugigi
-							green = new CMario(278.0f, 173.0f, 2);
+							green = new CMario(308.0f, GROUND_Y_INTRO, 2);
 							green->setLevel(MARIO_LEVEL_BIG);
 							green->SetState(MARIO_STATE_WALKING_LEFT);
-							green->setIsHolding(true);
+							//green->setIsHolding(true);
 
 							//define second koopas is hold by lugigi
-							second_koopas = new CKoopas(lugigi_x - 10.0f, 171.0f, 2);
+							second_koopas = new CKoopas(268.0f, GROUND_Y_INTRO, 2);
 							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 							second_koopas->SetAy(0.0f);
 
@@ -262,7 +262,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 					//update position second koopas arcoding Lugigi
 					if (second_koopas != NULL && green->getIsHolding())
-						second_koopas->SetPosition(lugigi_x - 10.0f, 171.0f);
+						second_koopas->SetPosition(lugigi_x - 12.0f, GROUND_Y_INTRO - 2.0f);
 
 					//3.3.3 Lugigi stop at this position and Kick second koopas
 					if (green->getx() < 228.0f)
@@ -321,7 +321,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					red->SetState(MARIO_STATE_WALKING_RIGHT);
 					if (red->getIsHolding())
 					{
-						second_koopas->SetPosition(red->getx() + 15.0f, 171.0f);
+						second_koopas->SetPosition(red->getx() + 15.0f, GROUND_Y_INTRO - 2.0f);
 						second_koopas->SetAy(0.0f);
 					}
 					if (red->getx() > 130.0f)
@@ -404,13 +404,13 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				isChooseOptionOne = true;
 				game->MakeKeyUp(DIK_A);
 
-				koopas_number_one = new CKoopas(8.0f, 173.0f, 2);
+				koopas_number_one = new CKoopas(8.0f, GROUND_Y_INTRO, 2);
 				koopas_number_one->setVx(KOOPAS_WALKING_SPEED);
 
-				CKoopas* koopas_number_two = new CKoopas(-48.0f, 173.0f, 2);
+				CKoopas* koopas_number_two = new CKoopas(-48.0f, GROUND_Y_INTRO, 2);
 				koopas_number_two->setVx(KOOPAS_WALKING_SPEED);
 
-				CKoopas* koopas_number_three = new CKoopas(-104.0f, 173.0f, 2);
+				CKoopas* koopas_number_three = new CKoopas(-104.0f, GROUND_Y_INTRO, 2);
 				koopas_number_three->setVx(KOOPAS_WALKING_SPEED);
 
 				CPlayScene::objects.push_back(koopas_number_one);
@@ -422,7 +422,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		{
 			if (koopas_number_one != NULL && koopas_number_one->getx() > 268.0f)
 			{
-				CKoopas* koopas_number_four = new CKoopas(-104.0f, 173.0f, 2);
+				CKoopas* koopas_number_four = new CKoopas(-104.0f, GROUND_Y_INTRO, 2);
 				koopas_number_four->setVx(KOOPAS_WALKING_SPEED * 3);
 				isCreateFastKoopas = true;
 				CPlayScene::objects.push_back(koopas_number_four);
