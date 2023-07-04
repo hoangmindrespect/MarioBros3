@@ -79,7 +79,7 @@ void CPointInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		x = cx + POINTINHUD_X_DEFAULT;
 
-	if (cy > 200.0f)
+	if (cy < -260.0f)
 		y = POINTINHUD_Y_HIDDEN;
 	else y = POINTINHUD_Y_DEFAULT;
 

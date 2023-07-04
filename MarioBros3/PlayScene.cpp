@@ -539,12 +539,8 @@ THERE:
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			if (objects[i]->gety() > DEAD_ZONE)
-			{
 				if (!dynamic_cast<CMario*>(objects[i]))
-				{
 					objects[i]->Delete();
-				}
-			}
 			if (!dynamic_cast<CMario*>(objects[i]))
 				objects[i]->Update(dt, &coObjects);
 		}
@@ -647,8 +643,8 @@ THERE:
 			
 		}
 
-		if (mario->gety() > 170.0f)
-			cy = 187.5f;
+		if (mario->gety() < -260.0f)
+			cy = -500.0f;
 		//mario đến đích
 		if (mario->getx() > 2715.71f)
 		{
@@ -710,6 +706,9 @@ void CPlayScene::Unload()
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+bool CPlayScene::IsOutOfBound(LPGAMEOBJECT a) {
+	return (abs(a->getx() - player->getx()) < 272.0f) || (a->gety() > DEAD_ZONE);
+}
 
 void CPlayScene::PurgeDeletedObjects()
 {

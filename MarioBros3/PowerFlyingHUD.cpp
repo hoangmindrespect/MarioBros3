@@ -67,7 +67,7 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = POWERFLYINGHUD_X_DEFAULT;
 	else
 		x = cx + POWERFLYINGHUD_X_DEFAULT;
-	if (cy > 200.0f)
+	if (cy < -260.0f)
 		y = POWERFLYINGHUD_Y_HIDDEN;
 	else y = POWERFLYINGHUD_Y_DEFAULT;
 

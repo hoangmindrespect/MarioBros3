@@ -835,6 +835,9 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 
+	if (isGetInOutPipe)
+		return aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
+
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -1062,17 +1065,15 @@ int CMario::GetAniIdBig()
 	}
 
 	if (isDelevel && !CPlayScene::IsIntroScene())
-		return aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
+		aniId = ID_ANI_MARIO_UP_LEVEL_TAIL;
+
 	if (CPlayScene::IsIntroScene())
 	{
-		if (isGetInOutPipe)
-			aniId = ID_ANI_MARIO_GET_INOUT_PIPE;
-
 		if (isFellOnTheHead)
 			aniId = ID_ANI_MARIO_FELL_ON_THE_HEAD;
+		if (isLookUp)
+			aniId = ID_ANI_MARIO_LOOKUP;
 	}
-	if (isLookUp)
-		aniId = ID_ANI_MARIO_LOOKUP;
 
 	if (FlagForUntouching % 2 == 0 && untouchable != 0 && !CPlayScene::IsIntroScene())
 		aniId = ID_ANI_TRANSPARENT;

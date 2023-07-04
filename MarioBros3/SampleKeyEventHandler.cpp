@@ -100,9 +100,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			{
 				if (mario->getx() == CPlayScene::stop[i]->getx() && mario->gety() == CPlayScene::stop[i]->gety())
 				{
-					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);
-					DebugOut(L"jo %d\n ", a->getCanMoveUp());
-					
+					CMarioStop* a = dynamic_cast<CMarioStop*>(CPlayScene::stop[i]);					
 					if (a->getCanMoveUp() == 0)
 						mario->SetIsMoveUp(false);
 					else

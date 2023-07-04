@@ -144,6 +144,7 @@
     <ClInclude Include="CoinInHUD.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
+    <ClInclude Include="EnemyTrigger.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="CoinInHUD.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
+    <ClCompile Include="EnemyTrigger.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Effect.cpp" />

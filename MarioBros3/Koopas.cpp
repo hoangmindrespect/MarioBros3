@@ -10,6 +10,7 @@
 #include "Brick.h"
 #include "Effect.h"
 #include "PSwitch.h"
+#include "PiranhaPlant.h"
 CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 {
 	this->type = type;
@@ -78,6 +79,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+		OnCollisionWithPiranha(e);
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
@@ -119,6 +122,19 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(KOOPAS_STATE_WALKING_LEFT);
 		if (nx > 0 && state == KOOPAS_STATE_WALKING_LEFT)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
+	}
+}
+void CKoopas::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
+{
+	CPiranhaPlant* pi = dynamic_cast<CPiranhaPlant*>(e->obj);
+	if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+	{
+		CPlayScene::point += 100;
+		CEffect* e = new CEffect(pi->getx(), pi->gety(), 8);
+		CEffect* p = new CEffect(pi->getx(), pi->gety(), 6);
+		CPlayScene::objects.push_back(e);
+		CPlayScene::objects.push_back(p);
+		pi->Delete();
 	}
 }
 

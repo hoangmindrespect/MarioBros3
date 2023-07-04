@@ -84,7 +84,7 @@ void CCoinInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = COININHUD_X_DEFAULT;
 	else
 		x = cx + COININHUD_X_DEFAULT;
-	if (cy > 200.0f)
+	if (cy < -260.0f)
 		y = COININHUD_Y_HIDDEN;
 	else y = COININHUD_Y_DEFAULT;
 

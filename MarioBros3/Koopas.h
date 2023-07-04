@@ -74,6 +74,7 @@ protected:
 	void OnCollisionWithGoomBa(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
 
 public:
 	CKoopas(float x, float y, int color);

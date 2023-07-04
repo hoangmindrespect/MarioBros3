@@ -90,7 +90,7 @@ void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		x = cx + TIMER_X_DEFAULT;
 
-	if (cy > 200.0f)
+	if (cy < -260.0f)
 		y = TIMER_Y_HIDDEN;
 	else y = TIMER_Y_DEFAULT;
 

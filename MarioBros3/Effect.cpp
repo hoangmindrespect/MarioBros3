@@ -4,35 +4,35 @@
 CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 	type = k;
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-	if (k == 1) // phải thấp
+	if (k == 1)				//debris bottom right
 	{
 		vx = 0.12f;
 		vy = -0.4f;
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 2 ) // phải cao
+	else if (k == 2 )		//debris top right
 	{
 		vx = 0.12f;
 		vy = -0.55f;
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 3) //trái thấp
+	else if (k == 3)		//debris bottom left
 	{
 		vx = -0.12f;
 		vy = -0.4f;
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 4) // trái cao
+	else if (k == 4)		//debris top left
 	{
 		vx = -0.12f;
 		vy = -0.55f;
 		ax = 0;
 		ay = 0.003f;
 	}
-	else if (k == 5) // biến hình thành tail
+	else if (k == 5) // bỏ
 	{
 		vx = 0;
 		vy = 0;
@@ -52,7 +52,7 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		time_start = GetTickCount64();
 		vx = vy = ax = ay = 0.0f;
 	}
-	else if (k == 9 || k == 10 || k == 12) // phải cao
+	else if (k == 9 || k == 10 || k == 12) // effect yellow, red goomba die, black shell.
 	{
 		if (mario != NULL)
 		{

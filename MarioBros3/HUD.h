@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #define HUD_WIDTH 256.0f
 #define HUD_HEIGHT 48.0f
-#define HUD_Y_HIDDEN 403.0f
+#define HUD_Y_HIDDEN -284.0f
 #define HUD_Y_DEFAULT 211.0f
 
 // 

@@ -50,7 +50,7 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = HUD_WIDTH / 2;
 	else
 		x = cx + HUD_WIDTH / 2;
-	if (cy > 200.0f)
+	if (cy < -260.0f)
 		y = HUD_Y_HIDDEN;
 	else y = HUD_Y_DEFAULT;
 
