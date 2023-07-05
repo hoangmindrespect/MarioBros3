@@ -70,7 +70,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			if (!isCreateMario)
 			{
 				//delay before lugigi and mario moving
-				if (GetTickCount64() - time_start > 2000)
+				if (GetTickCount64() - time_start > 2030)
 				{
 					//1.1: CREATE LUGIGI AT THE LEFT BACK AND MOVE
 					green = new CMario(8.0f, GROUND_Y_INTRO, 2);
