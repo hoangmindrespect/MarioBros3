@@ -20,9 +20,9 @@ CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 
 	if(type == 1 || type  == 2)
 	{
-		nx = 1;
-		this->vx = KOOPAS_WALKING_SPEED;
-		SetState(KOOPAS_STATE_WALKING_RIGHT);
+		nx = -1;
+		this->vx = -KOOPAS_WALKING_SPEED;
+		SetState(KOOPAS_STATE_WALKING_LEFT);
 	}
 	else
 	{
@@ -129,12 +129,15 @@ void CKoopas::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 	CPiranhaPlant* pi = dynamic_cast<CPiranhaPlant*>(e->obj);
 	if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 	{
-		CPlayScene::point += 100;
-		CEffect* e = new CEffect(pi->getx(), pi->gety(), 8);
-		CEffect* p = new CEffect(pi->getx(), pi->gety(), 6);
-		CPlayScene::objects.push_back(e);
-		CPlayScene::objects.push_back(p);
-		pi->Delete();
+		if (!pi->IsCannotBeAttack())
+		{
+			CPlayScene::point += 100;
+			CEffect* e = new CEffect(pi->getx(), pi->gety(), 8);
+			CEffect* p = new CEffect(pi->getx(), pi->gety(), 6);
+			CPlayScene::objects.push_back(e);
+			CPlayScene::objects.push_back(p);
+			pi->Delete();
+		}
 	}
 }
 

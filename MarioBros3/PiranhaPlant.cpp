@@ -100,10 +100,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						}
 						
 						if (GetTickCount64() - timeStart_Down > 1000)
-						{
 							y += 0.05f * dt;
-							
-						}
 						else
 							KeepMoving(this);
 						

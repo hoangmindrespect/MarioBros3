@@ -29,6 +29,7 @@
 #include "TurnInHUD.h"
 #include "CoinInHUD.h"
 #include "Funnel.h"
+#include "EnemyTrigger.h"
 
 #define DEAD_ZONE 500.0f
 
@@ -304,10 +305,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
 	case OBJECT_TYPE_TURN_IN_HUD: obj = new CTurnInHUD(x, y); break;
 	case OBJECT_TYPE_COIN_IN_HUD: obj = new CCoinInHUD(x, y); break;
+	case OBJECT_TYPE_ENEMY_TRIGGER: {
+		int type = (int)atof(tokens[3].c_str());
+		float pos_x = (float)atof(tokens[4].c_str());
+		float pos_y = (float)atof(tokens[5].c_str());
+		obj = new CEnemyTrigger(x, y, type, pos_x, pos_y);
+		break;
+	}
 	case OBJECT_TYPE_FUNNEL: {
 		float xt = (float)atof(tokens[3].c_str());
 		float yt = (float)atof(tokens[4].c_str());
-
 		obj = new CFunnel(x, y, xt, yt); break;
 	}
 	case OBJECT_TYPE_PORTAL:
@@ -316,9 +323,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
-
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -538,9 +544,9 @@ THERE:
 		// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
 		for (size_t i = 0; i < objects.size(); i++)
 		{
-			if (objects[i]->gety() > DEAD_ZONE)
+			/*if (objects[i]->gety() > DEAD_ZONE)
 				if (!dynamic_cast<CMario*>(objects[i]))
-					objects[i]->Delete();
+					objects[i]->Delete();*/
 			if (!dynamic_cast<CMario*>(objects[i]))
 				objects[i]->Update(dt, &coObjects);
 		}

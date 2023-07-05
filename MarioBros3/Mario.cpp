@@ -24,8 +24,10 @@
 #include "Funnel.h"
 #include "PSwitch.h"
 #include "Intro.h"
+#include "EnemyTrigger.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	DebugOut(L"%f, %f\n", x, y);
 	if (IsInMap == 0)
 	{
 		if(!isFlying && !isRealse)
@@ -337,6 +339,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFunnel(e);
 	else if (dynamic_cast<CPSwitch*>(e->obj))
 		OnCollisionWithPSwitch(e);
+	else if (dynamic_cast<CEnemyTrigger*>(e->obj))
+		OnCollisionWithEnemyTrigger(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -664,6 +668,12 @@ void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
 		CPlayScene::X_target = funnel->getXTarget();
 		CPlayScene::Y_target = funnel->getYTarget();
 	}
+}
+
+void CMario::OnCollisionWithEnemyTrigger(LPCOLLISIONEVENT e)
+{
+	CEnemyTrigger* trigger = dynamic_cast<CEnemyTrigger*>(e->obj);
+	trigger->CreateEnemy();
 }
 
 void  CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)

@@ -306,6 +306,7 @@ class CMario : public CGameObject
 	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 	void OnCollisionWithFunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
+	void OnCollisionWithEnemyTrigger(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdTail();

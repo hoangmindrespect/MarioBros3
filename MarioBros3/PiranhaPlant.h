@@ -55,7 +55,7 @@ public:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	friend void KeepMoving(CPiranhaPlant* a);
-
+	bool IsCannotBeAttack() { return !(IsStart_Up || IsStart_Down); }
 };
 
 
