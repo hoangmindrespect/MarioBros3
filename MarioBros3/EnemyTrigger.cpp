@@ -1,6 +1,7 @@
 #include "EnemyTrigger.h"
 #include "debug.h"
 #include "PlayScene.h"
+#include "KoopasNavigation.h"
 
 CEnemyTrigger::CEnemyTrigger(float x, float y, int type, float pos_x, float pos_y)
 {
@@ -70,5 +71,12 @@ void CEnemyTrigger::CreateEnemy()
 	default:
 		break;
 	}
+
+	/*if (type == ENEMY_KOOPAS)
+	{
+		CKoopasNavigation* a = new CKoopasNavigation(1.0f, enemyObject->gety());
+		a->setHost(dynamic_cast<CKoopas*>(enemyObject));
+		CPlayScene::objects.push_back(a);
+	}*/
 	CPlayScene::objects.insert(CPlayScene::objects.end() - 20, enemyObject);
 }

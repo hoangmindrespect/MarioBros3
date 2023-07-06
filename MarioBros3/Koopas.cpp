@@ -20,9 +20,9 @@ CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 
 	if(type == 1 || type  == 2)
 	{
-		nx = -1;
-		this->vx = -KOOPAS_WALKING_SPEED;
-		SetState(KOOPAS_STATE_WALKING_LEFT);
+		nx = 1;
+		this->vx = KOOPAS_WALKING_SPEED;
+		SetState(KOOPAS_STATE_WALKING_RIGHT);
 	}
 	else
 	{

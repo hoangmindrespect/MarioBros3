@@ -1,8 +1,4 @@
 #pragma once
-class EnemyTrigger
-{
-};
-#pragma once
 
 #include "GameObject.h"
 #include "Coin.h"
@@ -10,6 +6,7 @@ class EnemyTrigger
 #include "Animations.h"
 #include "Koopas.h"
 #include "RedGoomba.h"
+
 #define ENEMY_TRIGGER_SCOPE	256
 #define ENEMY_KOOPAS	1
 #define ENEMY_GREEN_KOOPAS	5

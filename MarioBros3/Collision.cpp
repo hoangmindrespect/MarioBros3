@@ -187,7 +187,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			else
 				coEvents.push_back(e);
 		}
-		else if (CPlayScene::player != NULL && mario->getIsAttack()) // bao quát trường hợp player null để xử lý intro
+		else if (!CPlayScene::IsIntroScene() && mario->getIsAttack()) // bao quát trường hợp player null để xử lý intro
 		{
 			if (dynamic_cast<CTail*>(objSrc))
 				if (IsCollding(objSrc, objDests->at(i)))
@@ -371,7 +371,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
 
-		// hard code =)
+		// haizzz =)
 		if (dynamic_cast<CTail*>(e->src_obj))
 		{
 			if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CQuestionBlock*>(e->obj))

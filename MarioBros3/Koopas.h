@@ -82,6 +82,9 @@ public:
 	void setVx(float i) {
 		vx = i;
 	}
+	void setNx(int i) {
+		nx = i;
+	}
 	void setVy(float i) {
 		vy = i;
 	}
@@ -91,6 +94,7 @@ public:
 	void setY(float x) {
 		this->y = x;
 	}
+	float getVx() { return vx; }
 	void SetAy(float a) { ay = a; }
 	ULONGLONG getDieStart() { return die_start; }
 	ULONGLONG getReturnStart() { return return_start; }

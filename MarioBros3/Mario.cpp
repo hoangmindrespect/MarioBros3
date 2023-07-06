@@ -27,7 +27,7 @@
 #include "EnemyTrigger.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	DebugOut(L"%f, %f\n", x, y);
+	//DebugOut(L"%f, %f\n", x, y);
 	if (IsInMap == 0)
 	{
 		if(!isFlying && !isRealse)
