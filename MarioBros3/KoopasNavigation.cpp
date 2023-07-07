@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "ColorBox.h"
 #include "Platform.h"
+#include "Mario.h"
 void CKoopasNavigation::Render()
 {
 	RenderBoundingBox();
@@ -23,7 +24,8 @@ void CKoopasNavigation::OnNoCollision(DWORD dt)
 
 void CKoopasNavigation::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	
+	if (dynamic_cast<CMario*>(e->obj))
+		return;
 }
 
 void CKoopasNavigation::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
@@ -32,7 +34,7 @@ void CKoopasNavigation::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 	vy += ay * dt;
 	if (koopas == NULL)
 		this->Delete();
-	if (this->y - koopas->gety() > KOOPAS_NAVIGATION_WIDTH)
+	if (this->y - koopas->gety() > KOOPAS_NAVIGATION_WIDTH / 2)
 		ChangeDirection();
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

@@ -57,7 +57,7 @@
 
 #define MARIO_STATE_IN_MAP	9991
 
-
+#define TIME_OUT_FLYING	6000
 #pragma region ANIMATION_ID
 //BIG - RED
 

@@ -30,6 +30,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	//DebugOut(L"%f, %f\n", x, y);
 	if (IsInMap == 0)
 	{
+		//const velocity
 		if(!isFlying && !isRealse)
 			vy += ay * dt;
 		vx += ax * dt;
@@ -71,7 +72,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (state == MARIO_STATE_DIE)
 		{
-			if (GetTickCount64() - die_start > 2000)
+			if (GetTickCount64() - die_start > 2500)
 			{
 				CGame::GetInstance()->InitiateSwitchScene(1); 
 				die_start = 0;
@@ -80,7 +81,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (state == MARIO_STATE_FLYING)
 		{
-			if (GetTickCount64() - flying_start > 6000)
+			if (GetTickCount64() - flying_start > TIME_OUT_FLYING)
 			{
 				SetState(MARIO_STATE_RELEASE_FLYING);
 				isFlying = false;
@@ -130,7 +131,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					else
 					{
-						count_time_prepare_running -= 40;
+						count_time_prepare_running -= 30;
 					}
 					pre_count_time_prepare_running = count_time_prepare_running;
 				}
