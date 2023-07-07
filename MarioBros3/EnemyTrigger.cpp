@@ -20,10 +20,10 @@ void CEnemyTrigger::Render()
 
 void CEnemyTrigger::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - ENEMY_TRIGGER_SCOPE / 2;
-	t = y - ENEMY_TRIGGER_SCOPE / 2;
-	r = l + ENEMY_TRIGGER_SCOPE;
-	b = t + ENEMY_TRIGGER_SCOPE;
+	l = x - ENEMY_TRIGGER_SCOPE_WIDTH / 2;
+	t = y - ENEMY_TRIGGER_SCOPE_HEIGHT / 2;
+	r = l + ENEMY_TRIGGER_SCOPE_WIDTH;
+	b = t + ENEMY_TRIGGER_SCOPE_HEIGHT;
 }
 
 void CEnemyTrigger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
@@ -34,7 +34,7 @@ void CEnemyTrigger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 		float p_x = 0.0f, p_y = 0.0f;
 		enemyObject->GetPosition(e_x, e_y);
 		CPlayScene::player->GetPosition(p_x, p_y);
-		if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE / 1.5f)
+		if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
 		{
 			if (enemyObject != NULL)
 			{
@@ -74,7 +74,7 @@ void CEnemyTrigger::CreateEnemy()
 
 	if (type == ENEMY_KOOPAS)
 	{
-		CKoopasNavigation* a = new CKoopasNavigation(1.0f, enemyObject->gety());
+		CKoopasNavigation* a = new CKoopasNavigation(enemyObject->getx() - KOOPAS_NAVIGATION_WIDTH - 2.0f, enemyObject->gety() + 6.0f);
 		a->setHost(dynamic_cast<CKoopas*>(enemyObject));
 		CPlayScene::objects.push_back(a);
 	}

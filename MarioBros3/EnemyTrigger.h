@@ -7,7 +7,9 @@
 #include "Koopas.h"
 #include "RedGoomba.h"
 
-#define ENEMY_TRIGGER_SCOPE	256
+#define ENEMY_TRIGGER_SCOPE_WIDTH	256
+#define ENEMY_TRIGGER_SCOPE_HEIGHT	272
+
 #define ENEMY_KOOPAS	1
 #define ENEMY_GREEN_KOOPAS	5
 #define ENEMY_WING_KOOPAS	2

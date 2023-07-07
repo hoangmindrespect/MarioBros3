@@ -404,13 +404,13 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 			{
 				isChooseOptionOne = true;
 				koopas_number_one = new CKoopas(8.0f, GROUND_Y_INTRO, 2);
-				koopas_number_one->setVx(KOOPAS_WALKING_SPEED);
+				koopas_number_one->SetState(KOOPAS_STATE_WALKING_RIGHT);
 
 				CKoopas* koopas_number_two = new CKoopas(-48.0f, GROUND_Y_INTRO, 2);
-				koopas_number_two->setVx(KOOPAS_WALKING_SPEED);
+				koopas_number_two->SetState(KOOPAS_STATE_WALKING_RIGHT);
 
 				CKoopas* koopas_number_three = new CKoopas(-104.0f, GROUND_Y_INTRO, 2);
-				koopas_number_three->setVx(KOOPAS_WALKING_SPEED);
+				koopas_number_three->SetState(KOOPAS_STATE_WALKING_RIGHT);
 
 				CPlayScene::objects.push_back(koopas_number_one);
 				CPlayScene::objects.push_back(koopas_number_two);
@@ -419,9 +419,10 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 		}
 		if (!isCreateFastKoopas)
 		{
-			if (koopas_number_one != NULL && koopas_number_one->getx() > 268.0f)
+			if (koopas_number_one != NULL && koopas_number_one->getx() > 258.0f)
 			{
 				CKoopas* koopas_number_four = new CKoopas(-104.0f, GROUND_Y_INTRO, 2);
+				koopas_number_four->SetState(KOOPAS_STATE_WALKING_RIGHT);
 				koopas_number_four->setVx(KOOPAS_WALKING_SPEED * 3);
 				isCreateFastKoopas = true;
 				CPlayScene::objects.push_back(koopas_number_four);

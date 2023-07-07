@@ -6,10 +6,12 @@
 #define	KOOPAS_NAVIGATION_WIDTH 16.0f
 class CKoopasNavigation : public CGameObject {
 	CKoopas* koopas = NULL;
-	bool isChangingDirection;
+	float ax;
+	float ay;
 public:
 	CKoopasNavigation(float x, float y) : CGameObject(x, y) {
-		isChangingDirection = false;
+		ax = 0.0f;
+		ay = KOOPAS_GRAVITY;
 	}
 	void Render();
 	void OnNoCollision(DWORD dt);
@@ -19,6 +21,7 @@ public:
 	int IsBlocking() { return 0; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void setHost(CKoopas* koo) { this->koopas = koo; }
+	void ChangeDirection();
 };
 
 

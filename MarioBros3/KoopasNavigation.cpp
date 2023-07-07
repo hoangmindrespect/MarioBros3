@@ -17,7 +17,8 @@ void CKoopasNavigation::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CKoopasNavigation::OnNoCollision(DWORD dt)
 {
-
+	x += vx * dt;
+	y += vy * dt;
 }
 
 void CKoopasNavigation::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -27,26 +28,35 @@ void CKoopasNavigation::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopasNavigation::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 {
+	vx = koopas->getVx();
+	vy += ay * dt;
+	if (koopas == NULL)
+		this->Delete();
+	if (this->y - koopas->gety() > KOOPAS_NAVIGATION_WIDTH)
+		ChangeDirection();
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-	
-	if (koopas != NULL)
-	{
-		float koopas_x = 0.0f, koopas_y = 0.0f;
-		int HostDirection = koopas->getnx();
-		koopas->GetPosition(koopas_x, koopas_y);
+}
 
-		if (HostDirection > 0)
-		{
-			x = koopas_x + KOOPAS_NAVIGATION_WIDTH + 4.0f;
-			y = koopas_y + 6.0f;
-		}
-		else
-		{
-			x = koopas_x - KOOPAS_NAVIGATION_WIDTH - 4.0f;
-			y = koopas_y + 6.0f;
-		}
+void CKoopasNavigation::ChangeDirection()
+{
+	if (koopas->GetState() == KOOPAS_STATE_WALKING_LEFT)
+		koopas->SetState(KOOPAS_STATE_WALKING_RIGHT);
+	else if(koopas->GetState() == KOOPAS_STATE_WALKING_RIGHT)
+		koopas->SetState(KOOPAS_STATE_WALKING_LEFT);
+
+	float koopas_x = 0.0f, koopas_y = 0.0f;
+	int HostDirection = koopas->getnx();
+	koopas->GetPosition(koopas_x, koopas_y);
+
+	if (HostDirection > 0)
+	{
+		x = koopas_x + KOOPAS_NAVIGATION_WIDTH + 2.0f;
+		y = koopas_y;
 	}
-	else if (koopas == NULL)
-		this->Delete();
+	else
+	{
+		x = koopas_x - KOOPAS_NAVIGATION_WIDTH - 2.0f;
+		y = koopas_y;
+	}
 }
