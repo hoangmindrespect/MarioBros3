@@ -9,6 +9,9 @@ int CCollisionEvent::WasCollided() {
 #include "Leaf.h"
 #include "Mario.h"
 #include "QuestionBlock.h"
+#include "KoopasNavigation.h"
+#include "ColorBox.h"
+#include "Platform.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
@@ -168,17 +171,18 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
+
+
 void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDests, vector<LPCOLLISIONEVENT>& coEvents)
 {
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
-	// kiểm tra các cái source đó có collide với cái destination kh
 	for (UINT i = 0; i < objDests->size(); i++)
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
-		
 		if (e->WasCollided() == 1)
 		{
+			//Leaf only collide with mario
 			if (dynamic_cast<CLeaf*>(objSrc))
 			{
 				if (dynamic_cast<CMario*>(objDests->at(i)))
@@ -187,14 +191,19 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			else
 				coEvents.push_back(e);
 		}
-		else if (!CPlayScene::IsIntroScene() && mario->getIsAttack()) // bao quát trường hợp player null để xử lý intro
+		else 
 		{
-			if (dynamic_cast<CTail*>(objSrc))
+			// => Tail, KoopasNavigation is objects have position depend on their host (mario, koopas) [not have vx, ax, ay, vy,..] => SweptAABB not work
+			if (dynamic_cast<CTail*>(objSrc) || dynamic_cast<CKoopasNavigation*>(objSrc))
+			{
 				if (IsCollding(objSrc, objDests->at(i)))
 					coEvents.push_back(e);
+				else
+					delete e;
+			}
+			else
+				delete e;
 		}
-		else
-			delete e;
 	}
 
 	//std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
@@ -372,9 +381,9 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		LPCOLLISIONEVENT e = coEvents[i];
 
 		// haizzz =)
-		if (dynamic_cast<CTail*>(e->src_obj))
+		if (dynamic_cast<CTail*>(e->src_obj) || dynamic_cast<CKoopasNavigation*>(e->src_obj))
 		{
-			if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<CQuestionBlock*>(e->obj))
+			if (e->obj->IsBlocking())
 				objSrc->OnCollisionWith(e);
 		}
 		if (e->isDeleted) continue;
@@ -386,6 +395,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
+
 bool CCollision::IsCollding(LPGAMEOBJECT source, LPGAMEOBJECT target)
 {
 	float sl, st, sr, sb;
@@ -402,5 +412,6 @@ bool CCollision::IsCollding(LPGAMEOBJECT source, LPGAMEOBJECT target)
 	float top = (target->gety() + t_height) - source->gety();
 	float right = (target->getx() + t_width) - source->getx();
 	float bottom = target->gety() - (source->gety() + o_height);
+
 	return !(left > 0 || right < 0 || top < 0 || bottom > 0);
 }

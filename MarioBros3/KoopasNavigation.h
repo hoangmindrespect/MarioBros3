@@ -6,8 +6,11 @@
 #define	KOOPAS_NAVIGATION_WIDTH 16.0f
 class CKoopasNavigation : public CGameObject {
 	CKoopas* koopas = NULL;
+	bool isChangingDirection;
 public:
-	CKoopasNavigation(float x, float y) : CGameObject(x, y) {}
+	CKoopasNavigation(float x, float y) : CGameObject(x, y) {
+		isChangingDirection = false;
+	}
 	void Render();
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
