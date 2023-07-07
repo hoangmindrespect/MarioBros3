@@ -267,7 +267,6 @@ class CMario : public CGameObject
 	bool isStart;				// biến bool để tính thời gian bay
 	bool isChanging;
 	bool isChangingTail;
-
 	bool isGetInOutPipe;		//trạng thái đi ra đi vào ống nước.
 	bool isFallDown;			// kiểm tra điểm rơi của mario => chỉnh camera
 	bool isDelevel;
@@ -292,7 +291,7 @@ class CMario : public CGameObject
 	ULONGLONG flying_start;
 	ULONGLONG kicking_start;
 	ULONGLONG time_switching;
-
+	ULONGLONG time_full_power;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -311,7 +310,7 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdTail();
 	int GetAniIdSmall();
-
+	bool IsReadyForFlying() { return count_time_prepare_running >= 1800; }
 	int IsInMap;
 	CTail* Tail = NULL;
 	CKoopas* Koopas = NULL;
@@ -347,6 +346,7 @@ public:
 
 		FlagForUntouching = 0;
 		untouchable = 0;
+		time_full_power = 0;
 		untouchable_start = -1;
 		attack_start = -1;
 		running_start = 1;
@@ -403,6 +403,7 @@ public:
 	void setIsFellOnTheHead(bool a) { isFellOnTheHead = a; }
 	void setKoopas(CKoopas* a) { Koopas = a; }
 	void setIsHolding(bool a) { isHolding = a; }
+	void setIsTimeFlying(ULONGLONG a) { time_full_power = a; } // when press A but not fly
 	//get 
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

@@ -196,6 +196,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			break;
 		}
 	}
+	case DIK_X:
+		if (mario->getCountTimePrepareRun() > 1800)
+			mario->setIsTimeFlying(GetTickCount64());
+		break;
 	case DIK_R: // reset
 		CGame::GetInstance()->InitiateSwitchScene(5);
 		break;
@@ -262,7 +266,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		// if press A => in first 2 - 3 second Mario will run with velocity : 0.08f, then velocity is 0.2f
-		if (game->IsKeyDown(DIK_A))
+		if (game->IsKeyDown(DIK_A) )
 		{
 			//at the first time into this state we'll have an boolean variable to count the time [isReady]
 			if (mario->GetState() !=  MARIO_STATE_PREPARE_RUNNING_RIGHT)
@@ -281,11 +285,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						else
 						{
 							// case mario change direction when flying and not time out
-							if (GetTickCount64() - mario->getFlyingStart() < 4000 )
+							if (GetTickCount64() - mario->getFlyingStart() <= TIME_OUT_FLYING)
 							{
+								
 								if (mario->getnx() < 0)
 								{
-									if (mario->getIsOnPlatForm() == false)
+									if (!mario->getIsOnPlatForm())
 									{
 										mario->setNx(1);
 										mario->SetVy(-MARIO_WALKING_SPEED);
@@ -322,18 +327,20 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						if (mario->GetState() != MARIO_STATE_FLYING)
 							mario->SetState(MARIO_STATE_FLYING);
 					}
+					else
+						mario->SetState(MARIO_STATE_JUMP);
 				}
 				else if (mario->GetState() == MARIO_STATE_FLYING)
 				{
-					if (GetTickCount64() - mario->getFlyingStart() < 4000)
+					if (GetTickCount64() - mario->getFlyingStart() <= TIME_OUT_FLYING)
 					{
-						//write for fun
+						
+						//change direction when flying without press DIK_A
 						if (game->IsKeyDown(DIK_A) == false)
 						{
 							if (mario->getnx() < 0)
 							{
 								mario->setNx(1);
-
 							}
 							mario->setIsOnPlatForm(true);
 							mario->SetVy(-MARIO_WALKING_SPEED);
@@ -345,7 +352,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 							mario->setIsOnPlatForm(true);
 							mario->SetVy(-MARIO_WALKING_SPEED);
 							mario->Setax(MARIO_ACCEL_RUN_X);
-							mario->setMaxVx(MARIO_RUNNING_SPEED -0.03f);
+							mario->setMaxVx(MARIO_RUNNING_SPEED - 0.03f);
 						}
 						
 						
@@ -353,7 +360,11 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 				}
 			}
 		}
-		
+		else
+		{
+			if (mario->GetState() == MARIO_STATE_FLYING)
+				mario->SetState(MARIO_STATE_JUMP);
+		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
@@ -374,11 +385,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						}
 						else
 						{
-							if (GetTickCount64() - mario->getFlyingStart() < 4000 )
+							//change direction when pressing DIK_A
+							if (GetTickCount64() - mario->getFlyingStart() <= TIME_OUT_FLYING)
 							{
 								if (mario->getnx() > 0)
 								{
-									if (mario->getIsOnPlatForm() == false)
+									if (!mario->getIsOnPlatForm())
 									{
 										mario->setNx(-1);
 										mario->SetVy(-MARIO_WALKING_SPEED);
@@ -414,12 +426,16 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						if (mario->GetState() != MARIO_STATE_FLYING)
 							mario->SetState(MARIO_STATE_FLYING);
 					}
+					else
+						mario->SetState(MARIO_STATE_JUMP);
+
 				}
 				else if (mario->GetState() == MARIO_STATE_FLYING)
-				{
-					if (GetTickCount64() - mario->getFlyingStart() < 4000)
+				{						
+					//change direction when flying without press DIK_A
+					if (GetTickCount64() - mario->getFlyingStart() <= TIME_OUT_FLYING)
 					{
-						if (game->IsKeyDown(DIK_A) == false )
+						if (!game->IsKeyDown(DIK_A))
 						{
 							if (mario->getnx() > 0)
 							{
@@ -441,6 +457,11 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 					}
 				}
 			}
+		}
+		else
+		{
+			if (mario->GetState() == MARIO_STATE_FLYING)
+				mario->SetState(MARIO_STATE_JUMP);
 		}
 	}
 	else

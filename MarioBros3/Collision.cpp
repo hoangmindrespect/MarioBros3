@@ -193,8 +193,8 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 		}
 		else 
 		{
-			// => Tail, KoopasNavigation is objects have position depend on their host (mario, koopas) [not have vx, ax, ay, vy,..] => SweptAABB not work
-			if (dynamic_cast<CTail*>(objSrc) || dynamic_cast<CKoopasNavigation*>(objSrc))
+			// => Tail is objects have position depend on their host (mario, koopas) [not have vx, ax, ay, vy,..] => SweptAABB not work
+			if (dynamic_cast<CTail*>(objSrc) )
 			{
 				if (IsCollding(objSrc, objDests->at(i)))
 					coEvents.push_back(e);
@@ -381,7 +381,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		LPCOLLISIONEVENT e = coEvents[i];
 
 		// haizzz =)
-		if (dynamic_cast<CTail*>(e->src_obj) || dynamic_cast<CKoopasNavigation*>(e->src_obj))
+		if (dynamic_cast<CTail*>(e->src_obj))
 		{
 			if (e->obj->IsBlocking())
 				objSrc->OnCollisionWith(e);

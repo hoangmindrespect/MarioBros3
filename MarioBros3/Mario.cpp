@@ -38,7 +38,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 				vx = maxVx;
 		}
-		if ((vx > 0 && ax > 0) || (vx < 0 && ax < 0))
+		if ((vx > 0 && ax > 0) || (vx < 0 && ax < 0)) // change direction when flying
 			isSwitch = false;
 		
 		// reset untouchable timer if untouchable time has passed
@@ -50,7 +50,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		
 		if (CPlayScene::IsIntroScene())
 		{
-			//DebugOut(L"hi");
 			if (isFellOnTheHead)
 			{
 				if (GetTickCount64() - time_switching > 300)
@@ -72,11 +71,33 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (state == MARIO_STATE_DIE)
 		{
-			if (GetTickCount64() - die_start > 2500)
+			if (GetTickCount64() - die_start > 3000)
 			{
 				CGame::GetInstance()->InitiateSwitchScene(1); 
 				die_start = 0;
 			}
+		}
+
+		if (time_full_power != 0)
+		{
+			if (GetTickCount64() - time_full_power > TIME_OUT_FLYING)
+			{
+				if (count_time_prepare_running > 0)
+				{
+					if (count_time_prepare_running - 30 < 0)
+					{
+						count_time_prepare_running = 0;
+						time_full_power = 0;
+					}
+					else
+					{
+						count_time_prepare_running -= 30;
+					}
+					pre_count_time_prepare_running = count_time_prepare_running;
+				}
+			}
+			else
+				count_time_prepare_running = 1900;
 		}
 
 		if (state == MARIO_STATE_FLYING)
@@ -99,33 +120,33 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		
 		if (state == MARIO_STATE_PREPARE_RUNNING_LEFT || state == MARIO_STATE_PREPARE_RUNNING_RIGHT)
 		{
-			count_time_prepare_running = GetTickCount64() - running_start;
-			if (pre_count_time_prepare_running > 0)
-			{
-				count_time_prepare_running += pre_count_time_prepare_running;
-				pre_count_time_prepare_running = 0;
-			}
+			count_time_prepare_running = (GetTickCount64() + pre_count_time_prepare_running) - running_start;
+
 			if (count_time_prepare_running > 1800)
 			{
-				if(nx > 0)
-					SetState(MARIO_STATE_RUNNING_RIGHT);
-				else
-					SetState(MARIO_STATE_RUNNING_LEFT);
+				if (isOnPlatform)
+				{
+					if (nx > 0)
+						SetState(MARIO_STATE_RUNNING_RIGHT);
+					else
+						SetState(MARIO_STATE_RUNNING_LEFT);
+				}
 				running_start = -1;
-				count_time_prepare_running = 1800;
+				count_time_prepare_running = 1900;
 			}
 		}
 		else
 		{
 			if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT)
 			{
-				count_time_prepare_running = 1800;
+				count_time_prepare_running = 1900;
+				pre_count_time_prepare_running = 900;
 			}
 			else
 			{
 				if (count_time_prepare_running > 0)
 				{
-					if (count_time_prepare_running - 40 < 0)
+					if (count_time_prepare_running - 30 < 0)
 					{
 						count_time_prepare_running = 0;
 					}
@@ -272,33 +293,6 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	
-	if (e->ny != 0 )
-	{
-		if (e->obj->IsBlocking())
-		{
-			vy = 0;
-			if (e->ny < 0) {
-				isOnPlatform = true;
-				isFlying = false;
-				if (state == MARIO_STATE_FLYING)
-				{
-					if (nx > 0)
-					{
-						SetState(MARIO_STATE_RUNNING_RIGHT);
-					}
-					else
-					{
-						SetState(MARIO_STATE_RUNNING_LEFT);
-					}
-				}
-			}
-		}
-	}
-	else if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
-	}
 
 	if (dynamic_cast<CMario*>(e->obj))
 	{
@@ -342,6 +336,33 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPSwitch(e);
 	else if (dynamic_cast<CEnemyTrigger*>(e->obj))
 		OnCollisionWithEnemyTrigger(e);
+
+	if (e->ny != 0)
+	{
+		if (e->obj->IsBlocking())
+		{
+			vy = 0;
+			if (e->ny < 0) {
+				isOnPlatform = true;
+				isFlying = false;
+				if (state == MARIO_STATE_FLYING)
+				{
+					if (nx > 0)
+					{
+						SetState(MARIO_STATE_RUNNING_RIGHT);
+					}
+					else
+					{
+						SetState(MARIO_STATE_RUNNING_LEFT);
+					}
+				}
+			}
+		}
+	}
+	else if (e->nx != 0 && e->obj->IsBlocking())
+	{
+		vx = 0;
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -1112,9 +1133,19 @@ int CMario::GetAniIdTail()
 					else
 					{
 						if (nx >= 0)
-							aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+						{
+							if(IsReadyForFlying())
+								aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
+							else
+								aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+						}
 						else
-							aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+						{
+							if(IsReadyForFlying())
+								aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT;
+							else
+								aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+						}
 					}
 				}
 				else
@@ -1187,7 +1218,7 @@ int CMario::GetAniIdTail()
 	{
 		if (nx > 0)
 			aniId = ID_ANI_MARIO_TAIL_FLYING_RIGHT;
-		else
+		else if(nx < 0)
 			aniId = ID_ANI_MARIO_TAIL_FLYING_LEFT;
 	}
 
