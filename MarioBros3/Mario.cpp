@@ -341,6 +341,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPSwitch(e);
 	else if (dynamic_cast<CEnemyTrigger*>(e->obj))
 		OnCollisionWithEnemyTrigger(e);
+	else if (dynamic_cast<CPlatform*>(e->obj))
+		OnCollisionWithPlatform(e);
 
 	if (e->ny != 0)
 	{
@@ -368,6 +370,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = 0;
 	}
+}
+void CMario::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
+{
+	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
+	if (p->getIsDestinationPoint())
+		isEndScene = true;
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

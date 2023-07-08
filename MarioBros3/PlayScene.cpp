@@ -638,10 +638,8 @@ THERE:
 		if (mario->gety() < -300.0f)
 			cy = -500.0f;
 		//mario đến đích
-		if (mario->getx() > 2715.71f)
-		{
+		if (mario->getIsEndScene())
 			return;
-		}
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	else

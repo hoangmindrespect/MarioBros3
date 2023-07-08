@@ -15,6 +15,8 @@
 #define ENEMY_WING_KOOPAS	2
 #define ENEMY_GOOMBA	3
 #define	ENEMY_RED_GOOMBA	4
+#define	ENEMY_RED_GOOMBA_ONE_TIME	6
+#define	ENEMY_GOOMBA_ONE_TIME	7
 
 //1: create koopas
 //2: create wing koopas
@@ -24,6 +26,7 @@
 class CEnemyTrigger : public CGameObject {
 	int type;
 	LPGAMEOBJECT enemyObject;
+	bool IsCreated;
 	float pos_x;
 	float pos_y;
 public:

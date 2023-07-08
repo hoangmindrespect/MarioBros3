@@ -11,6 +11,7 @@ CEnemyTrigger::CEnemyTrigger(float x, float y, int type, float pos_x, float pos_
 	this->type = type;
 	this->pos_x = pos_x;
 	this->pos_y = pos_y;
+	this->IsCreated = false;
 }
 
 void CEnemyTrigger::Render()
@@ -28,18 +29,22 @@ void CEnemyTrigger::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CEnemyTrigger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 {
-	if (enemyObject != NULL)
+	if (type == 6 || type == 7){}
+	else
 	{
-		float e_x = 0.0f, e_y = 0.0f;
-		float p_x = 0.0f, p_y = 0.0f;
-		enemyObject->GetPosition(e_x, e_y);
-		CPlayScene::player->GetPosition(p_x, p_y);
-		if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
+		if (enemyObject != NULL)
 		{
-			if (enemyObject != NULL)
+			float e_x = 0.0f, e_y = 0.0f;
+			float p_x = 0.0f, p_y = 0.0f;
+			enemyObject->GetPosition(e_x, e_y);
+			CPlayScene::player->GetPosition(p_x, p_y);
+			if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
 			{
-				enemyObject->Delete();
-				enemyObject = NULL;
+				if (enemyObject != NULL)
+				{
+					enemyObject->Delete();
+					enemyObject = NULL;
+				}
 			}
 		}
 	}
@@ -68,6 +73,24 @@ void CEnemyTrigger::CreateEnemy()
 	case ENEMY_RED_GOOMBA:
 		enemyObject = new CRedGoomba(pos_x, pos_y);
 		break;
+	case ENEMY_RED_GOOMBA_ONE_TIME:
+		if (!IsCreated)
+		{
+			enemyObject = new CRedGoomba(pos_x, pos_y);
+			IsCreated = true;
+			break;
+		}
+		else
+			break;
+	case ENEMY_GOOMBA_ONE_TIME:
+		if (!IsCreated)
+		{
+			enemyObject = new CGoomba(pos_x, pos_y);
+			IsCreated = true;
+			break;
+		}
+		else
+			break;
 	default:
 		break;
 	}

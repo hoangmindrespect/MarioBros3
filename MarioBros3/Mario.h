@@ -244,7 +244,6 @@
 class CMario : public CGameObject
 {
 	int color;				//1. red, 2. green [just mario- not lugigi]
-
 	bool isEndTurn;			// user for moving in map
 	bool isMoveLeft;
 	bool isMoveRight;
@@ -306,7 +305,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFunnel(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithEnemyTrigger(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdTail();
 	int GetAniIdSmall();
