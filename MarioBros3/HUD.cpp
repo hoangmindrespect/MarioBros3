@@ -55,11 +55,11 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = cx + HUD_WIDTH / 2;
 
 	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
-	if (mario_y < 77.0f)
+	if (mario_y < COORDINATES_ADJUST_CAMERA_FIRST)
 	{
 		if (mario->GetState() == MARIO_STATE_FLYING)
 		{
-			if (mario_y < -230.0f)
+			if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
 				y = -99.0f;
 			else
 				y = cy_tmp + 255.0f;
@@ -68,18 +68,37 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!mario->getIsOnPlatForm())
 			{
-				if (mario_y < -230.0f)
-					y = -99.0f;
+				if (!mario->getIsFallDown())
+				{
+					if (mario_y < ON_CLOUD)
+					{
+						mario->setIsFallDown(true);
+					}
+				}
 				else
-					y = cy_tmp + 233.0f;
+				{
+					if (mario_y > ON_CLOUD + 30.0f)
+						mario->setIsFallDown(false);
+				}
+
+				if (mario->getIsFallDown())
+				{
+					if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+						y = -99.0f;
+					else
+						y = cy_tmp + 233.0f;
+				}
+				else
+					y = HUD_Y_DEFAULT;
 			}
 			else
 			{
-				if (mario_y < -60.0f)
+				if (mario_y < ON_CLOUD)
 					y = cy_tmp + 233.0f;
 				else
 					y = HUD_Y_DEFAULT;
 			}
+
 		}
 	}
 	else
@@ -87,7 +106,6 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y = HUD_Y_DEFAULT;
 		mario->setIsFallDown(false);
 	}
-
 	if (cy < -300.0f)
 		y = HUD_Y_HIDDEN;
 

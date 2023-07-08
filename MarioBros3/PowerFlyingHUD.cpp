@@ -75,7 +75,7 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (mario->GetState() == MARIO_STATE_FLYING)
 		{
-			if (mario_y < -230.0f)
+			if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
 				y = -110.0f;
 			else
 				y = cy_tmp + 244.0f;
@@ -84,14 +84,32 @@ void CPowerFlyingHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!mario->getIsOnPlatForm())
 			{
-				if (mario_y < -230.0f)
-					y = -110.0f;
+				if (!mario->getIsFallDown())
+				{
+					if (mario_y < ON_CLOUD)
+					{
+						mario->setIsFallDown(true);
+					}
+				}
 				else
-					y = cy_tmp + 222.0f;
+				{
+					if (mario_y > ON_CLOUD + 30.0f)
+						mario->setIsFallDown(false);
+				}
+
+				if (mario->getIsFallDown())
+				{
+					if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+						y = -110.0f;
+					else
+						y = cy_tmp + 222.0f;
+				}
+				else
+					y = POWERFLYINGHUD_Y_DEFAULT;
 			}
 			else
 			{
-				if (mario_y < -60.0f)
+				if (mario_y < ON_CLOUD)
 					y = cy_tmp + 222.0f;
 				else
 					y = POWERFLYINGHUD_Y_DEFAULT;

@@ -8,6 +8,12 @@
 #include "Goomba.h"
 #include "Koopas.h"
 
+#define COORDINATES_ADJUST_CAMERA_FIRST	77.0f
+#define COORDINATES_ADJUST_CAMERA_SECOND	-230.0f
+#define COORDINATES_ADJUST_CAMERA_THIRD	-270.0f
+#define COORDINATES_DEFAULT_Y_AXIS_ADJUST_CAM	-309.0f
+#define ON_CLOUD	-60.0f
+
 
 class CPlayScene: public CScene
 {

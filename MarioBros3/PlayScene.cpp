@@ -574,14 +574,14 @@ THERE:
 	if (cx < 0) cx = 0;
 	if (mario->getIsInMap() == 0)
 	{
-		if (mario_y < 77.0f)
+		if (mario_y < COORDINATES_ADJUST_CAMERA_FIRST)
 		{
 			if (mario->GetState() == MARIO_STATE_FLYING)
 			{
-				if (mario_y < -270.0f)
+				if (mario_y < COORDINATES_ADJUST_CAMERA_THIRD)
 					cy = cy_tmp + 64.0f;
-				else if (mario_y < -230.0f)
-					cy = -309.12f;
+				else if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+					cy = COORDINATES_DEFAULT_Y_AXIS_ADJUST_CAM;
 				else
 					cy = cy_tmp + 44.0f;
 			}
@@ -591,23 +591,23 @@ THERE:
 				{
 					if (!mario->getIsFallDown())
 					{
-						if (mario_y < -60.0f)
+						if (mario_y < ON_CLOUD)
 						{
 							mario->setIsFallDown(true);
 						}
 					}
 					else
 					{
-						if (mario_y > 90.0f)
+						if (mario_y > ON_CLOUD + 30.0f)
 							mario->setIsFallDown(false);
 					}
 
 					if (mario->getIsFallDown())
 					{
-						if (mario_y < -270.0f)
+						if (mario_y < COORDINATES_ADJUST_CAMERA_THIRD)
 							cy = cy_tmp + 64.0f;
-						else if (mario_y < -230.0f)
-							cy = -309.12f;
+						else if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+							cy = COORDINATES_DEFAULT_Y_AXIS_ADJUST_CAM;
 						else
 							cy = cy_tmp + 22.0f;
 					}
@@ -616,7 +616,7 @@ THERE:
 				}
 				else
 				{
-					if (mario_y < -60.0f)
+					if (mario_y < ON_CLOUD)
 						cy = cy_tmp + 22.0f;
 					else
 					{

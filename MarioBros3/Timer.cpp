@@ -97,7 +97,7 @@ void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (mario->GetState() == MARIO_STATE_FLYING)
 		{
-			if (mario_y < -230.0f)
+			if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
 				y = -102.0f;
 			else
 				y = cy_tmp + 252.0f;
@@ -106,14 +106,32 @@ void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (!mario->getIsOnPlatForm())
 			{
-				if (mario_y < -230.0f)
-					y = -102.0f;
+				if (!mario->getIsFallDown())
+				{
+					if (mario_y < ON_CLOUD)
+					{
+						mario->setIsFallDown(true);
+					}
+				}
 				else
-					y = cy_tmp + 230.0f;
+				{
+					if (mario_y > ON_CLOUD + 30.0f)
+						mario->setIsFallDown(false);
+				}
+
+				if (mario->getIsFallDown())
+				{
+					if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+						y = -1102.0f;
+					else
+						y = cy_tmp + 230.0f;
+				}
+				else
+					y = TIMER_Y_DEFAULT;
 			}
 			else
 			{
-				if (mario_y < -60.0f)
+				if (mario_y < ON_CLOUD)
 					y = cy_tmp + 230.0f;
 				else
 					y = TIMER_Y_DEFAULT;
