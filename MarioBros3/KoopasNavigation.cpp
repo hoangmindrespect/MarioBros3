@@ -30,10 +30,14 @@ void CKoopasNavigation::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopasNavigation::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 {
+	if (koopas == NULL)
+	{
+		this->Delete();
+		return;
+	}
+
 	vx = koopas->getVx();
 	vy += ay * dt;
-	if (koopas == NULL)
-		this->Delete();
 	if (this->y - koopas->gety() > KOOPAS_NAVIGATION_WIDTH / 2)
 		ChangeDirection();
 	CGameObject::Update(dt, coObjects);

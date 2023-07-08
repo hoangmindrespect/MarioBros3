@@ -84,13 +84,52 @@ void CCoinInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x = COININHUD_X_DEFAULT;
 	else
 		x = cx + COININHUD_X_DEFAULT;
-	if (cy < -260.0f)
+
+	float mario_x, mario_y;
+	mario->GetPosition(mario_x, mario_y);
+	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
+	if (mario_y < 77.0f)
+	{
+		if (mario->GetState() == MARIO_STATE_FLYING)
+		{
+			if (mario_y < -230.0f)
+				y = -110.0f;
+			else
+				y = cy_tmp + 244.0f;
+		}
+		else
+		{
+			if (!mario->getIsOnPlatForm())
+			{
+				if (mario_y < -230.0f)
+					y = -110.0f;
+				else
+					y = cy_tmp + 222.0f;
+			}
+			else
+			{
+				if (mario_y < -60.0f)
+					y = cy_tmp + 222.0f;
+				else
+					y = COININHUD_Y_DEFAULT;
+			}
+		}
+	}
+	else
+	{
+		y = COININHUD_Y_DEFAULT;
+		mario->setIsFallDown(false);
+	}
+
+	if (cy < -300.0f)
 		y = COININHUD_Y_HIDDEN;
-	else y = COININHUD_Y_DEFAULT;
 
 	//in worldmap
 	if (mario->getIsInMap())
+	{
 		x = COININHUD_X_DEFAULT;
+		y = COININHUD_Y_DEFAULT;
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

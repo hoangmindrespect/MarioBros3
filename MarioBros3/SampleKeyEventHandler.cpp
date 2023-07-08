@@ -198,8 +198,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	}
 	case DIK_X:
 		if (mario->getCountTimePrepareRun() > 1800)
+		{
+			//DebugOut(L"set nè: %d\n", mario->getCountTimePrepareRun());
 			mario->setIsTimeFlying(GetTickCount64());
-		break;
+			break;
+		}
 	case DIK_R: // reset
 		CGame::GetInstance()->InitiateSwitchScene(5);
 		break;

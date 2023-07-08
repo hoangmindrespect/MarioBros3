@@ -541,12 +541,8 @@ THERE:
 	if (player != NULL)
 	{
 		mario->Update(dt, &coObjects);
-		// Không update những object nằm dưới màn hình => xóa luôn ngoại trừ mario thì set die
 		for (size_t i = 0; i < objects.size(); i++)
 		{
-			/*if (objects[i]->gety() > DEAD_ZONE)
-				if (!dynamic_cast<CMario*>(objects[i]))
-					objects[i]->Delete();*/
 			if (!dynamic_cast<CMario*>(objects[i]))
 				objects[i]->Update(dt, &coObjects);
 		}
@@ -562,19 +558,7 @@ THERE:
 		PurgeDeletedObjects();
 		return;
 	}
-	/*if (player->getx() > 689)
-	{
-		if (isCreateGoomba == false)
-		{
-			CGoomba* g1 = new CGoomba(889, 102);
-			CGoomba* g2 = new CGoomba(959, 102);
-			CRedGoomba* g3 = new CRedGoomba(1029, 102);
-			objects.push_back(g1);
-			objects.push_back(g2);
-			objects.push_back(g3);
-			isCreateGoomba = true;
-		}
-	}*/
+
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload
 	// Update camera to follow mario
@@ -585,71 +569,73 @@ THERE:
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-	float cyt = cy;
-	float fy = 0.0f;
 
+	float cy_tmp = cy;
 	if (cx < 0) cx = 0;
 	if (mario->getIsInMap() == 0)
 	{
-		if (mario->getlevel() == MARIO_LEVEL_SMALL || mario->getlevel() == MARIO_LEVEL_BIG)
-			cy = 0.0f;
-		else
+		if (mario_y < 77.0f)
 		{
-			if (mario_y < 77.0f)
+			if (mario->GetState() == MARIO_STATE_FLYING)
 			{
-				if (mario->GetState() == MARIO_STATE_FLYING)
-					cy = cyt + 44.0f;
+				if (mario_y < -270.0f)
+					cy = cy_tmp + 64.0f;
+				else if (mario_y < -230.0f)
+					cy = -309.12f;
 				else
+					cy = cy_tmp + 44.0f;
+			}
+			else
+			{
+				if (!mario->getIsOnPlatForm())
 				{
-					if (mario->getIsOnPlatForm() == false)
+					if (!mario->getIsFallDown())
 					{
-						if (mario->getIsFallDown() == false)
+						if (mario_y < -60.0f)
 						{
-							if (mario_y < -60.0f)
-							{
-								mario->setIsFallDown(true);
-								//fy = cy + 44.0f;
-							}
-						}
-						else
-						{
-							if (mario_y > 50.0f)
-								mario->setIsFallDown(false);
-						}
-
-						if (mario->getIsFallDown() == true)
-						{
-							cy = cyt;
-						}
-						else
-						{
-							cy = 0.0f;
+							mario->setIsFallDown(true);
 						}
 					}
 					else
 					{
-						// xử lý lúc di chuyển trên platform trên cao
-						if (mario_y < -60.0f)
-						{
-							cy = cyt;
-						}
-						else
-						{
-							cy = 0.0f;
-						}
+						if (mario_y > 90.0f)
+							mario->setIsFallDown(false);
 					}
 
+					if (mario->getIsFallDown())
+					{
+						if (mario_y < -270.0f)
+							cy = cy_tmp + 64.0f;
+						else if (mario_y < -230.0f)
+							cy = -309.12f;
+						else
+							cy = cy_tmp + 22.0f;
+					}
+					else
+						cy = 0.0f;
 				}
-			}
-			else
-			{
-				cy = 0.0f;
-				mario->setIsFallDown(false);
-			}
-			
-		}
+				else
+				{
+					if (mario_y < -60.0f)
+						cy = cy_tmp + 22.0f;
+					else
+					{
+						if(mario->getIsFallDown())
+							cy = cy_tmp + 22.0f;
+						else
+							cy = 0.0f;
+					}
+				}
 
-		if (mario->gety() < -260.0f)
+			}
+		}
+		else
+		{
+			cy = 0.0f;
+			mario->setIsFallDown(false);
+		}
+		
+		if (mario->gety() < -300.0f)
 			cy = -500.0f;
 		//mario đến đích
 		if (mario->getx() > 2715.71f)

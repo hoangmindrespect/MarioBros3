@@ -43,20 +43,61 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
+	float mario_x, mario_y;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	mario->GetPosition(cx, cy);
+	mario->GetPosition(mario_x, mario_y);
 	cx -= game->GetBackBufferWidth() / 2;
+
 	if (cx < 0)
 		x = HUD_WIDTH / 2;
 	else
 		x = cx + HUD_WIDTH / 2;
-	if (cy < -260.0f)
+
+	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
+	if (mario_y < 77.0f)
+	{
+		if (mario->GetState() == MARIO_STATE_FLYING)
+		{
+			if (mario_y < -230.0f)
+				y = -99.0f;
+			else
+				y = cy_tmp + 255.0f;
+		}
+		else
+		{
+			if (!mario->getIsOnPlatForm())
+			{
+				if (mario_y < -230.0f)
+					y = -99.0f;
+				else
+					y = cy_tmp + 233.0f;
+			}
+			else
+			{
+				if (mario_y < -60.0f)
+					y = cy_tmp + 233.0f;
+				else
+					y = HUD_Y_DEFAULT;
+			}
+		}
+	}
+	else
+	{
+		y = HUD_Y_DEFAULT;
+		mario->setIsFallDown(false);
+	}
+
+	if (cy < -300.0f)
 		y = HUD_Y_HIDDEN;
-	else y = HUD_Y_DEFAULT;
+
 
 	//in worldmap
 	if (mario->getIsInMap())
+	{
 		x = HUD_WIDTH / 2;
+		y = HUD_Y_DEFAULT;
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

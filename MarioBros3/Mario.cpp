@@ -84,20 +84,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (count_time_prepare_running > 0)
 				{
-					if (count_time_prepare_running - 30 < 0)
+					if (count_time_prepare_running - 40 < 0)
 					{
 						count_time_prepare_running = 0;
 						time_full_power = 0;
 					}
 					else
 					{
-						count_time_prepare_running -= 30;
+						count_time_prepare_running -= 40;
+						time_full_power = 0;
 					}
 					pre_count_time_prepare_running = count_time_prepare_running;
+					//DebugOut(L"pre: %d\n", pre_count_time_prepare_running);
 				}
 			}
 			else
-				count_time_prepare_running = 1900;
+				count_time_prepare_running = 1850;
 		}
 
 		if (state == MARIO_STATE_FLYING)
@@ -110,7 +112,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				flying_start = 0;
 			}
 			else
-				count_time_prepare_running = 1900;
+				count_time_prepare_running = 1850;
 		}
 		if (GetTickCount64() - attack_start > MARIO_ATTACK_TIME)
 		{
@@ -132,29 +134,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						SetState(MARIO_STATE_RUNNING_LEFT);
 				}
 				running_start = -1;
-				count_time_prepare_running = 1900;
+				count_time_prepare_running = 1850;
 			}
 		}
 		else
 		{
 			if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT)
 			{
-				count_time_prepare_running = 1900;
+				count_time_prepare_running = 1850;
 				pre_count_time_prepare_running = 900;
 			}
 			else
 			{
-				if (count_time_prepare_running > 0)
+				if (time_full_power == 0)
 				{
-					if (count_time_prepare_running - 30 < 0)
+					if (count_time_prepare_running > 0)
 					{
-						count_time_prepare_running = 0;
+						if (count_time_prepare_running - 40 < 0)
+						{
+							count_time_prepare_running = 0;
+						}
+						else
+						{
+							count_time_prepare_running -= 40;
+						}
+						pre_count_time_prepare_running = count_time_prepare_running;
 					}
-					else
-					{
-						count_time_prepare_running -= 30;
-					}
-					pre_count_time_prepare_running = count_time_prepare_running;
 				}
 			}
 		}

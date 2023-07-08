@@ -22,7 +22,6 @@ public:
 	static int turn;
 	static int point;
 	static int coin;
-	bool isCreateGoomba = false;
 
 	//pipe BOOLEAN
 	static bool isGetInDown;				//di chuyển vào pipe theo hướng từ trên xuống
@@ -34,8 +33,7 @@ public:
 	static float X_target;
 	static ULONGLONG time_start;
 	static ULONGLONG time_end;
-
-
+	float default_y = 0.0f;
 	void AddObject(LPGAMEOBJECT e);
 	void AddObject1(LPGAMEOBJECT e);
 	void _ParseSection_SPRITES(string line);

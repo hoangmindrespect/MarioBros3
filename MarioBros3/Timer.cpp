@@ -90,13 +90,51 @@ void CTimer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		x = cx + TIMER_X_DEFAULT;
 
-	if (cy < -260.0f)
+	float mario_x, mario_y;
+	mario->GetPosition(mario_x, mario_y);
+	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
+	if (mario_y < 77.0f)
+	{
+		if (mario->GetState() == MARIO_STATE_FLYING)
+		{
+			if (mario_y < -230.0f)
+				y = -102.0f;
+			else
+				y = cy_tmp + 252.0f;
+		}
+		else
+		{
+			if (!mario->getIsOnPlatForm())
+			{
+				if (mario_y < -230.0f)
+					y = -102.0f;
+				else
+					y = cy_tmp + 230.0f;
+			}
+			else
+			{
+				if (mario_y < -60.0f)
+					y = cy_tmp + 230.0f;
+				else
+					y = TIMER_Y_DEFAULT;
+			}
+		}
+	}
+	else
+	{
+		y = TIMER_Y_DEFAULT;
+		mario->setIsFallDown(false);
+	}
+
+	if (cy < -300.0f)
 		y = TIMER_Y_HIDDEN;
-	else y = TIMER_Y_DEFAULT;
 
 	//in world map
-	if(mario->getIsInMap())
+	if (mario->getIsInMap())
+	{
 		x = TIMER_X_DEFAULT;
+		y = TIMER_Y_DEFAULT;
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
