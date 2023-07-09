@@ -11,7 +11,8 @@
 #include "Effect.h"
 #include "PSwitch.h"
 #include "PiranhaPlant.h"
-CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
+#include "RedGoomba.h"
+CKoopas::CKoopas(float x, float y, int type) : CGameObject(x, y)
 {
 	this->type = type;
 	this->ax = 0;
@@ -74,6 +75,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			CEffect* a = new CEffect(des->getx(), des->gety(), 13);
 			CPlayScene::objects.push_back(a);
+
+			CEffect* b = new CEffect(des->getx(), des->gety(), 6);
+			CPlayScene::objects.push_back(b);
+
 			e->obj->Delete();
 		}
 
@@ -86,6 +91,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 		OnCollisionWithPiranha(e);
+	else if (dynamic_cast<CRedGoomba*>(e->obj))
+		OnCollisionWithRedGoomBa(e);
 	else if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		CPlatform* plat = dynamic_cast<CPlatform*>(e->obj);
@@ -129,6 +136,22 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 	}
 }
+void CKoopas::OnCollisionWithRedGoomBa(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+	{
+		CRedGoomba* red = dynamic_cast<CRedGoomba*>(e->obj);
+		CEffect* a = new CEffect(red->getx(), red->gety(), 10);
+		CPlayScene::objects.push_back(a);
+
+		CPlayScene::point += 100;
+		CEffect* b = new CEffect(red->getx(), red->gety(), 6);
+		CPlayScene::objects.push_back(b);
+
+		e->obj->Delete();
+	}
+}
+
 void CKoopas::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 {
 	CPiranhaPlant* pi = dynamic_cast<CPiranhaPlant*>(e->obj);

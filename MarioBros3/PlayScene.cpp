@@ -82,7 +82,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 void CPlayScene::AddObject1(LPGAMEOBJECT object)
 {
-	objects.insert(objects.begin() + 180,object);
+	objects.insert(objects.end() - 150,object);
 }
 
 void CPlayScene::AddObject(LPGAMEOBJECT object)
