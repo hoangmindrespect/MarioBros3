@@ -73,15 +73,19 @@ void CPointInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+	float mario_x, mario_y;
+	mario->GetPosition(mario_x, mario_y);
+	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
+
+	if (CPlayScene::destination_point != -1.0f && mario_x > CPlayScene::destination_point)
+		return;
+
 	//in scene
 	if (cx < 0)
 		x = POINTINHUD_X_DEFAULT;
 	else
 		x = cx + POINTINHUD_X_DEFAULT;
 
-	float mario_x, mario_y;
-	mario->GetPosition(mario_x, mario_y);
-	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
 	if (mario_y < 77.0f)
 	{
 		if (mario->GetState() == MARIO_STATE_FLYING)

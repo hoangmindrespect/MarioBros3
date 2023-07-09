@@ -49,6 +49,9 @@ void CHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	mario->GetPosition(mario_x, mario_y);
 	cx -= game->GetBackBufferWidth() / 2;
 
+	if (CPlayScene::destination_point != -1.0f && mario_x > CPlayScene::destination_point)
+		return;
+
 	if (cx < 0)
 		x = HUD_WIDTH / 2;
 	else

@@ -25,9 +25,10 @@
 #include "PSwitch.h"
 #include "Intro.h"
 #include "EnemyTrigger.h"
+#include "Timer.h"
+#include "Font.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	//DebugOut(L"%f, %f\n", x, y);
 	if (IsInMap == 0)
 	{
 		//const velocity
@@ -48,6 +49,84 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			untouchable = 0;
 		}
 		
+		if (isEndScene && x > CPlayScene::destination_point)
+		{
+			CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+			CGoal* goal = NULL;
+			float goal_x, goal_y;
+			for (int i = 0; i < scene->objects.size(); i++)
+			{
+				if (dynamic_cast<CGoal*>(scene->objects[i]))
+				{
+					scene->objects[i]->GetPosition(goal_x, goal_y);
+					goal = dynamic_cast<CGoal*>(scene->objects[i]);
+					break;
+				}
+			}
+
+			if (time_collect_goal == 0)
+			{
+				CFont* font = new CFont(goal_x - 45.0f, 39.0f, "COURSE CLEAR !");
+				scene->AddObject(font);
+				time_collect_goal = GetTickCount64();
+			}
+			else
+			{
+				if (!isCreatedCard)
+				{
+					if (GetTickCount64() - time_collect_goal > 1000)
+					{
+						CFont* font = new CFont(goal_x - 62.0f, 62.0f, "YOU GOT A CARD");
+						scene->AddObject(font);
+						CCard* card = new CCard(goal_x + 64.0f, 62.0f, 4);
+						if (goal->getResult() == 1)
+							card->SetState(CARD_STATE_STAR_STATIC);
+						else if (goal->getResult() == 2)
+							card->SetState(CARD_STATE_MUSH_STATIC);
+						else
+							card->SetState(CARD_STATE_FLOW_STATIC);
+						scene->AddObject(card);
+						isCreatedCard = true;
+						time_collect_goal = GetTickCount64();
+					}
+				}
+				else
+				{
+					if (GetTickCount64() - time_collect_goal < 2000)
+					{
+						if (!isGetCard)
+						{
+
+							if (CPlayScene::card_first->GetState() == CARD_STATE_EMPTY)
+								CPlayScene::card_first->setStateFlicking(goal);
+
+							else if (CPlayScene::card_second->GetState() == CARD_STATE_EMPTY)
+								CPlayScene::card_second->setStateFlicking(goal);
+
+							else if (CPlayScene::card_third->GetState() == CARD_STATE_EMPTY)
+								CPlayScene::card_third->setStateFlicking(goal);
+
+							isGetCard = true;
+						}
+					}
+					else
+					{
+						//reset card 1
+						CPlayScene::card_first->setStateStatic();
+
+						//reset card 2
+						CPlayScene::card_second->setStateStatic();
+
+						//reset card 3
+						CPlayScene::card_third->setStateStatic();
+
+						isGetCard = false;
+						CGame::GetInstance()->InitiateSwitchScene(1);
+					}
+				}
+			}
+		}
+
 		if (CPlayScene::IsIntroScene())
 		{
 			if (isFellOnTheHead)
@@ -375,7 +454,7 @@ void CMario::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
 	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
 	if (p->getIsDestinationPoint())
-		isEndScene = true;
+		CPlayScene::destination_point = p->getx() - 10.5f;
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -547,7 +626,29 @@ void CMario::OnCollisionWithGoal(LPCOLLISIONEVENT e)
 {
 	CGoal* a = dynamic_cast<CGoal*>(e->obj);
 	a->setIsCollide(true);
+
+	//Update position of transparent block at the end scene
+	for (int i = 0; i < CPlayScene::objects.size(); i++)
+	{
+		if (dynamic_cast<CPlatform*>(CPlayScene::objects[i]))
+		{
+			if (CPlayScene::objects[i]->getx() >= CPlayScene::destination_point + 100.0f)
+			{
+				CPlayScene::objects[i]->setx(CPlayScene::objects[i]->getx() + 30.0f);
+				break;
+			}
+		}
+	}
+	for (int i = 0; i < CPlayScene::objects.size(); i++)
+	{
+		if (dynamic_cast<CTimer*>(CPlayScene::objects[i]))
+		{
+			CTimer* t = dynamic_cast<CTimer*>(CPlayScene::objects[i]);
+			CPlayScene::point += (int)(t->getTime() * 50);
+		}
+	}
 	isEndScene = true;
+	SetState(MARIO_STATE_WALKING_RIGHT);
 }
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {

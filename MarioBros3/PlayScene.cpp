@@ -44,6 +44,9 @@ LPGAMEOBJECT CPlayScene::player;
 int::CPlayScene::turn = 4;
 int::CPlayScene::point = 0;
 int::CPlayScene::coin = 0;
+LPCARD CPlayScene::card_first = new CCard(400, 209, 0);
+LPCARD CPlayScene::card_second = new CCard(400, 209, 1);
+LPCARD CPlayScene::card_third = new CCard(400, 209, 2);
 
 //initial logic pipe
 bool::CPlayScene::isGetInDown = false;
@@ -55,6 +58,9 @@ float::CPlayScene::X_target = 0.0f;
 float::CPlayScene::Y_target = 0.0f;
 ULONGLONG CPlayScene::time_start;
 ULONGLONG CPlayScene::time_end;
+
+float::CPlayScene::destination_point = -1.0f;
+
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
@@ -175,14 +181,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		else
 			mario->setIsInMap(0);
 
-		
-
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_RED_GOOMBA: obj = new CRedGoomba(x, y); break;
-	case OBJECT_TYPE_KOOPAS: {int model = (int)atof(tokens[3].c_str());
+	case OBJECT_TYPE_KOOPAS: {
+		int model = (int)atof(tokens[3].c_str());
 		obj = new CKoopas(x, y, model); break;
 	}
 	case OBJECT_TYPE_BRICK: 
@@ -224,7 +229,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_GRASS_IN_MAP: obj = new CGrassInMap(x, y); break;
-	case OBJECT_TYPE_GOAL: obj = new CGoal(x, y); break;
+	case OBJECT_TYPE_GOAL: {
+		obj = new CGoal(x, y); break; 
+	}
 	case OBJECT_TYPE_PIPE:
 	{
 
@@ -298,13 +305,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = NULL;
 		break;
 	}
-	case OBJECT_TYPE_SCORE: obj = new CHUD(x, y); break;
-	case 20: obj = new CIntro(x, y); break;
+	case OBJECT_TYPE_SCORE: {
+		obj = new CHUD(x, y);
+		break; 
+	}
+	case OBJECT_TYPE_INTRO_SCE: obj = new CIntro(x, y); break;
 	case OBJECT_TYPE_TIMER: obj = new CTimer(x, y); break;
 	case OBJECT_TYPE_POINT: obj = new CPointInHUD(x, y); break;
 	case OBJECT_TYPE_POWER_FLYING_HUD: obj = new CPowerFlyingHUD(x, y); break;
 	case OBJECT_TYPE_TURN_IN_HUD: obj = new CTurnInHUD(x, y); break;
 	case OBJECT_TYPE_COIN_IN_HUD: obj = new CCoinInHUD(x, y); break;
+	case OBJECT_TYPE_CARD:
+	{
+		int pos = (int)atof(tokens[3].c_str());
+		obj = new CCard(x, y, pos);
+		break;
+	}
 	case OBJECT_TYPE_ENEMY_TRIGGER: {
 		int type = (int)atof(tokens[3].c_str());
 		float pos_x = (float)atof(tokens[4].c_str());
@@ -420,7 +436,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		//if mario is under the DEAD_ZONE -> mario die
 		if (mario->gety() > DEAD_ZONE)
+		{
 			mario->SetState(MARIO_STATE_DIE);
+			turn -= 1;
+		}
 
 		//Check for not update when Mario level up
 		if (mario->getIsChanging())
@@ -569,8 +588,11 @@ THERE:
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-
 	float cy_tmp = cy;
+
+	if (destination_point != -1.0f && mario_x > destination_point)
+		return;
+
 	if (cx < 0) cx = 0;
 	if (mario->getIsInMap() == 0)
 	{
@@ -637,9 +659,7 @@ THERE:
 		
 		if (mario->gety() < -300.0f)
 			cy = -500.0f;
-		//mario đến đích
-		if (mario->getIsEndScene())
-			return;
+
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	else

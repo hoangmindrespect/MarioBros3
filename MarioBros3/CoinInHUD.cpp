@@ -80,14 +80,18 @@ void CCoinInHUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 	cx -= game->GetBackBufferWidth() / 2;
+	float mario_x, mario_y;
+	mario->GetPosition(mario_x, mario_y);
+	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
+
+	if (CPlayScene::destination_point != -1.0f && mario_x > CPlayScene::destination_point)
+		return;
+
 	if (cx < 0)
 		x = COININHUD_X_DEFAULT;
 	else
 		x = cx + COININHUD_X_DEFAULT;
 
-	float mario_x, mario_y;
-	mario->GetPosition(mario_x, mario_y);
-	float cy_tmp = cy - game->GetBackBufferHeight() / 2;
 	if (mario_y < COORDINATES_ADJUST_CAMERA_FIRST)
 	{
 		if (mario->GetState() == MARIO_STATE_FLYING)

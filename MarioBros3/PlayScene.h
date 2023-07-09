@@ -7,7 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
-
+#include "Card.h"
 #define COORDINATES_ADJUST_CAMERA_FIRST	77.0f
 #define COORDINATES_ADJUST_CAMERA_SECOND	-230.0f
 #define COORDINATES_ADJUST_CAMERA_THIRD	-270.0f
@@ -28,6 +28,9 @@ public:
 	static int turn;
 	static int point;
 	static int coin;
+	static CCard* card_first;
+	static CCard* card_second;
+	static CCard* card_third;
 
 	//pipe BOOLEAN
 	static bool isGetInDown;				//di chuyển vào pipe theo hướng từ trên xuống
@@ -40,6 +43,9 @@ public:
 	static ULONGLONG time_start;
 	static ULONGLONG time_end;
 	float default_y = 0.0f;
+
+	//Des
+	static float destination_point;
 	void AddObject(LPGAMEOBJECT e);
 	void AddObject1(LPGAMEOBJECT e);
 	void _ParseSection_SPRITES(string line);

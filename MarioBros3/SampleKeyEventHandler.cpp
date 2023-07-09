@@ -34,6 +34,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	if (!mario)
 		return;
+	if (mario->getIsEndScene())
+		return;
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
@@ -230,6 +232,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (!mario)
 		return;
+	if (mario->getIsEndScene())
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -266,6 +271,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (!mario)
 		return;
+	if (mario->getIsEndScene())
+		return;
+
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		// if press A => in first 2 - 3 second Mario will run with velocity : 0.08f, then velocity is 0.2f

@@ -28,6 +28,17 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
 	void setIsCollide(bool a) { isCollide = a; }
+	int getResult() {
+		if (isStar)
+			return 1;
+		else if (isMushroom)
+			return 2;
+		else if (isFlower)
+			return 3;
+		else
+			return 0;
+	}
+
 };
 
 typedef CGoal* LPGOAL;

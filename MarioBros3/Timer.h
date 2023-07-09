@@ -32,6 +32,7 @@ public:
 	void RenderBoundingBox();
 	int IsBlocking() { return 0; }
 	void setPosition(float x, float y) { this->x = x; this->y = y; }
+	float getTime() { return time; }
 };
 
 typedef CTimer* LPTIMER;

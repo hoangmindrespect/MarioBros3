@@ -274,6 +274,10 @@ class CMario : public CGameObject
 	bool isFellOnTheHead;
 	bool isLookUp;
 
+	//end scene
+	bool isCreatedCard;
+	bool isGetCard;
+
 	int FlagForUntouching;
 	float maxVx;
 	float ax;					// acceleration on x 
@@ -291,6 +295,7 @@ class CMario : public CGameObject
 	ULONGLONG kicking_start;
 	ULONGLONG time_switching;
 	ULONGLONG time_full_power;
+	ULONGLONG time_collect_goal;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -338,6 +343,8 @@ public:
 		isDelevel = false;
 		isFellOnTheHead = false;
 		isLookUp = false;
+		isCreatedCard = false;
+		isGetCard = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -353,6 +360,7 @@ public:
 		flying_start = -1;
 		kicking_start = -1;
 		time_switching = -1;
+		time_collect_goal = 0;
 		count_time_prepare_running = 0;
 		pre_count_time_prepare_running = 0;
 		xtmp = ytmp = 0.0f;
