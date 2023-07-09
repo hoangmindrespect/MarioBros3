@@ -437,8 +437,11 @@ void CPlayScene::Update(DWORD dt)
 		//if mario is under the DEAD_ZONE -> mario die
 		if (mario->gety() > DEAD_ZONE)
 		{
-			mario->SetState(MARIO_STATE_DIE);
-			turn -= 1;
+			if (mario->GetState() != MARIO_STATE_DIE)
+			{
+				mario->SetState(MARIO_STATE_DIE);
+				turn -= 1;
+			}
 		}
 
 		//Check for not update when Mario level up

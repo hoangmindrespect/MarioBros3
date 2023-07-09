@@ -52,20 +52,20 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 		time_start = GetTickCount64();
 		vx = vy = ax = ay = 0.0f;
 	}
-	else if (k == 9 || k == 10 || k == 12) // effect yellow, red goomba die, black shell.
+	else if (k == 9 || k == 10 || k == 12 || k == 13) // effect yellow, red goomba die, black shell, green shell
 	{
 		if (mario != NULL)
 		{
 			if(mario->getnx() > 0)
-				vx = 0.12f;
+				vx = 0.1f;
 			else
-				vx = -0.12f;
+				vx = -0.1f;
 		}
 		else
 			vx = 0.12f;
-		vy = -0.65f;
+		vy = -0.35f;
 		ax = 0;
-		ay = 0.003f;
+		ay = 0.001f;
 	}
 }
 
@@ -109,6 +109,10 @@ void CEffect::Render()
 	else if (type == 12)
 	{
 		idAni = ID_ANI_BLACK_KOOPAS_DIE_UP;
+	}
+	else if (type == 13)
+	{
+		idAni = ID_ANI_GREEN_KOOPAS_DIE_UP;
 	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(idAni)->Render(x, y);

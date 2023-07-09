@@ -730,13 +730,17 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 		else
 		{
-			if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+			//keep two koopas 
+			if (!isHolding)
 			{
-				koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
+				if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
+				{
+					koopas->SetState(KOOPAS_STATE_IS_HOLD_DOWN);
+				}
+				else if (koopas->GetState() == KOOPAS_STATE_DIE_UP)
+					koopas->SetState(KOOPAS_STATE_IS_HOLD_UP);
+				isHolding = true; Koopas = koopas;
 			}
-			else if (koopas->GetState() == KOOPAS_STATE_DIE_UP)
-				koopas->SetState(KOOPAS_STATE_IS_HOLD_UP);
-			isHolding = true; Koopas = koopas;
 		}
 	}
 	else if (koopas->GetState() == KOOPAS_STATE_DIE_UP_SPIN || koopas->GetState() == KOOPAS_STATE_DIE_DOWN_SPIN)

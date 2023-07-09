@@ -70,6 +70,13 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 				e->obj->Delete();
 			}
 		}
+		if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
+		{
+			CEffect* a = new CEffect(des->getx(), des->gety(), 13);
+			CPlayScene::objects.push_back(a);
+			e->obj->Delete();
+		}
+
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomBa(e);

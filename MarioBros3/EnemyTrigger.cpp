@@ -40,11 +40,14 @@ void CEnemyTrigger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 			CPlayScene::player->GetPosition(p_x, p_y);
 			if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
 			{
-				if (enemyObject != NULL)
+				if (!enemyObject->IsDeleted())
 				{
 					enemyObject->Delete();
 					enemyObject = NULL;
 				}
+				else
+					enemyObject = NULL;
+
 			}
 		}
 	}
@@ -101,5 +104,14 @@ void CEnemyTrigger::CreateEnemy()
 		a->setHost(dynamic_cast<CKoopas*>(enemyObject));
 		CPlayScene::objects.push_back(a);
 	}
-	CPlayScene::objects.insert(CPlayScene::objects.end() - 20, enemyObject);
+	//CPlayScene::objects.insert(CPlayScene::objects.end() - 50, enemyObject);
+
+	for (int i = 0; i < CPlayScene::objects.size(); i++)
+	{
+		if (dynamic_cast<CMario*>(CPlayScene::objects[i]))
+		{
+			CPlayScene::objects.insert(CPlayScene::objects.begin() + i - 1, enemyObject);
+			break;
+		}
+	}
 }
