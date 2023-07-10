@@ -730,8 +730,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 		else
 		{
-			//keep two koopas 
-			if (!isHolding)
+			if (!isHolding && !isAttackByTail)
 			{
 				if (koopas->GetState() == KOOPAS_STATE_DIE_DOWN)
 				{
