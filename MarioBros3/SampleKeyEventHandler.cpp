@@ -201,9 +201,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_X:
 		if (mario->getCountTimePrepareRun() > 1800)
 		{
-			//DebugOut(L"set nè: %d\n", mario->getCountTimePrepareRun());
-			mario->setIsTimeFlying(GetTickCount64());
-			break;
+			if (mario->getTimeFullPower() == 0)
+			{
+				mario->setIsTimeFlying(GetTickCount64());
+				break;
+			}
 		}
 	case DIK_R: // reset
 		CGame::GetInstance()->InitiateSwitchScene(5);
@@ -273,7 +275,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		return;
 	if (mario->getIsEndScene())
 		return;
-
+	DebugOut(L"state: %d\n", mario->GetState());
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		// if press A => in first 2 - 3 second Mario will run with velocity : 0.08f, then velocity is 0.2f
@@ -369,6 +371,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						
 					}
 				}
+			}
+
+			if (mario->GetState() != MARIO_STATE_FLYING && mario->getTimeFullPower() != 0)
+			{
+				mario->SetState(MARIO_STATE_FLYING);
+				return;
 			}
 		}
 		else
@@ -467,6 +475,12 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 						
 					}
 				}
+			}
+
+			if (mario->GetState() != MARIO_STATE_FLYING && mario->getTimeFullPower() != 0)
+			{
+				mario->SetState(MARIO_STATE_FLYING);
+				return;
 			}
 		}
 		else

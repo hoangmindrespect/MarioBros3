@@ -69,6 +69,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 				CEffect* a = new CEffect(des->getx(), des->gety(), 12);
 				CPlayScene::objects.push_back(a);
 				e->obj->Delete();
+				return;
 			}
 		}
 		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)

@@ -612,6 +612,15 @@ THERE:
 			}
 			else
 			{
+				if (mario->GetState() == MARIO_STATE_JUMP && mario->getTimeFullPower() != 0)
+				{
+					if (mario_y < COORDINATES_ADJUST_CAMERA_THIRD)
+						cy = cy_tmp + 64.0f;
+					else if (mario_y < COORDINATES_ADJUST_CAMERA_SECOND)
+						cy = COORDINATES_DEFAULT_Y_AXIS_ADJUST_CAM;
+					else
+						cy = cy_tmp + 44.0f;
+				}
 				if (!mario->getIsOnPlatForm())
 				{
 					if (!mario->getIsFallDown())
@@ -623,7 +632,7 @@ THERE:
 					}
 					else
 					{
-						if (mario_y > ON_CLOUD + 30.0f)
+						if (mario_y > 90.0f)
 							mario->setIsFallDown(false);
 					}
 

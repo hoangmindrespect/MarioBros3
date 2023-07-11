@@ -55,9 +55,13 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 	////////////////		STAGE 1: OPEN THE CURTAIN AND DROP DOWN THE TITLE [MARIO BROS 3]		//////////////////////
 	float mario_x = 0.0f, mario_y = 0.0f, lugigi_x = 0.0f, lugigi_y = 0.0f;
 	if (red != NULL)
+	{
 		red->GetPosition(mario_x, mario_y);
+	}
 	if (green != NULL)
+	{
 		green->GetPosition(lugigi_x, lugigi_y);
+	}
 
 	/*STEP 1*/
 	if(y > TOP_EDGE_LIMIT && !isUp)
@@ -229,8 +233,11 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						}
 					}
 
-					if (!first_koopas->IsDeleted() && first_koopas->getx() > 268.0f)
-						first_koopas->Delete();
+					if (!first_koopas->IsDeleted())
+					{
+						if(first_koopas->getx() > 258.0f)
+							first_koopas->Delete();
+					}
 
 					// 3.3.2 Mario stop and waiting Lugigi hodling shell come out
 					if (mario_x > 185.0f)

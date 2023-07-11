@@ -434,6 +434,7 @@ public:
 	bool getIsHolding() { return isHolding; }
 	bool getIsDelevel() { return isDelevel; }
 	int getColor() { return color; }
+	ULONGLONG getTimeFullPower() { return time_full_power; }
 	LONGLONG getCountTimePrepareRun() { return count_time_prepare_running; }
 	ULONGLONG getFlyingStart() { return flying_start; }
 	ULONGLONG getRunningStart() { return running_start; }

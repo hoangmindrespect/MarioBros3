@@ -42,6 +42,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if ((vx > 0 && ax > 0) || (vx < 0 && ax < 0)) // change direction when flying
 			isSwitch = false;
 		
+		if (this->state == MARIO_STATE_FLYING && this->level != MARIO_LEVEL_TAIL)
+		{
+			if (nx > 0)
+				SetState(MARIO_STATE_RUNNING_RIGHT);
+			else
+				SetState(MARIO_STATE_RUNNING_LEFT);
+			isFlying = false;
+			time_full_power = 1700;
+		}
+
 		// reset untouchable timer if untouchable time has passed
 		if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 		{
@@ -1413,7 +1423,6 @@ void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
-
 	switch (state)
 	{	
 	case MARIO_STATE_RELEASE_FLYING: // it happen when time out
@@ -1433,7 +1442,8 @@ void CMario::SetState(int state)
 	}
 	case MARIO_STATE_FLYING:
 	{
-		flying_start = GetTickCount64();
+		if(time_full_power == 0)
+			flying_start = GetTickCount64();
 		isFlying = true;
 		vy = -MARIO_WALKING_SPEED;
 		if (nx < 0)
