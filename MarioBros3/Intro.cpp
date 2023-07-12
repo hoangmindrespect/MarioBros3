@@ -170,6 +170,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				//black shell
 				CKoopas* black_shell = new CKoopas(mario_x + 60.0f, TOP_EDGE_LIMIT_LUGIGI, 4);
 				black_shell->SetState(KOOPAS_STATE_DIE_DOWN);
+				black_shell->SetSpeed(0.0f, 0.005f);
 
 				// koopas - which fall onto mario
 				first_koopas = new CKoopas(mario_x, TOP_EDGE_LIMIT_LUGIGI, 2);
@@ -239,7 +240,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 					if (!first_koopas->IsDeleted())
 					{
-						if(first_koopas->getx() > 258.0f)
+						if(first_koopas->getx() > 248.0f)
 							first_koopas->Delete();
 					}
 
@@ -251,18 +252,17 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						red->SetVx(0.0f);
 						if (!isWaitedLugigi)
 						{
-							RESETSTATUS:
 							game->MakeKeyPressed(DIK_A);
 
 							//reset coordinate and state of lugigi
-							green = new CMario(368.0f, GROUND_Y_INTRO, 2);
+							green = new CMario(298.0f, GROUND_Y_INTRO, 2);
 							green->setLevel(MARIO_LEVEL_BIG);
 							green->SetState(MARIO_STATE_WALKING_LEFT);
 							green->setIsHolding(true);
 
 							//define second koopas is hold by lugigi
 							//ensure first not collide with second
-							second_koopas = new CKoopas(298.0f, GROUND_Y_INTRO, 2);
+							second_koopas = new CKoopas(298.0f, GROUND_Y_INTRO - 2.0f, 2);
 							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 							second_koopas->SetAy(0.0f);
 
@@ -272,11 +272,15 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 							isWaitedLugigi = true;
 						}
 					}
+					
+					if(second_koopas != NULL)
+						DebugOut(L"%f, %f\n", second_koopas->getx(), second_koopas->gety());
 
 					//update position second koopas arcoding Lugigi
 					if (green->getIsHolding())
 					{
-						second_koopas->SetPosition(lugigi_x - 12.0f, GROUND_Y_INTRO - 2.0f);
+						if(lugigi_x < 500.0f) // ensure second koopas fall out platform
+							second_koopas->SetPosition(lugigi_x - 12.0f, GROUND_Y_INTRO - 2.0f);
 					}
 
 					//3.3.3 Lugigi stop at this position and Kick second koopas

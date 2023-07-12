@@ -100,5 +100,6 @@ public:
 	ULONGLONG getDieStart() { return die_start; }
 	ULONGLONG getReturnStart() { return return_start; }
 	int getnx() { return nx; }
+	int getType() { return type; }
 };
 

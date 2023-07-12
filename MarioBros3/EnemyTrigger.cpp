@@ -100,11 +100,14 @@ void CEnemyTrigger::CreateEnemy()
 
 	if (type == ENEMY_KOOPAS)
 	{
-		CKoopasNavigation* a = new CKoopasNavigation(enemyObject->getx() - KOOPAS_NAVIGATION_WIDTH - 2.0f, enemyObject->gety() + 6.0f);
-		a->setHost(dynamic_cast<CKoopas*>(enemyObject));
-		CPlayScene::objects.push_back(a);
+		CKoopas* k = dynamic_cast<CKoopas*>(enemyObject);
+		if (k->getType() == 1)
+		{
+			CKoopasNavigation* a = new CKoopasNavigation(enemyObject->getx() - KOOPAS_NAVIGATION_WIDTH - 2.0f, enemyObject->gety() + 6.0f);
+			a->setHost(dynamic_cast<CKoopas*>(enemyObject));
+			CPlayScene::objects.push_back(a);
+		}
 	}
-	//CPlayScene::objects.insert(CPlayScene::objects.end() - 50, enemyObject);
 
 	for (int i = 0; i < CPlayScene::objects.size(); i++)
 	{
