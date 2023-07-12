@@ -54,7 +54,7 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 	}
 	else if (k == 9 || k == 10 || k == 12 || k == 13) // effect yellow, red goomba die, black shell, green shell
 	{
-		if (mario != NULL)
+		if (!CPlayScene::IsIntroScene())
 		{
 			if(mario->getnx() > 0)
 				vx = 0.1f;
@@ -62,7 +62,9 @@ CEffect ::CEffect(float x, float y, int k) : CGameObject(x, y) {
 				vx = -0.1f;
 		}
 		else
-			vx = 0.12f;
+		{
+			vx = 0.1f;
+		}
 		vy = -0.35f;
 		ax = 0;
 		ay = 0.001f;

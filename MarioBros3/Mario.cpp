@@ -801,21 +801,27 @@ void  CMario::OnCollisionWithFunnel(LPCOLLISIONEVENT e)
 	CFunnel* funnel = dynamic_cast<CFunnel*>(e->obj);
 	if (game->IsKeyDown(DIK_UP))
 	{
-		isGetInOutPipe = true;
-		CPlayScene::isGetInUp = true;
-		CPlayScene::tempoPosition = y - 18.0f;
-		CPlayScene::time_start = GetTickCount64();
-		CPlayScene::X_target = funnel->getXTarget();
-		CPlayScene::Y_target = funnel->getYTarget();
+		if (y > funnel->gety())
+		{
+			isGetInOutPipe = true;
+			CPlayScene::isGetInUp = true;
+			CPlayScene::tempoPosition = y - 18.0f;
+			CPlayScene::time_start = GetTickCount64();
+			CPlayScene::X_target = funnel->getXTarget();
+			CPlayScene::Y_target = funnel->getYTarget();
+		}
 	}
 	if (game->IsKeyDown(DIK_DOWN))
 	{
-		isGetInOutPipe = true;
-		CPlayScene::isGetInDown = true;
-		CPlayScene::tempoPosition = y + 18.0f;
-		CPlayScene::time_start = GetTickCount64();
-		CPlayScene::X_target = funnel->getXTarget();
-		CPlayScene::Y_target = funnel->getYTarget();
+		if (y < funnel->gety())
+		{
+			isGetInOutPipe = true;
+			CPlayScene::isGetInDown = true;
+			CPlayScene::tempoPosition = y + 18.0f;
+			CPlayScene::time_start = GetTickCount64();
+			CPlayScene::X_target = funnel->getXTarget();
+			CPlayScene::Y_target = funnel->getYTarget();
+		}
 	}
 }
 
@@ -1007,15 +1013,25 @@ int CMario::GetAniIdBig()
 		{
 			if (nx >= 0)
 			{
-				if(color == 1)
-					aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				if (color == 1)
+				{
+					if (vy <= 0)
+						aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_FALL_RIGHT;
+				}
 				else
 					aniId = ID_ANI_GREEN_MARIO_JUMP_WALK_RIGHT;
 			}
 			else
 			{
-				if(color == 1)
-					aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+				if (color == 1)
+				{
+					if(vy <= 0)
+						aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+					else
+						aniId = ID_ANI_MARIO_FALL_LEFT;
+				}
 				else 
 					aniId = ID_ANI_GREEN_MARIO_JUMP_WALK_LEFT;
 			}
@@ -1264,14 +1280,24 @@ int CMario::GetAniIdTail()
 							if(IsReadyForFlying())
 								aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT;
 							else
-								aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+							{
+								if (vy <= 0)
+									aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_RIGHT;
+								else
+									aniId = ID_ANI_MARIO_TAIL_FALL_RIGHT;
+							}
 						}
 						else
 						{
 							if(IsReadyForFlying())
 								aniId = ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT;
 							else
-								aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+							{
+								if (vy <= 0)
+									aniId = ID_ANI_MARIO_TAIL_JUMP_WALK_LEFT;
+								else
+									aniId = ID_ANI_MARIO_TAIL_FALL_LEFT;
+							}
 						}
 					}
 				}

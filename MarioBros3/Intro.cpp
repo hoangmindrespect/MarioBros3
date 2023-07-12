@@ -54,13 +54,17 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 
 	////////////////		STAGE 1: OPEN THE CURTAIN AND DROP DOWN THE TITLE [MARIO BROS 3]		//////////////////////
 	float mario_x = 0.0f, mario_y = 0.0f, lugigi_x = 0.0f, lugigi_y = 0.0f;
-	if (red != NULL)
+	if (!isChooseOptionOne && !isChooseOptionTwo)
 	{
-		red->GetPosition(mario_x, mario_y);
-	}
-	if (green != NULL)
-	{
-		green->GetPosition(lugigi_x, lugigi_y);
+		if (red != NULL)
+		{
+			red->GetPosition(mario_x, mario_y);
+		}
+
+		if (green != NULL)
+		{
+			green->GetPosition(lugigi_x, lugigi_y);
+		}
 	}
 
 	/*STEP 1*/
@@ -247,16 +251,18 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						red->SetVx(0.0f);
 						if (!isWaitedLugigi)
 						{
+							RESETSTATUS:
 							game->MakeKeyPressed(DIK_A);
 
 							//reset coordinate and state of lugigi
-							green = new CMario(308.0f, GROUND_Y_INTRO, 2);
+							green = new CMario(368.0f, GROUND_Y_INTRO, 2);
 							green->setLevel(MARIO_LEVEL_BIG);
 							green->SetState(MARIO_STATE_WALKING_LEFT);
-							//green->setIsHolding(true);
+							green->setIsHolding(true);
 
 							//define second koopas is hold by lugigi
-							second_koopas = new CKoopas(268.0f, GROUND_Y_INTRO, 2);
+							//ensure first not collide with second
+							second_koopas = new CKoopas(298.0f, GROUND_Y_INTRO, 2);
 							second_koopas->SetState(KOOPAS_STATE_DIE_DOWN);
 							second_koopas->SetAy(0.0f);
 
@@ -268,8 +274,10 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					}
 
 					//update position second koopas arcoding Lugigi
-					if (second_koopas != NULL && green->getIsHolding())
+					if (green->getIsHolding())
+					{
 						second_koopas->SetPosition(lugigi_x - 12.0f, GROUND_Y_INTRO - 2.0f);
+					}
 
 					//3.3.3 Lugigi stop at this position and Kick second koopas
 					if (green->getx() < 228.0f)
@@ -327,10 +335,10 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					red->SetState(MARIO_STATE_WALKING_RIGHT);
 					if (red->getIsHolding())
 					{
-						second_koopas->SetPosition(red->getx() + 15.0f, GROUND_Y_INTRO - 2.0f);
+						second_koopas->SetPosition(mario_x + 15.0f, GROUND_Y_INTRO - 2.0f);
 						second_koopas->SetAy(0.0f);
 					}
-					if (red->getx() > 130.0f)
+					if (mario_x > 130.0f)
 					{
 						isMarioHitKoopas = true;
 						red->SetState(MARIO_STATE_IDLE);

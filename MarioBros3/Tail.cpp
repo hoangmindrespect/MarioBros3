@@ -49,13 +49,16 @@ void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CMario* mario = dynamic_cast<CMario*>(CPlayScene::player);
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-	if (mario->getIsAttack())
+	if (!CPlayScene::IsIntroScene())
 	{
-		CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
-		CEffect * b = new CEffect(goomba->getx(), goomba->gety(), 9);
-		CPlayScene::objects.push_back(a);
-		CPlayScene::objects.push_back(b);
-		goomba->Delete();
+		if (mario->getIsAttack())
+		{
+			CEffect* a = new CEffect(goomba->getx(), goomba->gety(), 8);
+			CEffect* b = new CEffect(goomba->getx(), goomba->gety(), 9);
+			CPlayScene::objects.push_back(a);
+			CPlayScene::objects.push_back(b);
+			goomba->Delete();
+		}
 	}
 }
 

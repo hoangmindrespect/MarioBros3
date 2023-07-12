@@ -62,27 +62,32 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CKoopas*>(e->obj)) {
 		CKoopas* des = dynamic_cast<CKoopas*>(e->obj);
+		float des_x = 0.0f, des_y = 0.0f;
+		des->GetPosition(des_x, des_y);
 		if (CPlayScene::IsIntroScene())
 		{
-			if (des->GetState() == KOOPAS_STATE_DIE_DOWN || des->GetState() == KOOPAS_STATE_DIE_UP)
+			if (des->type == 4)
 			{
-				CEffect* a = new CEffect(des->getx(), des->gety(), 12);
-				CPlayScene::objects.push_back(a);
 				e->obj->Delete();
+
+				CEffect* a = new CEffect(des_x, des_y - 2.0f, 12);
+				CPlayScene::objects.push_back(a);
 				return;
 			}
 		}
 		else if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 		{
-			CEffect* a = new CEffect(des->getx(), des->gety(), 13);
+			CEffect* a = new CEffect(des_x, des_y, 13);
 			CPlayScene::objects.push_back(a);
 
-			CEffect* b = new CEffect(des->getx(), des->gety(), 6);
+			CEffect* b = new CEffect(des_x, des_y, 6);
 			CPlayScene::objects.push_back(b);
+
+			CEffect*c = new CEffect(des_x, des_y, 8);
+			CPlayScene::objects.push_back(c);
 
 			e->obj->Delete();
 		}
-
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomBa(e);
@@ -139,15 +144,19 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CKoopas::OnCollisionWithRedGoomBa(LPCOLLISIONEVENT e)
 {
+	CRedGoomba* red = dynamic_cast<CRedGoomba*>(e->obj);
 	if (state == KOOPAS_STATE_DIE_DOWN_SPIN || state == KOOPAS_STATE_DIE_UP_SPIN)
 	{
-		CRedGoomba* red = dynamic_cast<CRedGoomba*>(e->obj);
+		CPlayScene::point += 100;
+
 		CEffect* a = new CEffect(red->getx(), red->gety(), 10);
 		CPlayScene::objects.push_back(a);
 
-		CPlayScene::point += 100;
 		CEffect* b = new CEffect(red->getx(), red->gety(), 6);
 		CPlayScene::objects.push_back(b);
+
+		CEffect* c = new CEffect(red->getx(), red->gety(), 8);
+		CPlayScene::objects.push_back(c);
 
 		e->obj->Delete();
 	}

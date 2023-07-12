@@ -275,10 +275,10 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		return;
 	if (mario->getIsEndScene())
 		return;
-	DebugOut(L"state: %d\n", mario->GetState());
+
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
-		// if press A => in first 2 - 3 second Mario will run with velocity : 0.08f, then velocity is 0.2f
+		// if press A => in first 1.8 second Mario will run with velocity : 0.08f, then velocity is 0.2f
 		if (game->IsKeyDown(DIK_A) )
 		{
 			//at the first time into this state we'll have an boolean variable to count the time [isReady]
