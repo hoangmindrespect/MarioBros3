@@ -27,6 +27,7 @@ class CEnemyTrigger : public CGameObject {
 	int type;
 	LPGAMEOBJECT enemyObject;
 	bool IsCreated;
+	bool IsAdded;
 	float pos_x;
 	float pos_y;
 public:

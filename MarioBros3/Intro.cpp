@@ -170,7 +170,6 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 				//black shell
 				CKoopas* black_shell = new CKoopas(mario_x + 60.0f, TOP_EDGE_LIMIT_LUGIGI, 4);
 				black_shell->SetState(KOOPAS_STATE_DIE_DOWN);
-				black_shell->SetSpeed(0.0f, 0.005f);
 
 				// koopas - which fall onto mario
 				first_koopas = new CKoopas(mario_x, TOP_EDGE_LIMIT_LUGIGI, 2);
@@ -238,10 +237,13 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						}
 					}
 
-					if (!first_koopas->IsDeleted())
+					if (!first_koopas->IsDeleted() && !isDeleteFirstKoopas)
 					{
-						if(first_koopas->getx() > 248.0f)
+						if (first_koopas->getx() > 248.0f)
+						{
 							first_koopas->Delete();
+							isDeleteFirstKoopas = true;
+						}
 					}
 
 					// 3.3.2 Mario stop and waiting Lugigi hodling shell come out
@@ -250,7 +252,7 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						isFaceToFaceLugigi = true;
 						red->SetState(MARIO_STATE_IDLE);
 						red->SetVx(0.0f);
-						if (!isWaitedLugigi)
+						if (!isWaitedLugigi && isDeleteFirstKoopas)
 						{
 							game->MakeKeyPressed(DIK_A);
 
@@ -273,8 +275,8 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 						}
 					}
 					
-					if(second_koopas != NULL)
-						DebugOut(L"%f, %f\n", second_koopas->getx(), second_koopas->gety());
+					//if(second_koopas != NULL)
+					//	DebugOut(L"%f, %f\n", second_koopas->getx(), second_koopas->gety());
 
 					//update position second koopas arcoding Lugigi
 					if (green->getIsHolding())

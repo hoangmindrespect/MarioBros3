@@ -45,6 +45,7 @@ class CIntro : public CGameObject {
 	bool isSmallChangedDirectFirst;
 	bool isSmallChangedDirectSecond;
 	bool isCreateFastKoopas = false;
+	bool isDeleteFirstKoopas;
 	ULONGLONG time_start;
 	ULONGLONG bracing_start;
 	//object in intro
@@ -65,7 +66,7 @@ public:
 
 	CIntro(float x, float y) : CGameObject(x, y) {
 		isUp = isDown = flag = isCreateMario = isFallOntoMario = isShaked = isGotLeaf = false;
-		isCreateObject = isChangeDirection = isWaitedLugigi = isFaceToFaceLugigi = isLugigiThrowShell = false;
+		isCreateObject = isChangeDirection = isWaitedLugigi = isFaceToFaceLugigi = isLugigiThrowShell = isDeleteFirstKoopas = false;
 		isMarioHitKoopas = isKoopasChangedDirection = isSmallChangedDirectFirst = isSmallChangedDirectSecond = isDoneStageTwo= false;
 
 		isChooseOptionOne = false;

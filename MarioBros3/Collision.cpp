@@ -187,6 +187,8 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			{
 				if (dynamic_cast<CMario*>(objDests->at(i)))
 					coEvents.push_back(e);
+				else
+					delete e;
 			}
 			else
 				coEvents.push_back(e);

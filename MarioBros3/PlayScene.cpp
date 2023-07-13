@@ -560,7 +560,8 @@ THERE:
 	{
 		coObjects.push_back(objects[i]);
 	}
-	if (player != NULL)
+
+	if (!IsIntroScene())
 	{
 		mario->Update(dt, &coObjects);
 		for (size_t i = 0; i < objects.size(); i++)
@@ -575,8 +576,6 @@ THERE:
 		{
 			objects[i]->Update(dt, &coObjects);
 		}
-	}
-	if (player == NULL) {
 		PurgeDeletedObjects();
 		return;
 	}
