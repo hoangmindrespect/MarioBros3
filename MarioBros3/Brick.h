@@ -14,6 +14,12 @@
 
 class CBrick : public CGameObject {
 	int model;
+	bool isHitBySmall;
+
+	float miny = y - 10;
+	float maxy = y;
+	bool IsUp = false;
+	bool IsDown = false;
 public:
 	CBrick(float x, float y, int mo) : CGameObject(x, y) { this->model = mo; }
 	void Render();
@@ -21,5 +27,6 @@ public:
 	int IsCollidable() { return 0; }
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int getModel() { return model; }
+	void SetIsHitBySmall(bool a) { isHitBySmall = a; }
 };
 

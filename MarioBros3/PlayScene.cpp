@@ -452,14 +452,20 @@ void CPlayScene::Update(DWORD dt)
 				if (GetTickCount64() - mario->getTimeSwitch() > 1000)
 					mario->setIsChanging(false);
 				else // return not update
+				{
+					PurgeDeletedObjects();
 					return;
+				}
 			}
 			else if (mario->getlevel() == MARIO_LEVEL_TAIL)
 			{
 				if (GetTickCount64() - mario->getTimeSwitch() > 500)
 					mario->setIsChanging(false);
 				else // return not update
+				{
+					PurgeDeletedObjects();
 					return;
+				}
 			}
 		}
 
@@ -471,14 +477,20 @@ void CPlayScene::Update(DWORD dt)
 				if (GetTickCount64() - mario->getTimeSwitch() > 1000)
 					mario->setIsDelevel(false);
 				else // return not update
+				{
+					PurgeDeletedObjects();
 					return;
+				}
 			}
 			else if (mario->getlevel() == MARIO_LEVEL_BIG)
 			{
 				if (GetTickCount64() - mario->getTimeSwitch() > 500)
 					mario->setIsDelevel(false);
 				else // return not update
+				{
+					PurgeDeletedObjects();
 					return;
+				}
 			}
 		}
 
@@ -499,6 +511,8 @@ void CPlayScene::Update(DWORD dt)
 					player->sety(mario->gety() + dt * 0.03f);
 				else
 					mario->SetPosition(X_target, Y_target);
+
+				PurgeDeletedObjects();
 				return;
 			}
 		}
@@ -519,6 +533,8 @@ void CPlayScene::Update(DWORD dt)
 					mario->SetPosition(X_target, Y_target);
 					goto THERE;
 				}
+
+				PurgeDeletedObjects();
 				return;
 			}
 		}
@@ -535,6 +551,8 @@ void CPlayScene::Update(DWORD dt)
 				{
 					if (player->gety() > Y_target - MARIO_SMALL_BBOX_HEIGHT - 4.0f)
 						player->sety(mario->gety() - dt * 0.03f);
+
+					PurgeDeletedObjects();
 					return;
 				}
 			}
@@ -549,6 +567,8 @@ void CPlayScene::Update(DWORD dt)
 				{
 					if (player->gety() > Y_target - MARIO_BIG_BBOX_HEIGHT + 2.0f)
 						player->sety(mario->gety() - dt * 0.03f);
+					
+					PurgeDeletedObjects();
 					return;
 				}
 			}
@@ -593,7 +613,10 @@ THERE:
 	float cy_tmp = cy;
 
 	if (destination_point != -1.0f && mario_x > destination_point)
+	{
+		PurgeDeletedObjects();
 		return;
+	}
 
 	if (cx < 0) cx = 0;
 	if (mario->getIsInMap() == 0)
@@ -668,15 +691,13 @@ THERE:
 			mario->setIsFallDown(false);
 		}
 		
-		if (mario->gety() < -300.0f)
-			cy = -500.0f;
+		if (mario->gety() < COORDINATES_ADJUST_CAMERA_HIDDEN_ZONE)
+			cy = ON_HIDDEN_ZONE;
 
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	else
 		CGame::GetInstance()->SetCamPos(0.0f, 0.0f /*cy*/);
-
-
 
 	PurgeDeletedObjects();
 }

@@ -33,17 +33,20 @@ void CEnemyTrigger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 	if (type == 6 || type == 7){}
 	else
 	{
-		if (enemyObject != nullptr)
+		if (enemyObject != nullptr )
 		{
-			float e_x = 0.0f, e_y = 0.0f;
-			float p_x = 0.0f, p_y = 0.0f;
-			enemyObject->GetPosition(e_x, e_y);
-			CPlayScene::player->GetPosition(p_x, p_y);
-			
-			//Out current Frame?
-			if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
+			if (enemyObject->getx() > 0)
 			{
-				enemyObject->SetPosition(9999999.0f, 9999999.0f);
+				float e_x = 0.0f, e_y = 0.0f;
+				float p_x = 0.0f, p_y = 0.0f;
+				enemyObject->GetPosition(e_x, e_y);
+				CPlayScene::player->GetPosition(p_x, p_y);
+
+				//Out current Frame?
+				if (abs(e_x - p_x) > ENEMY_TRIGGER_SCOPE_WIDTH / 1.5f)
+				{
+					enemyObject->SetPosition(-100.0f, 100.0f);
+				}
 			}
 		}
 	}
@@ -56,10 +59,10 @@ void CEnemyTrigger::CreateEnemy()
 	//not delete object in enemytrigger [not find any way to guarantee that not happen bug like : thrown exception read violation,...]
 	if (enemyObject != NULL)
 	{
-		if (enemyObject->getx() < 5000.0f)
+		if (enemyObject->getx() > 0.0f)
 			return;
 	}
-
+	DebugOut(L"create\n");
 	switch (type)
 	{
 	case ENEMY_KOOPAS:

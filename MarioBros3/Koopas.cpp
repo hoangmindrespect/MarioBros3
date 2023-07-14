@@ -86,7 +86,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			CEffect*c = new CEffect(des_x, des_y, 8);
 			CPlayScene::objects.push_back(c);
 
-			e->obj->SetPosition(9999999.0f, 9999999.0f);
+			e->obj->SetPosition(-100.0f, -100.0f);
 		}
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))

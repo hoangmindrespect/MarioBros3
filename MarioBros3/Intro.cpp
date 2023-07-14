@@ -241,7 +241,9 @@ void CIntro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {
 					{
 						if (first_koopas->getx() > 248.0f)
 						{
-							first_koopas->Delete();
+							//change position to ensure first not collide with second
+							//if delete, sometime this action make error about violation read
+							first_koopas->SetPosition(9999.0f, 9999.0f);
 							isDeleteFirstKoopas = true;
 						}
 					}

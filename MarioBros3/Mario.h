@@ -318,6 +318,8 @@ class CMario : public CGameObject
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithEnemyTrigger(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+
 	int GetAniIdBig();
 	int GetAniIdTail();
 	int GetAniIdSmall();

@@ -18,6 +18,30 @@ void CBrick::Render()
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
+	if (model == 2)
+	{
+		if (isHitBySmall)
+		{
+			if (IsUp == false && y > miny)
+				y -= 0.2f * dt;
+			else
+			{
+				IsUp = true;
+				if (IsDown == false && y < maxy)
+					y += 0.2f * dt;
+				else
+				{
+					y = maxy;
+					IsDown = true;
+					isHitBySmall = false;
+				}
+			}
+		}
+		else
+		{
+			IsUp = IsDown = false;
+		}
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -29,3 +53,4 @@ void CBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	right = left + BRICK_BBOX_WIDTH + 1.0f;
 	bottom = top + BRICK_BBOX_HEIGHT;
 }
+

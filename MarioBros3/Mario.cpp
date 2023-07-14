@@ -432,6 +432,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithEnemyTrigger(e);
 	else if (dynamic_cast<CPlatform*>(e->obj))
 		OnCollisionWithPlatform(e);
+	else if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 
 	if (e->ny != 0)
 	{
@@ -465,6 +467,34 @@ void CMario::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
 	if (p->getIsDestinationPoint())
 		CPlayScene::destination_point = p->getx() - 10.5f;
+}
+
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+	if (e->ny > 0)
+	{
+		if (brick->getModel() == 2)
+		{
+			if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL)
+			{
+				CEffect* a = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 1);
+				CEffect* b = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 2);
+				CEffect* c = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 3);
+				CEffect* d = new CEffect(e->obj->getx() + 8, e->obj->gety() - 8, 4);
+				scene->AddObject(a);
+				scene->AddObject(b);
+				scene->AddObject(c); 
+				scene->AddObject(d);
+				e->obj->Delete();
+			}
+			else
+			{
+				brick->SetIsHitBySmall(true);
+			}
+		}
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
